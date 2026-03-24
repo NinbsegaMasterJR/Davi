@@ -1,7 +1,7 @@
-import Anthropic from "@anthropic-ai/sdk";
+import Groq from "groq-sdk";
 
-const client = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY,
+const groq = new Groq({
+  apiKey: process.env.GROQ_API_KEY,
 });
 
 export async function gerarEsbocoPregacao(
@@ -22,8 +22,8 @@ O esboço deve ter:
 
 Formato: Use Markdown bem estruturado.`;
 
-    const response = await client.messages.create({
-      model: "claude-3-5-sonnet-20241022",
+    const response = await groq.chat.completions.create({
+      model: "mixtral-8x7b-32768",
       max_tokens: 2000,
       messages: [
         {
@@ -33,9 +33,7 @@ Formato: Use Markdown bem estruturado.`;
       ],
     });
 
-    return response.content[0].type === "text"
-      ? response.content[0].text
-      : "Erro ao gerar esboço";
+    return response.choices[0]?.message?.content || "Erro ao gerar esboço";
   } catch (error) {
     console.error("Erro ao gerar esboço:", error);
     throw error;
@@ -59,8 +57,8 @@ A análise deve cobrir:
 
 Seja aprofundado e academicamente rigoroso.`;
 
-    const response = await client.messages.create({
-      model: "claude-3-5-sonnet-20241022",
+    const response = await groq.chat.completions.create({
+      model: "mixtral-8x7b-32768",
       max_tokens: 2500,
       messages: [
         {
@@ -70,9 +68,7 @@ Seja aprofundado e academicamente rigoroso.`;
       ],
     });
 
-    return response.content[0].type === "text"
-      ? response.content[0].text
-      : "Erro ao analisar";
+    return response.choices[0]?.message?.content || "Erro ao analisar";
   } catch (error) {
     console.error("Erro na análise teológica:", error);
     throw error;
@@ -93,8 +89,8 @@ Sua explicação deve incluir:
 
 Seja claro e acessível.`;
 
-    const response = await client.messages.create({
-      model: "claude-3-5-sonnet-20241022",
+    const response = await groq.chat.completions.create({
+      model: "mixtral-8x7b-32768",
       max_tokens: 2000,
       messages: [
         {
@@ -104,9 +100,7 @@ Seja claro e acessível.`;
       ],
     });
 
-    return response.content[0].type === "text"
-      ? response.content[0].text
-      : "Erro ao explicar";
+    return response.choices[0]?.message?.content || "Erro ao explicar";
   } catch (error) {
     console.error("Erro ao explicar passagem:", error);
     throw error;
