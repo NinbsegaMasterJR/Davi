@@ -1,0 +1,10 @@
+{
+  "name": "pregador-ia",
+  "version": "1.0.0",
+  "description": "Assistente IA para preparação de pregações - Versão Web",
+  "scripts": {
+    "setup-git": "git init && git add . && git commit -m 'Initial commit'",
+    "deploy": "node deploy.js"
+  },
+  "dependencies": {}
+}
