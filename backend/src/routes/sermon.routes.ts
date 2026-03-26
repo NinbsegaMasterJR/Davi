@@ -3,7 +3,9 @@ import {
   gerarEsbocoPregacao,
   analisarTeologicamente,
   explicarPassagem,
+  gerarCronogramaPregacoes,
 } from "../services/ia.service";
+import { getErrorMessage } from "../utils/httpError";
 
 const router = Router();
 
@@ -34,8 +36,10 @@ router.post("/outline", async (req: Request, res: Response) => {
 
     const esboço = await gerarEsbocoPregacao(tema, estilo, duracao);
     res.json({ sucesso: true, esboço });
-  } catch (error: any) {
-    res.status(500).json({ error: error.message });
+  } catch (error: unknown) {
+    res
+      .status(500)
+      .json({ error: getErrorMessage(error, "Erro interno do servidor") });
   }
 });
 
@@ -51,8 +55,10 @@ router.post("/analysis", async (req: Request, res: Response) => {
 
     const analise = await analisarTeologicamente(tema, passagem);
     res.json({ sucesso: true, analise });
-  } catch (error: any) {
-    res.status(500).json({ error: error.message });
+  } catch (error: unknown) {
+    res
+      .status(500)
+      .json({ error: getErrorMessage(error, "Erro interno do servidor") });
   }
 });
 
@@ -68,8 +74,10 @@ router.post("/explain", async (req: Request, res: Response) => {
 
     const explicacao = await explicarPassagem(referencia);
     res.json({ sucesso: true, explicacao });
-  } catch (error: any) {
-    res.status(500).json({ error: error.message });
+  } catch (error: unknown) {
+    res
+      .status(500)
+      .json({ error: getErrorMessage(error, "Erro interno do servidor") });
   }
 });
 
@@ -78,21 +86,17 @@ router.post("/schedule", async (req: Request, res: Response) => {
   try {
     const { mes, ano, temas, estilo = "Pentecostal" } = req.body;
 
-    // TODO: Implementar lógica de cronograma
-    const cronograma = {
-      mes,
-      ano,
-      pregacoes: temas.map((tema: string, index: number) => ({
-        semana: index + 1,
-        data: new Date(),
-        tema,
-        estilo,
-      })),
-    };
+    if (!mes || !ano) {
+      res.status(400).json({ error: "Mês e ano são obrigatórios" });
+      return;
+    }
 
+    const cronograma = await gerarCronogramaPregacoes(mes, ano, estilo, temas);
     res.json({ sucesso: true, cronograma });
-  } catch (error: any) {
-    res.status(500).json({ error: error.message });
+  } catch (error: unknown) {
+    res
+      .status(500)
+      .json({ error: getErrorMessage(error, "Erro interno do servidor") });
   }
 });
 

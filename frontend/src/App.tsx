@@ -6,6 +6,8 @@ import "./App.css";
 
 type PageType = "home" | "about";
 
+const GITHUB_REPO_URL = "https://github.com/NinsegaMasterJr/Gerador.P-Web";
+
 function App() {
   const [currentPage, setCurrentPage] = useState<PageType>("home");
 
@@ -15,13 +17,13 @@ function App() {
         {/* Navigation Header */}
         <nav className="app-navbar">
           <div className="navbar-content">
-            <div
-              className="logo"
-              onClick={() => setCurrentPage("home")}
-              style={{ cursor: "pointer" }}
-            >
-              <h2>⛪ Pregador IA</h2>
-            </div>
+            <button className="logo" onClick={() => setCurrentPage("home")}>
+              <span className="logo-mark">⛪</span>
+              <span className="logo-copy">
+                <strong>Pregador IA</strong>
+                <small>Esboços, análise e estudo bíblico</small>
+              </span>
+            </button>
             <div className="nav-links">
               <button
                 className={`nav-link ${currentPage === "home" ? "active" : ""}`}
@@ -36,7 +38,7 @@ function App() {
                 ℹ️ Sobre
               </button>
               <a
-                href="https://github.com/seu-usuario/Gerador.P-Web"
+                href={GITHUB_REPO_URL}
                 className="nav-link"
                 target="_blank"
                 rel="noreferrer"
@@ -50,7 +52,12 @@ function App() {
         {/* Page Content */}
         <main className="app-main">
           {currentPage === "home" && <Home />}
-          {currentPage === "about" && <About />}
+          {currentPage === "about" && (
+            <About
+              onBackHome={() => setCurrentPage("home")}
+              githubUrl={GITHUB_REPO_URL}
+            />
+          )}
         </main>
       </div>
     </AppProvider>

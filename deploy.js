@@ -2,12 +2,13 @@
 
 /**
  * Script de Deploy para Pregador IA
- * Automatiza o processo de upload para produção
+ * Automatiza verificações para deploy em produção
  */
 
 const fs = require("fs");
 const path = require("path");
 const { execSync } = require("child_process");
+const REQUIRED_PACKAGE_MANAGER = "npm@11.9.0";
 
 console.log(`
 ╔════════════════════════════════════════╗
@@ -19,6 +20,8 @@ console.log(`
 // Verificar Node.js
 const nodeVersion = process.version;
 console.log(`✓ Node.js ${nodeVersion}\n`);
+
+checkNpm();
 
 // Funções auxiliares
 function run(cmd, description) {
@@ -43,13 +46,44 @@ function checkFile(filePath, description) {
   }
 }
 
+function checkNpm() {
+  try {
+    const npmVersion = execSync("npm --version", { encoding: "utf8" }).trim();
+    console.log(`✓ npm ${npmVersion}`);
+    console.log(`✓ Package manager esperado: ${REQUIRED_PACKAGE_MANAGER}\n`);
+    return true;
+  } catch (error) {
+    console.error("✗ npm não foi encontrado no ambiente");
+    return false;
+  }
+}
+
+function checkPackageManager(packageJsonPath, description) {
+  if (!fs.existsSync(packageJsonPath)) {
+    console.log(`✗ ${description} não encontrado`);
+    return false;
+  }
+
+  const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf8"));
+
+  if (packageJson.packageManager === REQUIRED_PACKAGE_MANAGER) {
+    console.log(`✓ ${description} usa ${REQUIRED_PACKAGE_MANAGER}`);
+    return true;
+  }
+
+  console.log(
+    `✗ ${description} não está padronizado em ${REQUIRED_PACKAGE_MANAGER}`,
+  );
+  return false;
+}
+
 // Menu principal
 console.log("Escolha uma opção:\n");
-console.log("1. Build Backend para Render");
-console.log("2. Build Frontend para Vercel");
+console.log("1. Build Backend para Railway");
+console.log("2. Build Frontend para Railway");
 console.log("3. Build Ambos");
 console.log("4. Verificar Configuração");
-console.log("5. Abrir Documentação de Deploy\n");
+console.log("5. Verificar prontidão para deploy Railway\n");
 
 const option = process.argv[2] || "4";
 
@@ -68,7 +102,7 @@ switch (option) {
     checkConfig();
     break;
   case "5":
-    openDeploy();
+    checkReadiness();
     break;
   default:
     console.log("Opção inválida");
@@ -84,9 +118,10 @@ function buildBackend() {
 
   checkFile(".env.example", "Arquivo .env.example");
   checkFile("src/server.ts", "Server principal");
+  checkFile("railway.json", "Configuração Railway");
 
   run("npm run build", "Compilar TypeScript");
-  console.log("✓ Backend pronto para deploy em Render\n");
+  console.log("✓ Backend pronto para deploy em Railway\n");
 }
 
 function buildFrontend() {
@@ -97,11 +132,13 @@ function buildFrontend() {
   const frontendPath = path.join(__dirname, "frontend");
   process.chdir(frontendPath);
 
+  checkFile(".env.example", "Arquivo .env.example");
   checkFile("vite.config.ts", "Configuração Vite");
   checkFile("index.html", "HTML principal");
+  checkFile("railway.json", "Configuração Railway");
 
   run("npm run build", "Build com Vite");
-  console.log("✓ Frontend pronto para deploy em Vercel\n");
+  console.log("✓ Frontend pronto para deploy em Railway\n");
 }
 
 function checkConfig() {
@@ -112,38 +149,60 @@ function checkConfig() {
   // Backend checks
   console.log("Backend:");
   checkFile(path.join(__dirname, "backend/package.json"), "  package.json");
-  checkFile(path.join(__dirname, "backend/vercel.json"), "  vercel.json");
+  checkPackageManager(
+    path.join(__dirname, "backend/package.json"),
+    "  backend/package.json",
+  );
+  checkFile(path.join(__dirname, "backend/railway.json"), "  railway.json");
   checkFile(path.join(__dirname, "backend/tsconfig.json"), "  tsconfig.json");
+  checkFile(path.join(__dirname, "backend/.env.example"), "  .env.example");
 
   // Frontend checks
   console.log("\nFrontend:");
   checkFile(path.join(__dirname, "frontend/package.json"), "  package.json");
+  checkPackageManager(
+    path.join(__dirname, "frontend/package.json"),
+    "  frontend/package.json",
+  );
+  checkFile(path.join(__dirname, "frontend/railway.json"), "  railway.json");
   checkFile(
     path.join(__dirname, "frontend/vite.config.ts"),
     "  vite.config.ts",
   );
   checkFile(path.join(__dirname, "frontend/index.html"), "  index.html");
+  checkFile(path.join(__dirname, "frontend/.env.example"), "  .env.example");
 
   // Documentation
   console.log("\nDocumentação:");
-  checkFile(path.join(__dirname, "DEPLOY.md"), "  DEPLOY.md");
+  checkPackageManager(
+    path.join(__dirname, "package.json"),
+    "  package.json raiz",
+  );
+  checkFile(path.join(__dirname, "RAILWAY_DEPLOY.md"), "  RAILWAY_DEPLOY.md");
   checkFile(path.join(__dirname, "README.md"), "  README.md");
 
   console.log("\n✓ Configuração verificada!\n");
 }
 
-function openDeploy() {
-  const open = require("open");
-  const deployPath = path.join(__dirname, "DEPLOY.md");
-  if (fs.existsSync(deployPath)) {
-    console.log("\nAbrindo DEPLOY.md...\n");
-    // Em caso real, abrir o arquivo
-  }
+function checkReadiness() {
+  console.log("\n═══════════════════════════════════");
+  console.log("  PRONTIDÃO PARA DEPLOY RAILWAY");
+  console.log("═══════════════════════════════════\n");
+
+  checkConfig();
+
+  console.log("Variáveis obrigatórias:");
+  console.log("- Frontend: VITE_API_URL=https://seu-backend.up.railway.app");
+  console.log("- Backend: GROQ_API_KEY=gsk_sua_chave");
+  console.log("- Backend: CORS_ORIGIN=https://seu-frontend.up.railway.app");
+  console.log("- Backend: NODE_ENV=production\n");
+
+  console.log("Guia principal: RAILWAY_DEPLOY.md\n");
 }
 
-console.log("\n✓ Deploy completado com sucesso!\n");
-console.log("Próximos passos:");
-console.log("1. Leia DEPLOY.md para instruções detalhadas");
-console.log("2. Configure variáveis de ambiente em Render + Vercel");
+console.log("\n✓ Execução finalizada\n");
+console.log("Próximos passos sugeridos:");
+console.log("1. Leia RAILWAY_DEPLOY.md para instruções detalhadas");
+console.log("2. Configure variáveis de ambiente em Railway");
 console.log("3. Faça push para GitHub");
-console.log("4. Deploy automático começará\n");
+console.log("4. Acompanhe o deploy automático\n");

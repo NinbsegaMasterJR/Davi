@@ -21,6 +21,15 @@ if errorlevel 1 (
     exit /b 1
 )
 
+REM Verificar se npm está instalado
+npm --version >nul 2>&1
+if errorlevel 1 (
+    echo [ERRO] npm nao encontrado!
+    echo Este projeto esta padronizado em npm 11.9.0.
+    pause
+    exit /b 1
+)
+
 set "SCRIPT_DIR=%~dp0"
 set "BACKEND_DIR=%SCRIPT_DIR%backend"
 set "FRONTEND_DIR=%SCRIPT_DIR%frontend"
@@ -39,6 +48,7 @@ if not exist "%FRONTEND_DIR%" (
 )
 
 echo [INFO] Iniciando Pregador IA...
+echo [INFO] Package manager esperado: npm 11.9.0
 echo.
 
 REM Abrir terminal do Backend

@@ -1,5 +1,7 @@
 # Guia de Instalação Rápida
 
+Use npm em todo o projeto. O repositório está fixado em `npm@11.9.0`.
+
 ## 1️⃣ Backend
 
 ```bash
@@ -8,8 +10,8 @@ npm install
 cp .env.example .env
 
 # Editar .env com suas chaves
-# OPENAI_API_KEY=sk-...
-# BIBLE_API_KEY=...
+# GROQ_API_KEY=gsk_...
+# CORS_ORIGIN=http://localhost:3000
 
 npm run dev
 ```
@@ -35,8 +37,7 @@ Abra seu navegador em: **http://localhost:3000**
 ```env
 PORT=3001
 NODE_ENV=development
-OPENAI_API_KEY=your_openai_api_key
-BIBLE_API_KEY=your_bible_api_key
+GROQ_API_KEY=your_groq_api_key
 CORS_ORIGIN=http://localhost:3000
 ```
 
@@ -74,8 +75,8 @@ kill -9 <PID>
 **Erro de CORS?**
 Verifique se CORS_ORIGIN no .env corresponde ao seu frontend URL
 
-**OpenAI erro?**
-Confira se a chave está correta e tem créditos disponíveis
+**Erro na IA?**
+Confira se `GROQ_API_KEY` está correta e com acesso ativo
 
 ---
 

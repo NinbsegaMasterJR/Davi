@@ -22,6 +22,13 @@ if ! command -v node &> /dev/null; then
     exit 1
 fi
 
+# Verificar npm
+if ! command -v npm &> /dev/null; then
+    echo "[ERRO] npm não encontrado!"
+    echo "Este projeto está padronizado em npm 11.9.0."
+    exit 1
+fi
+
 # Verificar pastas
 if [ ! -d "$BACKEND_DIR" ]; then
     echo "[ERRO] Pasta backend não encontrada!"
@@ -34,6 +41,7 @@ if [ ! -d "$FRONTEND_DIR" ]; then
 fi
 
 echo "[INFO] Iniciando Pregador IA..."
+echo "[INFO] Package manager esperado: npm 11.9.0"
 echo ""
 
 # Função para cleanup ao sair

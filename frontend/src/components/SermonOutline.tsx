@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { sermonAPI } from "../services/api";
 import { useApp } from "../context/AppContext";
+import { getErrorMessage } from "../utils/httpError";
 import "./SermonOutline.css";
 import ReactMarkdown from "react-markdown";
 
@@ -25,8 +26,8 @@ export const SermonOutline: React.FC = () => {
       const response = await sermonAPI.generateOutline(tema, estilo, duracao);
       setResultado(response.data.esboço);
       showSuccess("Esboço gerado com sucesso!");
-    } catch (error: any) {
-      showError(error.response?.data?.error || "Erro ao gerar esboço");
+    } catch (error: unknown) {
+      showError(getErrorMessage(error, "Erro ao gerar esboço"));
     } finally {
       setCarregando(false);
     }

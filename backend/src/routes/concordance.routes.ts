@@ -1,12 +1,8 @@
 import { Router, Request, Response } from "express";
 import { buscarConcordancia } from "../services/bible.service";
+import { getErrorMessage } from "../utils/httpError";
 
 const router = Router();
-
-interface ConcordanceRequest {
-  palavra: string;
-  limite?: number;
-}
 
 // Buscar concordância bíblica
 router.get("/search", async (req: Request, res: Response) => {
@@ -21,15 +17,18 @@ router.get("/search", async (req: Request, res: Response) => {
       return;
     }
 
-    const resultados = await buscarConcordancia(palavra);
+    const limiteNum = parseInt(String(limite) || "10");
+    const resultados = await buscarConcordancia(palavra, limiteNum);
     res.json({
       sucesso: true,
       palavra,
       total: resultados.length,
-      resultados: resultados.slice(0, parseInt(String(limite) || "10")),
+      resultados,
     });
-  } catch (error: any) {
-    res.status(500).json({ error: error.message });
+  } catch (error: unknown) {
+    res
+      .status(500)
+      .json({ error: getErrorMessage(error, "Erro interno do servidor") });
   }
 });
 

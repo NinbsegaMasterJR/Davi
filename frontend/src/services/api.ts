@@ -1,9 +1,18 @@
 import axios from "axios";
+import API_BASE_URL from "../config";
+
+const apiBaseUrl = import.meta.env.DEV ? "/api" : `${API_BASE_URL}/api`;
 
 const api = axios.create({
-  baseURL: "/api",
+  baseURL: apiBaseUrl,
   timeout: 30000,
 });
+
+export interface Versiculo {
+  referencia: string;
+  texto: string;
+  versao?: string;
+}
 
 export interface SermonOutlineResponse {
   sucesso: boolean;
@@ -13,11 +22,7 @@ export interface SermonOutlineResponse {
 export interface VersesSuggestion {
   sucesso: boolean;
   tema: string;
-  versiculos: Array<{
-    referencia: string;
-    texto: string;
-    versao?: string;
-  }>;
+  versiculos: Versiculo[];
 }
 
 export interface PassageExplanation {
@@ -30,6 +35,17 @@ export interface TheologicalAnalysis {
   analise: string;
 }
 
+export interface TheologicalAnalysisRequest {
+  tema: string;
+  passagem?: string;
+  profundidade?: "basico" | "medio" | "avancado";
+}
+
+export interface SermonScheduleResponse {
+  sucesso: boolean;
+  cronograma: string;
+}
+
 // Sermon endpoints
 export const sermonAPI = {
   generateOutline: (tema: string, estilo?: string, duracao?: number) =>
@@ -39,8 +55,16 @@ export const sermonAPI = {
       duracao,
     }),
 
-  analyzeTheologically: (tema: string, passagem?: string) =>
-    api.post<TheologicalAnalysis>("/sermons/analysis", { tema, passagem }),
+  analyzeTheologically: ({
+    tema,
+    passagem,
+    profundidade,
+  }: TheologicalAnalysisRequest) =>
+    api.post<TheologicalAnalysis>("/analysis/theological", {
+      tema,
+      passagem,
+      profundidade,
+    }),
 
   explainPassage: (referencia: string) =>
     api.post<PassageExplanation>("/sermons/explain", { referencia }),
@@ -50,7 +74,13 @@ export const sermonAPI = {
     ano: number,
     temas: string[],
     estilo?: string,
-  ) => api.post("/sermons/schedule", { mes, ano, temas, estilo }),
+  ) =>
+    api.post<SermonScheduleResponse>("/sermons/schedule", {
+      mes,
+      ano,
+      temas,
+      estilo,
+    }),
 };
 
 // Verses endpoints
@@ -62,15 +92,32 @@ export const versesAPI = {
 };
 
 // Concordance endpoints
+export interface ConcordanceResponse {
+  sucesso: boolean;
+  palavra: string;
+  total: number;
+  resultados: Versiculo[];
+}
+
 export const concordanceAPI = {
   search: (palavra: string, limite?: number) =>
-    api.get("/concordance/search", { params: { palavra, limite } }),
+    api.get<ConcordanceResponse>("/concordance/search", {
+      params: { palavra, limite },
+    }),
 };
 
 // Analysis endpoints
 export const analysisAPI = {
-  theological: (tema: string, profundidade?: "basico" | "medio" | "avancado") =>
-    api.post("/analysis/theological", { tema, profundidade }),
+  theological: (
+    tema: string,
+    profundidade?: "basico" | "medio" | "avancado",
+    passagem?: string,
+  ) =>
+    api.post<TheologicalAnalysis>("/analysis/theological", {
+      tema,
+      profundidade,
+      passagem,
+    }),
 };
 
 export default api;

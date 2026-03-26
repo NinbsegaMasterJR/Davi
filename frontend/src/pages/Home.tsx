@@ -2,9 +2,18 @@ import React, { useState } from "react";
 import { SermonOutline } from "../components/SermonOutline";
 import { VersesSuggestion } from "../components/VersesSuggestion";
 import { TheologicalAnalysis } from "../components/TheologicalAnalysis";
+import { ExplicarPassagem } from "../components/ExplicarPassagem";
+import { Concordancia } from "../components/Concordancia";
+import { CronogramaPregacoes } from "../components/CronogramaPregacoes";
 import "./Home.css";
 
-type ActiveTab = "outline" | "verses" | "analysis";
+type ActiveTab =
+  | "outline"
+  | "verses"
+  | "analysis"
+  | "explain"
+  | "concordance"
+  | "schedule";
 
 export const Home: React.FC = () => {
   const [activeTab, setActiveTab] = useState<ActiveTab>("outline");
@@ -37,16 +46,37 @@ export const Home: React.FC = () => {
         >
           🔍 Análise
         </button>
+        <button
+          className={`tab ${activeTab === "explain" ? "active" : ""}`}
+          onClick={() => setActiveTab("explain")}
+        >
+          ✝️ Passagem
+        </button>
+        <button
+          className={`tab ${activeTab === "concordance" ? "active" : ""}`}
+          onClick={() => setActiveTab("concordance")}
+        >
+          📚 Concordância
+        </button>
+        <button
+          className={`tab ${activeTab === "schedule" ? "active" : ""}`}
+          onClick={() => setActiveTab("schedule")}
+        >
+          📅 Cronograma
+        </button>
       </nav>
 
       <main className="main-content">
         {activeTab === "outline" && <SermonOutline />}
         {activeTab === "verses" && <VersesSuggestion />}
         {activeTab === "analysis" && <TheologicalAnalysis />}
+        {activeTab === "explain" && <ExplicarPassagem />}
+        {activeTab === "concordance" && <Concordancia />}
+        {activeTab === "schedule" && <CronogramaPregacoes />}
       </main>
 
       <footer className="footer">
-        <p>© 2024 Pregador IA - Assistente de Pregações Inteligente</p>
+        <p>© 2026 Pregador IA - Assistente de Pregações Inteligente</p>
       </footer>
     </div>
   );

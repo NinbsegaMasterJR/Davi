@@ -7,8 +7,9 @@ Uma transformação completa do Gerador.P (extensão VS Code) em um **site web f
 - ✨ **Gerar Esboço de Pregações** - Crie esboços estruturados com IA
 - 📖 **Sugerir Versículos** - Busque versículos bíblicos por tema
 - 🔍 **Análise Teológica** - Análises profundas de temas teológicos
-- 📅 **Cronograma de Pregações** - Planeje suas pregações
-- 🔗 **Concordância Bíblica** - Busque palavras na Bíblia
+- 📅 **Cronograma de Pregações** - Planeje temas mensais com IA
+- 🔗 **Concordância Bíblica** - Busque palavras e conceitos na Bíblia
+- ✝️ **Explicar Passagem** - Gere explicações detalhadas de textos bíblicos
 
 ## 🏗️ Arquitetura
 
@@ -19,7 +20,7 @@ backend/
 ├── src/
 │   ├── server.ts                 # Servidor principal
 │   ├── services/
-│   │   ├── ia.service.ts         # Integração OpenAI
+│   │   ├── ia.service.ts         # Integração Groq
 │   │   └── bible.service.ts      # Dados bíblicos
 │   └── routes/
 │       ├── sermon.routes.ts      # Esboços e análises
@@ -56,7 +57,7 @@ frontend/
 
 ## 🚀 Instalação e Configuração
 
-### ⚡ Quick Start (Uma Clique!)
+### ⚡ Quick Start (Um clique)
 
 **Windows:** Duplo-clique em `iniciar.bat`
 
@@ -82,9 +83,10 @@ chmod +x iniciar.sh
 ### 🔧 Instalação Manual
 
 - Node.js 16+
-- npm ou yarn
-- Chave de API OpenAI
-- Chave de API Bible (opcional)
+- npm 11.9.0
+- Chave de API Groq
+
+O projeto está padronizado com `packageManager: npm@11.9.0` nos `package.json`. Use npm em todos os comandos deste repositório.
 
 ### Backend
 
@@ -107,8 +109,7 @@ npm install
 cp .env.example .env
 
 # Edite o .env e adicione suas chaves
-OPENAI_API_KEY=seu_openai_key_aqui
-BIBLE_API_KEY=sua_bible_api_key_aqui
+GROQ_API_KEY=sua_chave_groq_aqui
 PORT=3001
 CORS_ORIGIN=http://localhost:3000
 ```
@@ -196,9 +197,9 @@ Body: {
 
 ## 🤖 Integração com IA
 
-### OpenAI (Claude)
+### Groq
 
-O sistema usa Claude 3.5 Sonnet para:
+O sistema usa Groq com LLM para:
 
 - Geração de esboços com estrutura teológica
 - Análises teológicas profundas
@@ -211,13 +212,8 @@ O sistema usa Claude 3.5 Sonnet para:
 - Análises incluem contexto histórico e aplicação moderna
 - Explicações são estruturadas com múltiplas seções
 
-### Bible API
-
-Para implementação completa, integre com:
-
-- **BibleAPI.com** - Textos completos da Bíblia
-- **Scripture.api.bible** - Múltiplas versões
-- **Bíblia digital local** - Arquivo JSON/SQLite
+Atualmente as sugestões bíblicas e concordância são geradas pela camada de IA.
+Se quiser maior precisão textual no futuro, você pode integrar uma API bíblica dedicada.
 
 ## 🎨 Componentes Frontend
 
@@ -257,6 +253,31 @@ npm run build
 # Os arquivos estarão em dist/
 ```
 
+## 🚂 Deploy no Railway
+
+O fluxo recomendado é usar dois serviços separados no Railway:
+
+- Serviço `backend` com root directory `backend`
+- Serviço `frontend` com root directory `frontend`
+
+Variáveis mínimas:
+
+### Backend
+
+```bash
+GROQ_API_KEY=gsk_sua_chave_aqui
+NODE_ENV=production
+CORS_ORIGIN=https://seu-frontend.up.railway.app
+```
+
+### Frontend
+
+```bash
+VITE_API_URL=https://seu-backend.up.railway.app
+```
+
+Veja [RAILWAY_DEPLOY.md](RAILWAY_DEPLOY.md) para o passo a passo.
+
 ## 🔐 Segurança
 
 - ✅ Variáveis de ambiente para chaves sensíveis
@@ -266,44 +287,34 @@ npm run build
 
 ## ☁️ Colocar no Ar (Deploy)
 
-**Leia este arquivo PRIMEIRO:** [DEPLOY_RAPIDO.md](DEPLOY_RAPIDO.md)
+**Leia este arquivo PRIMEIRO:** [RAILWAY_DEPLOY.md](RAILWAY_DEPLOY.md)
 
-### Opções de Hosting Gratuitas
+### Plataforma recomendada
 
-#### Frontend (Vercel)
+#### Frontend e Backend no Railway
 
 ```bash
-1. Clique em: https://vercel.com/new
+1. Crie um projeto em https://railway.app
 2. Conecte seu repositório GitHub
-3. Se perguntado pelo "Root Directory", escolha: frontend
-4. Clique "Deploy"
+3. Crie um serviço com Root Directory: frontend
+4. Crie outro serviço com Root Directory: backend
 ```
 
-**Pronto em:** ~2 minutos  
-**Seu site:** https://seu-projeto.vercel.app
+**Variáveis obrigatórias:**
 
-#### Backend (Render)
+- Frontend: `VITE_API_URL=https://seu-backend.up.railway.app`
+- Backend: `GROQ_API_KEY`, `CORS_ORIGIN=https://seu-frontend.up.railway.app`, `NODE_ENV=production`
 
-```bash
-1. Clique em: https://render.com/new
-2. Selecione "Web Service"
-3. Conecte seu repositório GitHub
-4. Configure variáveis de ambiente:
-   - ANTHROPIC_API_KEY (obtenha em https://console.anthropic.com)
-   - CORS_ORIGIN (seu URL do Vercel)
-5. Clique "Create"
-```
-
-**Pronto em:** ~5 minutos  
-**Sua API:** https://seu-api.onrender.com
+**Tempo médio:** ~5 minutos por serviço  
+**Guia completo:** [RAILWAY_DEPLOY.md](RAILWAY_DEPLOY.md)
 
 ---
 
 ## 🎯 Próximas Etapas
 
-1. **Integrar Bible APIs reais** - Implementar buscas de versículos autênticas
-2. **Adicionar persistência** - Banco de dados para salvar pregações
-3. **Autenticação** - Login e conta do usuário
+1. **Adicionar persistência** - Banco de dados para salvar esboços e históricos
+2. **Criar autenticação** - Login e contas de usuário
+3. **Melhorar observabilidade** - Logs, métricas e monitoramento de erros
 4. **Histórico** - Salvar esboços anteriores
 5. **Share** - Compartilhar pregações por link
 6. **Upload** - Importar suas próprias notas

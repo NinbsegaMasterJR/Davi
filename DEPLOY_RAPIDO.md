@@ -1,196 +1,64 @@
 # 🚀 Colocar Pregador IA no Ar - Guia Rápido
 
-## ⚡ TL;DR (Quick Start)
+## ⚡ TL;DR
 
-1. **Clicar aqui:** https://vercel.com/new
-2. **Clicar aqui:** https://render.com/new
-3. **Pronto!** Site está no ar em ~15 minutos
+1. Envie o repositório para o GitHub
+2. Crie dois serviços no Railway: `frontend` e `backend`
+3. Configure `VITE_API_URL`, `GROQ_API_KEY` e `CORS_ORIGIN`
+4. Aguarde o deploy e teste a rota `/health`
 
----
+## Stack atual de deploy
 
-## 📋 Step-by-Step Completo
+- Package manager: npm 11.9.0
+- Frontend: Railway com Root Directory `frontend`
+- Backend: Railway com Root Directory `backend`
+- IA: Groq
 
-### PASSO 1️⃣: Preparar GitHub
+## Configuração rápida
 
-```bash
-cd Gerador.P-Web
+### Serviço frontend
 
-# Inicializar repositório
-git init
-
-# Adicionar todos os arquivos
-git add .
-
-# Fazer commit
-git commit -m "Pregador IA - Versão Web"
-
-# Criar main branch
-git branch -M main
-
-# Adicionar repositório remoto
-git remote add origin https://github.com/SEU_USUARIO/Gerador.P-Web.git
-
-# Enviar para GitHub
-git push -u origin main
+```txt
+Root Directory: frontend
+Build Command: npm install && npm run build
+Start Command: npx vite preview --host 0.0.0.0 --port $PORT
+VITE_API_URL=https://seu-backend.up.railway.app
 ```
 
-**GitHub:** Acesse https://github.com/new para criar um novo repositório
+### Serviço backend
 
----
+```txt
+Root Directory: backend
+Build Command: npm install && npm run build
+Start Command: npm start
+GROQ_API_KEY=gsk_sua_chave
+CORS_ORIGIN=https://seu-frontend.up.railway.app
+NODE_ENV=production
+```
 
-### PASSO 2️⃣: Deploy Frontend (Vercel)
+## Checklist final
 
-1. Acesse **https://vercel.com**
-2. Clique **"Sign Up"** → crie conta com GitHub
-3. Clique **"Add New..."** → **"Project"**
-4. Selecione **Gerador.P-Web**
-5. Configure:
-   ```
-   Framework Preset: Vite
-   Root Directory: frontend
-   Build Command: npm run build
-   Output Directory: dist
-   ```
-6. Clique **"Deploy"** ✨
-
-**Sua URL será:** `https://seu-projeto.vercel.app`
-
----
-
-### PASSO 3️⃣: Deploy Backend (Render)
-
-1. Acesse **https://render.com**
-2. Clique **"Sign Up"** → crie conta com GitHub
-3. Clique **"New"** → **"Web Service"**
-4. Conecte seu repositório GitHub
-5. Configure:
-   ```
-   Name: pregador-ia-api
-   Runtime: Node.js
-   Start Command: npm start
-   ```
-6. Clique **"Advanced"** e adicione:
-   ```
-   ANTHROPIC_API_KEY = sk-ant-...
-   CORS_ORIGIN = https://seu-projeto.vercel.app
-   NODE_ENV = production
-   ```
-7. Clique **"Create Web Service"** ✨
-
-**Sua URL será:** `https://pregador-ia-api.onrender.com`
-
----
-
-### PASSO 4️⃣: Conectar Frontend ↔ Backend
-
-Edite no Vercel:
-
-1. Dashboard → Projeto → **Settings**
-2. **Environment Variables**
-3. Adicione:
-   ```
-   VITE_API_URL = https://pregador-ia-api.onrender.com/api
-   ```
-4. **Redeploy** (automático)
-
----
-
-## ✅ Checklist Final
-
-- [ ] GitHub conta criada
-- [ ] Repositório enviado (git push)
-- [ ] Vercel account criada com GitHub
-- [ ] Frontend deployado (https://seu-projeto.vercel.app)
-- [ ] Render account criada com GitHub
-- [ ] Backend deployado (https://pregador-ia-api.onrender.com)
+- [ ] Repositório enviado ao GitHub
+- [ ] Frontend publicado no Railway
+- [ ] Backend publicado no Railway
 - [ ] Variáveis de ambiente configuradas
-- [ ] Teste: acesse seu site e tente usar um comando
+- [ ] Teste em `/health` funcionando
+- [ ] Geração de conteúdo funcionando no frontend
 
----
+## Teste rápido
 
-## 🧪 Testar Produção
+Verifique se o backend responde em:
 
-### 1. Health Check (Backend)
-
-```bash
-curl https://pregador-ia-api.onrender.com/health
+```txt
+https://seu-backend.up.railway.app/health
 ```
 
-Deve retornar:
+Resposta esperada:
 
 ```json
 { "status": "OK", "message": "Pregador IA API is running" }
 ```
 
-### 2. Testar Frontend
+## Guia completo
 
-Acesse seu URL: `https://seu-projeto.vercel.app`
-
-Tente:
-
-- Digite um tema em "Gerar Esboço"
-- Clique em "Gerar Esboço"
-- Aguarde resposta da IA
-
----
-
-## 🔐 Chave Anthropic (Claude)
-
-1. Acesse https://console.anthropic.com
-2. Clique **"Get API Key"**
-3. Copie a chave (começa com `sk-ant-`)
-4. Cole em Render → **ANTHROPIC_API_KEY**
-
----
-
-## 💰 Custo
-
-| Serviço         | Custo                       | Status |
-| --------------- | --------------------------- | ------ |
-| Vercel Frontend | **GRÁTIS**                  | ✅     |
-| Render Backend  | **GRÁTIS** (com limitações) | ✅     |
-| Anthropic API   | Pague conforme usar         | 💳     |
-
-**Primeiro mês:** Grátis! Depois depende de uso.
-
----
-
-## 🆘 Erro Comum: "Cannot Cannot connect to API"
-
-**Solução:**
-
-1. Ir em Render → Web Service → **Logs**
-2. Verificar se há erro
-3. Confirmar CORS_ORIGIN está correto em Render
-4. Redeploy em Vercel
-
----
-
-## 📊 Status do Site
-
-Com tudo "no ar", você tem:
-
-- ✅ Frontend em Vercel (rápido, global)
-- ✅ Backend em Render (serverless, automático)
-- ✅ IA Claude (powered by Anthropic)
-- ✅ HTTPS (seguro)
-- ✅ Auto-scaling (crescimento automático)
-
----
-
-## 📞 Suporte
-
-- **Vercel:** https://vercel.com/support
-- **Render:** https://render.com/docs
-- **Anthropic:** https://support.anthropic.com
-
----
-
-**Seu site estará no ar em ~15 minutos! 🎉**
-
-Próximas melhorias opcionais:
-
-- Domínio próprio (seu-dominio.com)
-- Email (seu-email@seu-dominio.com)
-- Analytics (Google Analytics)
-- Banco de dados (PostgreSQL)
+Se precisar do passo a passo completo, use [RAILWAY_DEPLOY.md](RAILWAY_DEPLOY.md).

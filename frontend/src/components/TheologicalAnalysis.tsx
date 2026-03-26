@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { sermonAPI } from "../services/api";
+import { analysisAPI } from "../services/api";
 import { useApp } from "../context/AppContext";
+import { getErrorMessage } from "../utils/httpError";
 import "./TheologicalAnalysis.css";
 import ReactMarkdown from "react-markdown";
 
@@ -21,14 +22,15 @@ export const TheologicalAnalysis: React.FC = () => {
 
     setCarregando(true);
     try {
-      const response = await sermonAPI.analyzeTheologically(
+      const response = await analysisAPI.theological(
         tema,
+        profundidade as "basico" | "medio" | "avancado",
         passagem || undefined,
       );
       setResultado(response.data.analise);
       showSuccess("Análise gerada com sucesso!");
-    } catch (error: any) {
-      showError(error.response?.data?.error || "Erro ao gerar análise");
+    } catch (error: unknown) {
+      showError(getErrorMessage(error, "Erro ao gerar análise"));
     } finally {
       setCarregando(false);
     }

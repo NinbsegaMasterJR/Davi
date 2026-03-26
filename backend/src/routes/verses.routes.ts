@@ -1,12 +1,8 @@
 import { Router, Request, Response } from "express";
 import { buscarVersiculos } from "../services/bible.service";
+import { getErrorMessage } from "../utils/httpError";
 
 const router = Router();
-
-interface VersesRequest {
-  tema: string;
-  limite?: number;
-}
 
 // Sugerir versículos por tema
 router.get("/suggest", async (req: Request, res: Response) => {
@@ -18,14 +14,19 @@ router.get("/suggest", async (req: Request, res: Response) => {
       return;
     }
 
-    const versiculos = await buscarVersiculos(tema);
+    const versiculos = await buscarVersiculos(
+      tema,
+      parseInt(String(limite) || "5"),
+    );
     res.json({
       sucesso: true,
       tema,
-      versiculos: versiculos.slice(0, parseInt(String(limite) || "5")),
+      versiculos,
     });
-  } catch (error: any) {
-    res.status(500).json({ error: error.message });
+  } catch (error: unknown) {
+    res
+      .status(500)
+      .json({ error: getErrorMessage(error, "Erro interno do servidor") });
   }
 });
 
@@ -42,8 +43,10 @@ router.get("/:referencia", async (req: Request, res: Response) => {
         texto: "Implementar integração com Bible API",
       },
     });
-  } catch (error: any) {
-    res.status(500).json({ error: error.message });
+  } catch (error: unknown) {
+    res
+      .status(500)
+      .json({ error: getErrorMessage(error, "Erro interno do servidor") });
   }
 });
 

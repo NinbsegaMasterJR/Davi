@@ -1,15 +1,32 @@
-import express, { Express, Request, Response } from "express";
+import express, { Express, NextFunction, Request, Response } from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import sermonRoutes from "./routes/sermon.routes";
 import versesRoutes from "./routes/verses.routes";
 import concordanceRoutes from "./routes/concordance.routes";
 import analysisRoutes from "./routes/analysis.routes";
+import { getErrorMessage, getErrorStatus } from "./utils/httpError";
 
 dotenv.config();
 
 const app: Express = express();
 const port = process.env.PORT || 3001;
+const configuredOrigins = (process.env.CORS_ORIGIN || "")
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
+function isAllowedOrigin(origin: string): boolean {
+  return (
+    origin === "http://localhost:3000" ||
+    origin === "http://localhost:3001" ||
+    origin.includes("vercel.app") ||
+    origin.includes("onrender.com") ||
+    origin.includes("up.railway.app") ||
+    origin.includes("localhost") ||
+    configuredOrigins.includes(origin)
+  );
+}
 
 // Middleware
 const corsOptions = {
@@ -18,17 +35,15 @@ const corsOptions = {
     callback: (err: Error | null, allow?: boolean) => void,
   ) {
     // Permitir requisições sem origin (mobile apps, curl, etc)
-    if (
-      !origin ||
-      origin === "http://localhost:3000" ||
-      origin === "http://localhost:3001" ||
-      origin.includes("vercel.app") ||
-      origin.includes("onrender.com") ||
-      origin.includes("localhost")
-    ) {
+    if (!origin) {
+      callback(null, true);
+      return;
+    }
+
+    if (isAllowedOrigin(origin)) {
       callback(null, true);
     } else {
-      callback(null, true); // Permitir de qualquer lugar para público
+      callback(new Error("Origem não permitida pelo CORS"));
     }
   },
   credentials: true,
@@ -53,14 +68,17 @@ app.use("/api/analysis", analysisRoutes);
 
 // 404 Handler
 app.use((req: Request, res: Response) => {
+  void req;
   res.status(404).json({ error: "Route not found" });
 });
 
 // Error Handler
-app.use((err: any, req: Request, res: Response, next: any) => {
+app.use((err: unknown, req: Request, res: Response, next: NextFunction) => {
+  void req;
+  void next;
   console.error(err);
-  res.status(err.status || 500).json({
-    error: err.message || "Internal Server Error",
+  res.status(getErrorStatus(err)).json({
+    error: getErrorMessage(err, "Internal Server Error"),
   });
 });
 

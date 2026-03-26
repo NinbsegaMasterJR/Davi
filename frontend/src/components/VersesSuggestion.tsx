@@ -1,12 +1,13 @@
 import React, { useState } from "react";
-import { versesAPI } from "../services/api";
+import { versesAPI, type Versiculo } from "../services/api";
 import { useApp } from "../context/AppContext";
+import { getErrorMessage } from "../utils/httpError";
 import "./VersesSuggestion.css";
 
 export const VersesSuggestion: React.FC = () => {
   const [tema, setTema] = useState("");
   const [limite, setLimite] = useState(5);
-  const [versiculos, setVersiculos] = useState<any[]>([]);
+  const [versiculos, setVersiculos] = useState<Versiculo[]>([]);
   const [carregando, setCarregando] = useState(false);
 
   const { showSuccess, showError } = useApp();
@@ -22,8 +23,8 @@ export const VersesSuggestion: React.FC = () => {
       const response = await versesAPI.suggest(tema, limite);
       setVersiculos(response.data.versiculos);
       showSuccess(`${response.data.versiculos.length} versículos encontrados!`);
-    } catch (error: any) {
-      showError(error.response?.data?.error || "Erro ao buscar versículos");
+    } catch (error: unknown) {
+      showError(getErrorMessage(error, "Erro ao buscar versículos"));
     } finally {
       setCarregando(false);
     }

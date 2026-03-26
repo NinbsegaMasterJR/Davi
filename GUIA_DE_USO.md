@@ -190,9 +190,9 @@ Um assistente inteligente desenvolvido para ajudar pregadores, pastores e líder
 
 **Tecnologia:**
 
-- 🤖 Powered by Claude AI (Anthropic)
+- 🤖 Powered by Groq + LLM
 - 💻 Desenvolvido em React + Express
-- ☁️ Hospedado em Vercel + Render
+- ☁️ Preparado para deploy em Railway
 
 **Missão:**
 Facilitar a preparação de pregações transformadores para o Reino de Deus.

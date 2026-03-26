@@ -1,20 +1,25 @@
 import React, { useState } from "react";
 import "./About.css";
 
+interface AboutProps {
+  onBackHome: () => void;
+  githubUrl: string;
+}
+
 // eslint-disable-next-line @typescript-eslint/naming-convention
-export const About: React.FC = () => {
+export const About: React.FC<AboutProps> = ({ onBackHome, githubUrl }) => {
   const [expandedFaq, setExpandedFaq] = useState<number | null>(null);
 
   const faqs = [
     {
       pergunta: "Como funciona o Pregador IA?",
       resposta:
-        "O Pregador IA usa inteligência artificial (Claude) para gerar esboços de pregações, análises teológicas e sugerir versículos. Você fornece um tema, e a IA estrutura uma pregação completa em segundos.",
+        "O Pregador IA usa inteligência artificial para gerar esboços de pregações, análises teológicas e sugestões de versículos. Você informa um tema ou passagem, e a plataforma devolve uma base estruturada em segundos.",
     },
     {
       pergunta: "É realmente grátis?",
       resposta:
-        "Sim! O uso é completamente grátis. Você só precisa accesar o site. Sem cadastro, sem cobrança, sem limite de uso.",
+        "Sim. A proposta atual do projeto é oferecer uso simples e direto, sem cadastro obrigatório e sem barreiras para começar.",
     },
     {
       pergunta: "Posso usar com celular?",
@@ -24,12 +29,12 @@ export const About: React.FC = () => {
     {
       pergunta: "Como posso salvar meus esboços?",
       resposta:
-        "Você pode copiar o resultado e colar em Word, Google Docs, ou qualquer editor de texto. Futuramente teremos opção de salvar na nuvem.",
+        "Você pode copiar o resultado e colar em Word, Google Docs ou qualquer editor de texto. O foco atual é geração rápida e reaproveitamento manual.",
     },
     {
       pergunta: "Qual versão da Bíblia é usada?",
       resposta:
-        "Usamos principalmente a ARA (Almeida Revista e Atualizada). Os versículos são do acervo mais confiável.",
+        "O projeto prioriza respostas em português com referências bíblicas no formato mais comum para estudo e pregação.",
     },
     {
       pergunta: "A IA sempre dá respostas diferentes?",
@@ -67,8 +72,8 @@ export const About: React.FC = () => {
             precise preparar pregações teologicamente sólidas e inspiradoras.
           </p>
           <p>
-            Usando inteligência artificial avançada (Claude), geramos esboços
-            estruturados, análises teológicas profundas e sugestões de
+            Usando inteligência artificial com foco em produtividade, geramos
+            esboços estruturados, análises teológicas profundas e sugestões de
             versículos em segundos.
           </p>
         </section>
@@ -80,7 +85,10 @@ export const About: React.FC = () => {
             <div className="step">
               <div className="step-number">1</div>
               <h3>Escolha uma aba</h3>
-              <p>Esboço, Versículos ou Análise</p>
+              <p>
+                Esboço, Versículos, Análise, Passagem, Concordância ou
+                Cronograma
+              </p>
             </div>
             <div className="step">
               <div className="step-number">2</div>
@@ -95,7 +103,7 @@ export const About: React.FC = () => {
             <div className="step">
               <div className="step-number">4</div>
               <h3>Clique gerar</h3>
-              <p>Aguarde 30-60 segundos</p>
+              <p>Aguarde alguns segundos</p>
             </div>
             <div className="step">
               <div className="step-number">5</div>
@@ -131,6 +139,27 @@ export const About: React.FC = () => {
               </p>
             </div>
             <div className="feature">
+              <h3>✝️ Explicar Passagem</h3>
+              <p>
+                Explicação detalhada de qualquer passagem bíblica com contexto
+                histórico e interpretação teológica.
+              </p>
+            </div>
+            <div className="feature">
+              <h3>📚 Concordância Bíblica</h3>
+              <p>
+                Encontre todos os versículos bíblicos que contêm ou se
+                relacionam com uma palavra ou conceito.
+              </p>
+            </div>
+            <div className="feature">
+              <h3>📅 Cronograma de Pregações</h3>
+              <p>
+                Gere um cronograma mensal completo de pregações com temas,
+                títulos e versículos base para cada domingo.
+              </p>
+            </div>
+            <div className="feature">
               <h3>⚡ Rápido e Fácil</h3>
               <p>Resultados em segundos. Sem cadastro necessário.</p>
             </div>
@@ -140,7 +169,7 @@ export const About: React.FC = () => {
             </div>
             <div className="feature">
               <h3>📱 Funciona em Todos os Dispositivos</h3>
-              <p>Computador, tablet, celular. Offline não funciona.</p>
+              <p>Computador, tablet, celular. Totalmente responsivo.</p>
             </div>
           </div>
         </section>
@@ -177,8 +206,8 @@ export const About: React.FC = () => {
           <h2>Tecnologia</h2>
           <div className="tech-grid">
             <div className="tech-item">
-              <h4>🤖 AI Claude</h4>
-              <p>Powered by Anthropic - IA mais avançada do mercado</p>
+              <h4>🤖 Groq + LLM</h4>
+              <p>Geração rápida de conteúdo com respostas em poucos segundos</p>
             </div>
             <div className="tech-item">
               <h4>⚛️ React</h4>
@@ -190,7 +219,9 @@ export const About: React.FC = () => {
             </div>
             <div className="tech-item">
               <h4>☁️ Cloud</h4>
-              <p>Hospedado em Vercel + Render (grátis)</p>
+              <p>
+                Pronto para deploy em serviços modernos como Railway e Render
+              </p>
             </div>
           </div>
         </section>
@@ -198,20 +229,34 @@ export const About: React.FC = () => {
         {/* Seção: Contato */}
         <section className="about-section about-contact">
           <h2>Quer Entrar em Contato?</h2>
-          <p>Sugestões, feedback ou dúvidas? Adoramos ouvir de você!</p>
+          <p>
+            O canal mais confiável do projeto hoje é o repositório no GitHub,
+            onde você pode acompanhar evolução, abrir issue e sugerir melhorias.
+          </p>
           <div className="contact-links">
-            <a href="mailto:seu-email@example.com" className="contact-btn">
-              📧 Email
-            </a>
             <a
-              href="https://github.com/seu-usuario/Gerador.P-Web"
+              href={githubUrl}
               className="contact-btn"
+              target="_blank"
+              rel="noreferrer"
             >
               🐙 GitHub
             </a>
-            <a href="https://wa.me/seu-numero" className="contact-btn">
-              💬 WhatsApp
+            <a
+              href={`${githubUrl}/issues`}
+              className="contact-btn secondary"
+              target="_blank"
+              rel="noreferrer"
+            >
+              🛠️ Reportar melhoria
             </a>
+            <button
+              type="button"
+              className="contact-btn secondary"
+              onClick={onBackHome}
+            >
+              ← Voltar ao app
+            </button>
           </div>
         </section>
 
@@ -219,9 +264,9 @@ export const About: React.FC = () => {
         <section className="about-cta">
           <h2>Pronto para começar?</h2>
           <p>Prepare sua próxima pregação em minutos, não horas.</p>
-          <a href="/" className="cta-button">
+          <button type="button" className="cta-button" onClick={onBackHome}>
             ← Voltar para o Pregador IA
-          </a>
+          </button>
         </section>
       </div>
 
