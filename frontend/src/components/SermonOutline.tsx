@@ -11,7 +11,7 @@ import "./SermonOutline.css";
 
 export const SermonOutline: React.FC = () => {
   const [tema, setTema] = useState("");
-  const [estilo, setEstilo] = useState("Pentecostal");
+  const [estilo, setEstilo] = useState("Arminiana");
   const [duracao, setDuracao] = useState(30);
   const [versaoBiblica, setVersaoBiblica] = useState<BibleVersion>("ARA");
   const [incluirExegese, setIncluirExegese] = useState(false);
@@ -81,7 +81,7 @@ export const SermonOutline: React.FC = () => {
 
         <div className="form-row form-row-3">
           <div className="form-group">
-            <label htmlFor="estilo">Linha ou contexto ministerial:</label>
+            <label htmlFor="estilo">Linha teologica:</label>
             <select
               id="estilo"
               value={estilo}
@@ -90,10 +90,10 @@ export const SermonOutline: React.FC = () => {
               }
               disabled={carregando}
             >
-              <option>Pentecostal</option>
-              <option>Assembleia de Deus</option>
-              <option>Foursquare</option>
-              <option>Evangelica Generica</option>
+              <option>Arminiana</option>
+              <option>Arminio-Wesleyana</option>
+              <option>Calvinista</option>
+              <option>Luterana</option>
             </select>
           </div>
 

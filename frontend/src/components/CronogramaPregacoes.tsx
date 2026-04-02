@@ -24,13 +24,11 @@ const MESES = [
   "Dezembro",
 ];
 
-const ESTILOS = [
-  "Pentecostal",
-  "Assembleia de Deus",
-  "Foursquare",
-  "Evangelica Generica",
-  "Batista",
-  "Presbiteriana",
+const LINHAS_TEOLOGICAS = [
+  "Arminiana",
+  "Arminio-Wesleyana",
+  "Calvinista",
+  "Luterana",
 ];
 
 export const CronogramaPregacoes: React.FC = () => {
@@ -39,7 +37,7 @@ export const CronogramaPregacoes: React.FC = () => {
 
   const [mes, setMes] = useState(mesAtual);
   const [ano, setAno] = useState(anoAtual);
-  const [estilo, setEstilo] = useState("Pentecostal");
+  const [estilo, setEstilo] = useState("Arminiana");
   const [versaoBiblica, setVersaoBiblica] = useState<BibleVersion>("ARA");
   const [temas, setTemas] = useState("");
   const [resultado, setResultado] = useState("");
@@ -125,7 +123,7 @@ export const CronogramaPregacoes: React.FC = () => {
           </div>
 
           <div className="form-group">
-            <label htmlFor="estilo">Contexto ministerial:</label>
+            <label htmlFor="estilo">Linha teologica:</label>
             <select
               id="estilo"
               value={estilo}
@@ -134,7 +132,7 @@ export const CronogramaPregacoes: React.FC = () => {
               }
               disabled={carregando}
             >
-              {ESTILOS.map((opcao) => (
+              {LINHAS_TEOLOGICAS.map((opcao) => (
                 <option key={opcao} value={opcao}>
                   {opcao}
                 </option>
