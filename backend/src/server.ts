@@ -28,13 +28,11 @@ function isAllowedOrigin(origin: string): boolean {
   );
 }
 
-// Middleware
 const corsOptions = {
   origin: function (
     origin: string | undefined,
     callback: (err: Error | null, allow?: boolean) => void,
   ) {
-    // Permitir requisições sem origin (mobile apps, curl, etc)
     if (!origin) {
       callback(null, true);
       return;
@@ -43,7 +41,7 @@ const corsOptions = {
     if (isAllowedOrigin(origin)) {
       callback(null, true);
     } else {
-      callback(new Error("Origem não permitida pelo CORS"));
+      callback(new Error("Origem nao permitida pelo CORS"));
     }
   },
   credentials: true,
@@ -55,24 +53,25 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Health check
 app.get("/health", (req: Request, res: Response) => {
-  res.json({ status: "OK", message: "Pregador IA API is running" });
+  void req;
+  res.json({
+    status: "OK",
+    message: "Pregador IA API is running",
+    groqConfigured: Boolean(process.env.GROQ_API_KEY),
+  });
 });
 
-// API Routes
 app.use("/api/sermons", sermonRoutes);
 app.use("/api/verses", versesRoutes);
 app.use("/api/concordance", concordanceRoutes);
 app.use("/api/analysis", analysisRoutes);
 
-// 404 Handler
 app.use((req: Request, res: Response) => {
   void req;
   res.status(404).json({ error: "Route not found" });
 });
 
-// Error Handler
 app.use((err: unknown, req: Request, res: Response, next: NextFunction) => {
   void req;
   void next;
@@ -83,7 +82,7 @@ app.use((err: unknown, req: Request, res: Response, next: NextFunction) => {
 });
 
 app.listen(port, () => {
-  console.log(`🚀 Pregador IA API running on http://localhost:${port}`);
+  console.log(`Pregador IA API running on http://localhost:${port}`);
 });
 
 export default app;

@@ -1,14 +1,18 @@
 import React, { useState } from "react";
-import { sermonAPI } from "../services/api";
+import ReactMarkdown from "react-markdown";
+import {
+  sermonAPI,
+  BIBLE_VERSION_OPTIONS,
+  type BibleVersion,
+} from "../services/api";
 import { useApp } from "../context/AppContext";
 import { getErrorMessage } from "../utils/httpError";
 import "./CronogramaPregacoes.css";
-import ReactMarkdown from "react-markdown";
 
 const MESES = [
   "Janeiro",
   "Fevereiro",
-  "Março",
+  "Marco",
   "Abril",
   "Maio",
   "Junho",
@@ -22,9 +26,9 @@ const MESES = [
 
 const ESTILOS = [
   "Pentecostal",
-  "Assembléia de Deus",
+  "Assembleia de Deus",
   "Foursquare",
-  "Evangélica Genérica",
+  "Evangelica Generica",
   "Batista",
   "Presbiteriana",
 ];
@@ -36,6 +40,7 @@ export const CronogramaPregacoes: React.FC = () => {
   const [mes, setMes] = useState(mesAtual);
   const [ano, setAno] = useState(anoAtual);
   const [estilo, setEstilo] = useState("Pentecostal");
+  const [versaoBiblica, setVersaoBiblica] = useState<BibleVersion>("ARA");
   const [temas, setTemas] = useState("");
   const [resultado, setResultado] = useState("");
   const [carregando, setCarregando] = useState(false);
@@ -55,6 +60,7 @@ export const CronogramaPregacoes: React.FC = () => {
         ano,
         temasArray,
         estilo,
+        versaoBiblica,
       );
       setResultado(response.data.cronograma);
       showSuccess("Cronograma gerado com sucesso!");
@@ -75,15 +81,15 @@ export const CronogramaPregacoes: React.FC = () => {
   return (
     <div className="cronograma-pregacoes">
       <div className="input-section">
-        <h2>📅 Cronograma de Pregações</h2>
+        <h2>Cronograma de Pregacoes</h2>
         <p className="subtitle">
-          Gere um cronograma completo de pregações para o mês, com temas,
-          títulos e versículos base para cada domingo.
+          Organize o mes com temas, titulos e textos base para cada oportunidade
+          de ministracao.
         </p>
 
-        <div className="form-row-3">
+        <div className="form-row-3 form-row-4">
           <div className="form-group">
-            <label htmlFor="mes">Mês:</label>
+            <label htmlFor="mes">Mes de planejamento:</label>
             <select
               id="mes"
               value={mes}
@@ -119,7 +125,7 @@ export const CronogramaPregacoes: React.FC = () => {
           </div>
 
           <div className="form-group">
-            <label htmlFor="estilo">Estilo:</label>
+            <label htmlFor="estilo">Contexto ministerial:</label>
             <select
               id="estilo"
               value={estilo}
@@ -128,9 +134,27 @@ export const CronogramaPregacoes: React.FC = () => {
               }
               disabled={carregando}
             >
-              {ESTILOS.map((e) => (
-                <option key={e} value={e}>
-                  {e}
+              {ESTILOS.map((opcao) => (
+                <option key={opcao} value={opcao}>
+                  {opcao}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="versao-biblica-cronograma">Versao biblica:</label>
+            <select
+              id="versao-biblica-cronograma"
+              value={versaoBiblica}
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                setVersaoBiblica(e.target.value as BibleVersion)
+              }
+              disabled={carregando}
+            >
+              {BIBLE_VERSION_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
                 </option>
               ))}
             </select>
@@ -141,7 +165,7 @@ export const CronogramaPregacoes: React.FC = () => {
           <label htmlFor="temas">
             Temas sugeridos{" "}
             <span className="label-hint">
-              (opcional — separados por vírgula)
+              (opcional, separados por virgula)
             </span>
           </label>
           <input
@@ -151,7 +175,7 @@ export const CronogramaPregacoes: React.FC = () => {
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               setTemas(e.target.value)
             }
-            placeholder="Ex: Fé, Esperança, Amor, Perdão..."
+            placeholder="Ex: Fe perseverante, Familia, Avivamento, Graca..."
             disabled={carregando}
           />
         </div>
@@ -162,8 +186,8 @@ export const CronogramaPregacoes: React.FC = () => {
           className="btn-primary"
         >
           {carregando
-            ? "⏳ Gerando cronograma..."
-            : `📅 Gerar Cronograma de ${MESES[mes - 1]}/${ano}`}
+            ? "Montando cronograma..."
+            : `Gerar Cronograma de ${MESES[mes - 1]}/${ano}`}
         </button>
       </div>
 
@@ -171,10 +195,10 @@ export const CronogramaPregacoes: React.FC = () => {
         <div className="result-section">
           <div className="result-header">
             <h3>
-              📋 Cronograma: {MESES[mes - 1]}/{ano}
+              Cronograma de {MESES[mes - 1]}/{ano}
             </h3>
             <button onClick={copiar} className="btn-copy">
-              📋 Copiar
+              Copiar
             </button>
           </div>
           <div className="markdown-content">

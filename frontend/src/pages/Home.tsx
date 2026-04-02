@@ -5,6 +5,8 @@ import { TheologicalAnalysis } from "../components/TheologicalAnalysis";
 import { ExplicarPassagem } from "../components/ExplicarPassagem";
 import { Concordancia } from "../components/Concordancia";
 import { CronogramaPregacoes } from "../components/CronogramaPregacoes";
+import { PastoralLetter } from "../components/PastoralLetter";
+import { BrandLogo } from "../components/BrandLogo";
 import "./Home.css";
 
 type ActiveTab =
@@ -13,7 +15,8 @@ type ActiveTab =
   | "analysis"
   | "explain"
   | "concordance"
-  | "schedule";
+  | "schedule"
+  | "pastoral-letter";
 
 export const Home: React.FC = () => {
   const [activeTab, setActiveTab] = useState<ActiveTab>("outline");
@@ -22,8 +25,26 @@ export const Home: React.FC = () => {
     <div className="home">
       <header className="header">
         <div className="header-content">
-          <h1>⛪ Pregador IA</h1>
-          <p>Seu assistente inteligente para preparação de pregações</p>
+          <div className="hero-brand">
+            <div className="hero-logo-shell">
+              <BrandLogo className="hero-logo" />
+            </div>
+            <div>
+              <span className="hero-kicker">
+                Preparacao biblica com direcao e profundidade
+              </span>
+              <h1>Pregador IA</h1>
+            </div>
+          </div>
+          <p>
+            Construa esbocos, estudos e series de mensagens com mais clareza,
+            mais profundidade biblica e mais agilidade no preparo ministerial.
+          </p>
+          <div className="hero-highlights">
+            <span>Esbocos prontos para desenvolver</span>
+            <span>Analise teologica com contexto</span>
+            <span>Aplicacao fiel para a igreja</span>
+          </div>
         </div>
       </header>
 
@@ -32,37 +53,43 @@ export const Home: React.FC = () => {
           className={`tab ${activeTab === "outline" ? "active" : ""}`}
           onClick={() => setActiveTab("outline")}
         >
-          📝 Esboço
+          Esboco
         </button>
         <button
           className={`tab ${activeTab === "verses" ? "active" : ""}`}
           onClick={() => setActiveTab("verses")}
         >
-          📖 Versículos
+          Versiculos
         </button>
         <button
           className={`tab ${activeTab === "analysis" ? "active" : ""}`}
           onClick={() => setActiveTab("analysis")}
         >
-          🔍 Análise
+          Analise
         </button>
         <button
           className={`tab ${activeTab === "explain" ? "active" : ""}`}
           onClick={() => setActiveTab("explain")}
         >
-          ✝️ Passagem
+          Passagem
         </button>
         <button
           className={`tab ${activeTab === "concordance" ? "active" : ""}`}
           onClick={() => setActiveTab("concordance")}
         >
-          📚 Concordância
+          Concordancia
         </button>
         <button
           className={`tab ${activeTab === "schedule" ? "active" : ""}`}
           onClick={() => setActiveTab("schedule")}
         >
-          📅 Cronograma
+          Cronograma
+        </button>
+        <button
+          className={`tab ${activeTab === "pastoral-letter" ? "active" : ""}`}
+          onClick={() => setActiveTab("pastoral-letter")}
+        >
+          Carta GCEU
         </button>
       </nav>
 
@@ -73,10 +100,11 @@ export const Home: React.FC = () => {
         {activeTab === "explain" && <ExplicarPassagem />}
         {activeTab === "concordance" && <Concordancia />}
         {activeTab === "schedule" && <CronogramaPregacoes />}
+        {activeTab === "pastoral-letter" && <PastoralLetter />}
       </main>
 
       <footer className="footer">
-        <p>© 2026 Pregador IA - Assistente de Pregações Inteligente</p>
+        <p>© 2026 Pregador IA - Preparacao inteligente para mensagens biblicas</p>
       </footer>
     </div>
   );

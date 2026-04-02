@@ -2,12 +2,14 @@ import Groq from "groq-sdk";
 
 let groqClient: Groq | null = null;
 
+export type VersaoBiblica = "ARA" | "ARC" | "ARCF" | "KING_JAMES";
+
 function getGroqClient(): Groq {
   const apiKey = process.env.GROQ_API_KEY;
 
   if (!apiKey) {
     throw new Error(
-      "GROQ_API_KEY não configurada. Defina a variável de ambiente no backend.",
+      "GROQ_API_KEY nao configurada. Defina a variavel de ambiente no backend.",
     );
   }
 
@@ -18,39 +20,97 @@ function getGroqClient(): Groq {
   return groqClient;
 }
 
+function getNomeVersaoBiblica(versao: VersaoBiblica = "ARA"): string {
+  switch (versao) {
+    case "ARC":
+      return "ARC (Almeida Revista e Corrigida)";
+    case "ARCF":
+      return "ARCF (Almeida Revista e Corrigida Fiel)";
+    case "KING_JAMES":
+      return "King James";
+    case "ARA":
+    default:
+      return "ARA (Almeida Revista e Atualizada)";
+  }
+}
+
 export async function gerarEsbocoPregacao(
   tema: string,
   estilo: string,
   duracao: number,
+  versaoBiblica: VersaoBiblica = "ARA",
+  secoesOpcionais?: {
+    exegese?: boolean;
+    ilustracao?: boolean;
+    aplicacaoPratica?: boolean;
+  },
 ): Promise<string> {
   try {
     const groq = getGroqClient();
-    const prompt = `Você é um especialista em pregações pentecostais. Crie um esboço estruturado de pregação sobre o tema "${tema}" no estilo "${estilo}" com duração aproximada de ${duracao} minutos.
+    const incluirExegese = secoesOpcionais?.exegese ?? false;
+    const incluirIlustracao = secoesOpcionais?.ilustracao ?? false;
+    const incluirAplicacaoPratica =
+      secoesOpcionais?.aplicacaoPratica ?? false;
+    const nomeVersao = getNomeVersaoBiblica(versaoBiblica);
 
-O esboço deve ter:
-1. Título atrativo
-2. Versículo base
-3. Introdução (2-3 pontos principais)
+    const secoesExtras = [
+      incluirExegese ? "5. Exegese" : null,
+      incluirIlustracao ? `${incluirExegese ? 6 : 5}. Ilustracao` : null,
+      incluirAplicacaoPratica
+        ? `${5 + Number(incluirExegese) + Number(incluirIlustracao)}. Aplicacao pratica`
+        : null,
+    ]
+      .filter(Boolean)
+      .join("\n");
+
+    const numeroConclusao =
+      5 +
+      Number(incluirExegese) +
+      Number(incluirIlustracao) +
+      Number(incluirAplicacaoPratica);
+    const numeroVersiculos = numeroConclusao + 1;
+
+    const instrucoesOpcionais = [
+      incluirExegese
+        ? '- Inclua a secao "Exegese" com contexto historico, contexto literario, palavras-chave do texto e a verdade central da passagem'
+        : '- Nao inclua a secao "Exegese"',
+      incluirIlustracao
+        ? '- Inclua a secao "Ilustracao" com pelo menos 1 exemplo concreto, memoravel e fiel a mensagem biblica'
+        : '- Nao inclua a secao "Ilustracao"',
+      incluirAplicacaoPratica
+        ? '- Inclua a secao "Aplicacao pratica" com pelo menos 3 aplicacoes objetivas em lista numerada'
+        : '- Nao inclua a secao "Aplicacao pratica"',
+    ].join("\n");
+
+    const prompt = `Voce e um especialista em pregacoes pentecostais. Crie um esboco estruturado de pregacao sobre o tema "${tema}" no estilo "${estilo}" com duracao aproximada de ${duracao} minutos.
+
+O esboco deve ter obrigatoriamente, nesta ordem:
+1. Titulo atrativo
+2. Versiculo base
+3. Introducao
 4. Desenvolvimento (3-4 pontos relacionados)
-5. Conclusão com apelo
-6. Versículos de apoio sugeridos
+${secoesExtras ? `${secoesExtras}\n` : ""}${numeroConclusao}. Conclusao com apelo
+${numeroVersiculos}. Versiculos de apoio sugeridos
 
-Formato: Use Markdown bem estruturado.`;
+Regras importantes:
+- Sempre respeite exatamente as secoes opcionais solicitadas
+${instrucoesOpcionais}
+- Use referencias e citacoes biblicas em ${nomeVersao}
+- Evite respostas genericas, rasas ou repetitivas
+- Responda em portugues
+
+Formato: Use Markdown bem estruturado, com titulos e subtitulos claros.
+Se possivel, faca o resultado soar pronto para ser pregado.`;
 
     const response = await groq.chat.completions.create({
       model: "mixtral-8x7b-32768",
       max_tokens: 2000,
-      messages: [
-        {
-          role: "user",
-          content: prompt,
-        },
-      ],
+      messages: [{ role: "user", content: prompt }],
     });
 
-    return response.choices[0]?.message?.content || "Erro ao gerar esboço";
+    return response.choices[0]?.message?.content || "Erro ao gerar esboco";
   } catch (error) {
-    console.error("Erro ao gerar esboço:", error);
+    console.error("Erro ao gerar esboco:", error);
     throw error;
   }
 }
@@ -59,69 +119,68 @@ export async function analisarTeologicamente(
   tema: string,
   passagem?: string,
   profundidade: string = "medio",
+  versaoBiblica: VersaoBiblica = "ARA",
 ): Promise<string> {
   try {
     const groq = getGroqClient();
-    const passagemText = passagem ? ` Passagem específica: ${passagem}` : "";
+    const passagemText = passagem ? ` Passagem especifica: ${passagem}` : "";
+    const nomeVersao = getNomeVersaoBiblica(versaoBiblica);
     const nivelDetalhe =
       profundidade === "avancado"
-        ? "extremamente detalhado e academicamente rigoroso, com referências cruzadas e análise exegética"
+        ? "extremamente detalhado e academicamente rigoroso, com referencias cruzadas e analise exegetica"
         : profundidade === "basico"
-          ? "acessível e prático, adequado para leigos"
-          : "equilibrado entre profundidade teológica e acessibilidade";
-    const prompt = `Você é um teólogo experiente. Faça uma análise teológica ${nivelDetalhe} sobre "${tema}".${passagemText}
+          ? "acessivel e pratico, adequado para leigos"
+          : "equilibrado entre profundidade teologica e acessibilidade";
 
-A análise deve cobrir:
-1. Fundamento bíblico
-2. Contexto histórico-cultural
-3. Interpretação teológica
-4. Aplicação prática moderna
-5. Relação com a doutrina pentecostal
+    const prompt = `Voce e um teologo experiente. Faca uma analise teologica ${nivelDetalhe} sobre "${tema}".${passagemText}
 
+A analise deve cobrir:
+1. Fundamento biblico
+2. Contexto historico-cultural
+3. Interpretacao teologica
+4. Aplicacao pratica moderna
+5. Relacao com a doutrina pentecostal
+
+Use referencias e citacoes biblicas em ${nomeVersao}.
 Formate com Markdown bem estruturado.`;
 
     const response = await groq.chat.completions.create({
       model: "mixtral-8x7b-32768",
       max_tokens: 2500,
-      messages: [
-        {
-          role: "user",
-          content: prompt,
-        },
-      ],
+      messages: [{ role: "user", content: prompt }],
     });
 
     return response.choices[0]?.message?.content || "Erro ao analisar";
   } catch (error) {
-    console.error("Erro na análise teológica:", error);
+    console.error("Erro na analise teologica:", error);
     throw error;
   }
 }
 
-export async function explicarPassagem(referencia: string): Promise<string> {
+export async function explicarPassagem(
+  referencia: string,
+  versaoBiblica: VersaoBiblica = "ARA",
+): Promise<string> {
   try {
     const groq = getGroqClient();
-    const prompt = `Explique detalhadamente a passagem bíblica: ${referencia}
+    const nomeVersao = getNomeVersaoBiblica(versaoBiblica);
+    const prompt = `Explique detalhadamente a passagem biblica: ${referencia}
 
-Sua explicação deve incluir:
+Sua explicacao deve incluir:
 1. Contexto da passagem
 2. Significado direto do texto
-3. Interpretação teológica
-4. Aplicação para a vida cristã moderna
-5. Conexões com outras passagens
-6. Insights para pregação
+3. Interpretacao teologica
+4. Aplicacao para a vida crista moderna
+5. Conexoes com outras passagens
+6. Insights para pregacao
 
-Seja claro e acessível.`;
+Use a versao ${nomeVersao} ao citar o texto biblico.
+Seja claro e acessivel.`;
 
     const response = await groq.chat.completions.create({
       model: "mixtral-8x7b-32768",
       max_tokens: 2000,
-      messages: [
-        {
-          role: "user",
-          content: prompt,
-        },
-      ],
+      messages: [{ role: "user", content: prompt }],
     });
 
     return response.choices[0]?.message?.content || "Erro ao explicar";
@@ -140,16 +199,18 @@ export interface VersoIA {
 export async function sugerirVersiculosPorTema(
   tema: string,
   quantidade: number = 5,
+  versaoBiblica: VersaoBiblica = "ARA",
 ): Promise<VersoIA[]> {
   try {
     const groq = getGroqClient();
-    const prompt = `Liste exatamente ${quantidade} versículos bíblicos relevantes sobre o tema "${tema}".
-Retorne APENAS um array JSON válido, sem texto adicional, no seguinte formato:
+    const nomeVersao = getNomeVersaoBiblica(versaoBiblica);
+    const prompt = `Liste exatamente ${quantidade} versiculos biblicos relevantes sobre o tema "${tema}".
+Retorne APENAS um array JSON valido, sem texto adicional, no seguinte formato:
 [
-  {"referencia": "João 3:16", "texto": "Porque Deus amou o mundo de tal maneira que deu o seu Filho unigênito...", "versao": "ARA"},
-  {"referencia": "Romanos 8:28", "texto": "Sabemos que todas as coisas cooperam para o bem...", "versao": "ARA"}
+  {"referencia": "Joao 3:16", "texto": "Porque Deus amou o mundo de tal maneira que deu o seu Filho unigenito...", "versao": "${versaoBiblica}"},
+  {"referencia": "Romanos 8:28", "texto": "Sabemos que todas as coisas cooperam para o bem...", "versao": "${versaoBiblica}"}
 ]
-Use a versão ARA (Almeida Revista e Atualizada) e textos precisos.`;
+Use a versao ${nomeVersao} e textos precisos.`;
 
     const response = await groq.chat.completions.create({
       model: "mixtral-8x7b-32768",
@@ -162,7 +223,7 @@ Use a versão ARA (Almeida Revista e Atualizada) e textos precisos.`;
     if (!jsonMatch) return [];
     return JSON.parse(jsonMatch[0]) as VersoIA[];
   } catch (error) {
-    console.error("Erro ao sugerir versículos:", error);
+    console.error("Erro ao sugerir versiculos:", error);
     throw error;
   }
 }
@@ -170,15 +231,17 @@ Use a versão ARA (Almeida Revista e Atualizada) e textos precisos.`;
 export async function buscarConcordanciaIA(
   palavra: string,
   limite: number = 10,
+  versaoBiblica: VersaoBiblica = "ARA",
 ): Promise<VersoIA[]> {
   try {
     const groq = getGroqClient();
-    const prompt = `Encontre ${limite} versículos bíblicos que contenham ou se relacionem diretamente com a palavra/conceito "${palavra}".
-Retorne APENAS um array JSON válido, sem texto adicional, no formato:
+    const nomeVersao = getNomeVersaoBiblica(versaoBiblica);
+    const prompt = `Encontre ${limite} versiculos biblicos que contenham ou se relacionem diretamente com a palavra/conceito "${palavra}".
+Retorne APENAS um array JSON valido, sem texto adicional, no formato:
 [
-  {"referencia": "Salmos 119:105", "texto": "Lâmpada para os meus pés é tua palavra...", "versao": "ARA"}
+  {"referencia": "Salmos 119:105", "texto": "Lampada para os meus pes e tua palavra...", "versao": "${versaoBiblica}"}
 ]
-Use a versão ARA (Almeida Revista e Atualizada) e textos precisos.`;
+Use a versao ${nomeVersao} e textos precisos.`;
 
     const response = await groq.chat.completions.create({
       model: "mixtral-8x7b-32768",
@@ -191,7 +254,7 @@ Use a versão ARA (Almeida Revista e Atualizada) e textos precisos.`;
     if (!jsonMatch) return [];
     return JSON.parse(jsonMatch[0]) as VersoIA[];
   } catch (error) {
-    console.error("Erro ao buscar concordância:", error);
+    console.error("Erro ao buscar concordancia:", error);
     throw error;
   }
 }
@@ -200,14 +263,16 @@ export async function gerarCronogramaPregacoes(
   mes: number,
   ano: number,
   estilo: string,
+  versaoBiblica: VersaoBiblica = "ARA",
   temas?: string[],
 ): Promise<string> {
   try {
     const groq = getGroqClient();
+    const nomeVersao = getNomeVersaoBiblica(versaoBiblica);
     const nomesMeses = [
       "Janeiro",
       "Fevereiro",
-      "Março",
+      "Marco",
       "Abril",
       "Maio",
       "Junho",
@@ -221,18 +286,19 @@ export async function gerarCronogramaPregacoes(
     const nomeMes = nomesMeses[mes - 1];
     const temasText =
       temas && temas.length > 0
-        ? `Sugira pregações baseadas nestes temas: ${temas.join(", ")}.`
-        : "Sugira temas relevantes e variados para o mês.";
+        ? `Sugira pregacoes baseadas nestes temas: ${temas.join(", ")}.`
+        : "Sugira temas relevantes e variados para o mes.";
 
-    const prompt = `Crie um cronograma mensal de pregações para ${nomeMes}/${ano} no estilo ${estilo}.
+    const prompt = `Crie um cronograma mensal de pregacoes para ${nomeMes}/${ano} no estilo ${estilo}.
 ${temasText}
 
 O cronograma deve incluir:
-- Uma pregação para cada domingo do mês
-- Título atrativo
+- Uma pregacao para cada domingo do mes
+- Titulo atrativo
 - Tema principal
-- Versículo base
-- Breve subtítulo ou foco da mensagem
+- Versiculo base
+- Breve subtitulo ou foco da mensagem
+- Use referencias biblicas em ${nomeVersao}
 
 Formate com Markdown bem estruturado, organizado por semana/domingo.`;
 
@@ -245,6 +311,55 @@ Formate com Markdown bem estruturado, organizado por semana/domingo.`;
     return response.choices[0]?.message?.content || "Erro ao gerar cronograma";
   } catch (error) {
     console.error("Erro ao gerar cronograma:", error);
+    throw error;
+  }
+}
+
+export async function gerarCartaPastoralGceu(
+  tema: string,
+  objetivo: string,
+  publicoAlvo: string,
+  tom: string,
+  versaoBiblica: VersaoBiblica = "ARA",
+): Promise<string> {
+  try {
+    const groq = getGroqClient();
+    const nomeVersao = getNomeVersaoBiblica(versaoBiblica);
+    const prompt = `Voce e um redator pastoral experiente. Crie uma carta pastoral para GCEU sobre "${tema}".
+
+Contexto da carta:
+- Objetivo principal: ${objetivo}
+- Publico-alvo: ${publicoAlvo}
+- Tom desejado: ${tom}
+
+A carta deve conter:
+1. Titulo pastoral apropriado
+2. Saudacao inicial calorosa
+3. Desenvolvimento pastoral com orientacao espiritual clara
+4. Exortacao, encorajamento ou alinhamento conforme o tema
+5. Pelo menos 2 referencias biblicas relevantes em ${nomeVersao}
+6. Encerramento pastoral com chamada a oracao, unidade ou resposta pratica
+
+Regras:
+- Escreva em portugues
+- Soe pastoral, maduro, biblico e edificante
+- Mencione GCEU naturalmente no texto
+- Evite linguagem excessivamente burocratica
+- Formate em Markdown bem organizado
+
+Entregue um texto pronto para leitura, adaptacao ou envio.`;
+
+    const response = await groq.chat.completions.create({
+      model: "mixtral-8x7b-32768",
+      max_tokens: 2200,
+      messages: [{ role: "user", content: prompt }],
+    });
+
+    return (
+      response.choices[0]?.message?.content || "Erro ao gerar carta pastoral"
+    );
+  } catch (error) {
+    console.error("Erro ao gerar carta pastoral:", error);
     throw error;
   }
 }

@@ -1,13 +1,6 @@
-// API Configuration for different environments
+const envApiUrl = import.meta.env.VITE_API_URL?.trim() || "";
 
-const inferredProductionApiUrl =
-  typeof window !== "undefined" ? window.location.origin : "";
-
-const API_BASE_URL =
-  import.meta.env.VITE_API_URL ||
-  (import.meta.env.MODE === "production"
-    ? inferredProductionApiUrl
-    : "http://localhost:3001"); // Backend em desenvolvimento
+const API_BASE_URL = envApiUrl || (import.meta.env.DEV ? "http://localhost:3001" : "");
 
 export const API_ENDPOINTS = {
   SERMONS: {

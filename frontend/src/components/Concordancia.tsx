@@ -1,5 +1,9 @@
 import React, { useState } from "react";
-import { concordanceAPI } from "../services/api";
+import {
+  concordanceAPI,
+  BIBLE_VERSION_OPTIONS,
+  type BibleVersion,
+} from "../services/api";
 import { useApp } from "../context/AppContext";
 import { getErrorMessage } from "../utils/httpError";
 import "./Concordancia.css";
@@ -13,6 +17,7 @@ interface VersoResult {
 export const Concordancia: React.FC = () => {
   const [palavra, setPalavra] = useState("");
   const [limite, setLimite] = useState(10);
+  const [versaoBiblica, setVersaoBiblica] = useState<BibleVersion>("ARA");
   const [resultados, setResultados] = useState<VersoResult[]>([]);
   const [totalResultados, setTotalResultados] = useState(0);
   const [carregando, setCarregando] = useState(false);
@@ -27,12 +32,16 @@ export const Concordancia: React.FC = () => {
 
     setCarregando(true);
     try {
-      const response = await concordanceAPI.search(palavra, limite);
+      const response = await concordanceAPI.search(
+        palavra,
+        limite,
+        versaoBiblica,
+      );
       setResultados(response.data.resultados);
       setTotalResultados(response.data.total);
       showSuccess(`${response.data.total} resultados encontrados!`);
     } catch (error: unknown) {
-      showError(getErrorMessage(error, "Erro ao buscar concordância"));
+      showError(getErrorMessage(error, "Erro ao buscar concordancia"));
     } finally {
       setCarregando(false);
     }
@@ -43,21 +52,21 @@ export const Concordancia: React.FC = () => {
       .map((r) => `${r.referencia}: "${r.texto}" (${r.versao || "ARA"})`)
       .join("\n\n");
     navigator.clipboard.writeText(texto);
-    showSuccess("Todos os versículos copiados!");
+    showSuccess("Todos os versiculos copiados!");
   };
 
   return (
     <div className="concordancia">
       <div className="search-section">
-        <h2>📚 Concordância Bíblica</h2>
+        <h2>Concordancia Biblica</h2>
         <p className="subtitle">
-          Encontre todos os versículos bíblicos que contêm ou se relacionam com
-          uma palavra ou conceito específico.
+          Localize rapidamente textos ligados a uma palavra, tema ou ideia para
+          fortalecer sua preparacao biblica.
         </p>
 
         <div className="form-row">
           <div className="form-group flex-grow">
-            <label htmlFor="palavra">Palavra ou Conceito:</label>
+            <label htmlFor="palavra">Palavra, tema ou conceito:</label>
             <input
               id="palavra"
               type="text"
@@ -66,7 +75,7 @@ export const Concordancia: React.FC = () => {
                 setPalavra(e.target.value)
               }
               onKeyDown={(e) => e.key === "Enter" && buscar()}
-              placeholder="Ex: amor, fé, graça, perdão, ressurreição..."
+              placeholder="Ex: amor, fe, graca, perdao, ressurreicao..."
               disabled={carregando}
             />
           </div>
@@ -81,16 +90,34 @@ export const Concordancia: React.FC = () => {
               }
               disabled={carregando}
             >
-              <option value={5}>5 versículos</option>
-              <option value={10}>10 versículos</option>
-              <option value={15}>15 versículos</option>
-              <option value={20}>20 versículos</option>
+              <option value={5}>5 versiculos</option>
+              <option value={10}>10 versiculos</option>
+              <option value={15}>15 versiculos</option>
+              <option value={20}>20 versiculos</option>
+            </select>
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="versao-biblica-concordancia">Versao biblica:</label>
+            <select
+              id="versao-biblica-concordancia"
+              value={versaoBiblica}
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                setVersaoBiblica(e.target.value as BibleVersion)
+              }
+              disabled={carregando}
+            >
+              {BIBLE_VERSION_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
             </select>
           </div>
         </div>
 
         <button onClick={buscar} disabled={carregando} className="btn-search">
-          {carregando ? "🔍 Buscando..." : "🔍 Buscar na Bíblia"}
+          {carregando ? "Buscando textos..." : "Buscar na Biblia"}
         </button>
       </div>
 
@@ -98,11 +125,11 @@ export const Concordancia: React.FC = () => {
         <div className="results-section">
           <div className="results-header">
             <h3>
-              📖 Resultados para: <em>"{palavra}"</em>
+              Resultados para <em>"{palavra}"</em>
               <span className="badge">{totalResultados}</span>
             </h3>
             <button onClick={copiarTodos} className="btn-copy-all">
-              📋 Copiar Todos
+              Copiar Todos
             </button>
           </div>
 
@@ -122,10 +149,10 @@ export const Concordancia: React.FC = () => {
                     navigator.clipboard.writeText(
                       `${verso.referencia}: "${verso.texto}"`,
                     );
-                    showSuccess("Versículo copiado!");
+                    showSuccess("Versiculo copiado!");
                   }}
                 >
-                  📋 Copiar
+                  Copiar
                 </button>
               </div>
             ))}

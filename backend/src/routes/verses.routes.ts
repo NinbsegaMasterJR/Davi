@@ -1,23 +1,31 @@
 import { Router, Request, Response } from "express";
-import { buscarVersiculos } from "../services/bible.service";
+import {
+  buscarVersiculos,
+  obterTextoCompletoBiblia,
+} from "../services/bible.service";
 import { getErrorMessage } from "../utils/httpError";
 
 const router = Router();
 
-// Sugerir versículos por tema
 router.get("/suggest", async (req: Request, res: Response) => {
   try {
-    const { tema, limite = 5 } = req.query as { tema: string; limite?: string };
+    const { tema, limite = 5, versaoBiblica = "ARA" } = req.query as {
+      tema: string;
+      limite?: string;
+      versaoBiblica?: "ARA" | "ARC" | "ARCF" | "KING_JAMES";
+    };
 
     if (!tema) {
-      res.status(400).json({ error: "Tema é obrigatório" });
+      res.status(400).json({ error: "Tema e obrigatorio" });
       return;
     }
 
     const versiculos = await buscarVersiculos(
       tema,
-      parseInt(String(limite) || "5"),
+      parseInt(String(limite) || "5", 10),
+      versaoBiblica,
     );
+
     res.json({
       sucesso: true,
       tema,
@@ -30,18 +38,22 @@ router.get("/suggest", async (req: Request, res: Response) => {
   }
 });
 
-// Buscar verso específico
 router.get("/:referencia", async (req: Request, res: Response) => {
   try {
     const { referencia } = req.params;
+    const { versaoBiblica = "ARA" } = req.query as {
+      versaoBiblica?: "ARA" | "ARC" | "ARCF" | "KING_JAMES";
+    };
 
-    // TODO: Implementar busca de verso específico
+    if (!referencia) {
+      res.status(400).json({ error: "Referencia e obrigatoria" });
+      return;
+    }
+
+    const verso = await obterTextoCompletoBiblia(referencia, versaoBiblica);
     res.json({
       sucesso: true,
-      verso: {
-        referencia,
-        texto: "Implementar integração com Bible API",
-      },
+      verso,
     });
   } catch (error: unknown) {
     res

@@ -4,21 +4,25 @@ import { getErrorMessage } from "../utils/httpError";
 
 const router = Router();
 
-// Buscar concordância bíblica
 router.get("/search", async (req: Request, res: Response) => {
   try {
-    const { palavra, limite = 10 } = req.query as {
+    const { palavra, limite = 10, versaoBiblica = "ARA" } = req.query as {
       palavra: string;
       limite?: string;
+      versaoBiblica?: "ARA" | "ARC" | "ARCF" | "KING_JAMES";
     };
 
     if (!palavra) {
-      res.status(400).json({ error: "Palavra é obrigatória" });
+      res.status(400).json({ error: "Palavra e obrigatoria" });
       return;
     }
 
-    const limiteNum = parseInt(String(limite) || "10");
-    const resultados = await buscarConcordancia(palavra, limiteNum);
+    const limiteNum = parseInt(String(limite) || "10", 10);
+    const resultados = await buscarConcordancia(
+      palavra,
+      limiteNum,
+      versaoBiblica,
+    );
     res.json({
       sucesso: true,
       palavra,

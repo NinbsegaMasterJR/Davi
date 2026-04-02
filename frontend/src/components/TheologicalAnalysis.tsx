@@ -1,14 +1,19 @@
 import React, { useState } from "react";
-import { analysisAPI } from "../services/api";
+import ReactMarkdown from "react-markdown";
+import {
+  analysisAPI,
+  BIBLE_VERSION_OPTIONS,
+  type BibleVersion,
+} from "../services/api";
 import { useApp } from "../context/AppContext";
 import { getErrorMessage } from "../utils/httpError";
 import "./TheologicalAnalysis.css";
-import ReactMarkdown from "react-markdown";
 
 export const TheologicalAnalysis: React.FC = () => {
   const [tema, setTema] = useState("");
   const [passagem, setPassagem] = useState("");
   const [profundidade, setProfundidade] = useState("medio");
+  const [versaoBiblica, setVersaoBiblica] = useState<BibleVersion>("ARA");
   const [resultado, setResultado] = useState("");
   const [carregando, setCarregando] = useState(false);
 
@@ -26,11 +31,12 @@ export const TheologicalAnalysis: React.FC = () => {
         tema,
         profundidade as "basico" | "medio" | "avancado",
         passagem || undefined,
+        versaoBiblica,
       );
       setResultado(response.data.analise);
-      showSuccess("Análise gerada com sucesso!");
+      showSuccess("Analise gerada com sucesso!");
     } catch (error: unknown) {
-      showError(getErrorMessage(error, "Erro ao gerar análise"));
+      showError(getErrorMessage(error, "Erro ao gerar analise"));
     } finally {
       setCarregando(false);
     }
@@ -39,10 +45,14 @@ export const TheologicalAnalysis: React.FC = () => {
   return (
     <div className="theological-analysis">
       <div className="input-section">
-        <h2>🔍 Análise Teológica</h2>
+        <h2>Analise Teologica</h2>
+        <p className="feature-highlight">
+          Aprofunde temas doutrinarios com mais contexto, mais leitura biblica e
+          mais clareza para ensino e pregacao.
+        </p>
 
         <div className="form-group">
-          <label htmlFor="tema">Tema Teológico:</label>
+          <label htmlFor="tema">Tema teologico ou doutrinario:</label>
           <input
             id="tema"
             type="text"
@@ -50,13 +60,13 @@ export const TheologicalAnalysis: React.FC = () => {
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               setTema(e.target.value)
             }
-            placeholder="Ex: Justificação, Santificação, Reino de Deus..."
+            placeholder="Ex: Justificacao pela fe, Santificacao, Reino de Deus..."
             disabled={carregando}
           />
         </div>
 
         <div className="form-group">
-          <label htmlFor="passagem">Passagem Relacionada (opcional):</label>
+          <label htmlFor="passagem">Passagem de apoio (opcional):</label>
           <input
             id="passagem"
             type="text"
@@ -70,7 +80,7 @@ export const TheologicalAnalysis: React.FC = () => {
         </div>
 
         <div className="form-group">
-          <label htmlFor="profundidade">Profundidade da Análise:</label>
+          <label htmlFor="profundidade">Nivel de aprofundamento:</label>
           <select
             id="profundidade"
             value={profundidade}
@@ -79,9 +89,27 @@ export const TheologicalAnalysis: React.FC = () => {
             }
             disabled={carregando}
           >
-            <option value="basico">Básico</option>
-            <option value="medio">Médio</option>
-            <option value="avancado">Avançado</option>
+            <option value="basico">Basico</option>
+            <option value="medio">Medio</option>
+            <option value="avancado">Avancado</option>
+          </select>
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="versao-biblica-analise">Versao biblica:</label>
+          <select
+            id="versao-biblica-analise"
+            value={versaoBiblica}
+            onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+              setVersaoBiblica(e.target.value as BibleVersion)
+            }
+            disabled={carregando}
+          >
+            {BIBLE_VERSION_OPTIONS.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
           </select>
         </div>
 
@@ -90,14 +118,14 @@ export const TheologicalAnalysis: React.FC = () => {
           disabled={carregando}
           className="btn-primary"
         >
-          {carregando ? "⏳ Analisando..." : "📊 Fazer Análise"}
+          {carregando ? "Analisando tema..." : "Gerar Analise"}
         </button>
       </div>
 
       {resultado && (
         <div className="result-section">
           <div className="result-header">
-            <h3>📝 Análise Teológica:</h3>
+            <h3>Analise teologica:</h3>
           </div>
           <div className="markdown-content">
             <ReactMarkdown>{resultado}</ReactMarkdown>

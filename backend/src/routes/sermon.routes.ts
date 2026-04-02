@@ -4,6 +4,8 @@ import {
   analisarTeologicamente,
   explicarPassagem,
   gerarCronogramaPregacoes,
+  gerarCartaPastoralGceu,
+  type VersaoBiblica,
 } from "../services/ia.service";
 import { getErrorMessage } from "../utils/httpError";
 
@@ -13,29 +15,52 @@ interface SermonRequest {
   tema: string;
   estilo?: string;
   duracao?: number;
+  versaoBiblica?: VersaoBiblica;
+  secoesOpcionais?: {
+    exegese?: boolean;
+    ilustracao?: boolean;
+    aplicacaoPratica?: boolean;
+  };
 }
 
 interface AnalysisRequest {
   tema: string;
   passagem?: string;
+  profundidade?: "basico" | "medio" | "avancado";
+  versaoBiblica?: VersaoBiblica;
 }
 
-// Gerar esboço de pregação
+interface PastoralLetterRequest {
+  tema: string;
+  objetivo?: string;
+  publicoAlvo?: string;
+  tom?: string;
+  versaoBiblica?: VersaoBiblica;
+}
+
 router.post("/outline", async (req: Request, res: Response) => {
   try {
     const {
       tema,
       estilo = "Pentecostal",
       duracao = 30,
+      versaoBiblica = "ARA",
+      secoesOpcionais,
     } = req.body as SermonRequest;
 
     if (!tema) {
-      res.status(400).json({ error: "Tema é obrigatório" });
+      res.status(400).json({ error: "Tema e obrigatorio" });
       return;
     }
 
-    const esboço = await gerarEsbocoPregacao(tema, estilo, duracao);
-    res.json({ sucesso: true, esboço });
+    const esboco = await gerarEsbocoPregacao(
+      tema,
+      estilo,
+      duracao,
+      versaoBiblica,
+      secoesOpcionais,
+    );
+    res.json({ sucesso: true, esboco });
   } catch (error: unknown) {
     res
       .status(500)
@@ -43,17 +68,26 @@ router.post("/outline", async (req: Request, res: Response) => {
   }
 });
 
-// Análise teológica
 router.post("/analysis", async (req: Request, res: Response) => {
   try {
-    const { tema, passagem } = req.body as AnalysisRequest;
+    const {
+      tema,
+      passagem,
+      profundidade = "medio",
+      versaoBiblica = "ARA",
+    } = req.body as AnalysisRequest;
 
     if (!tema) {
-      res.status(400).json({ error: "Tema é obrigatório" });
+      res.status(400).json({ error: "Tema e obrigatorio" });
       return;
     }
 
-    const analise = await analisarTeologicamente(tema, passagem);
+    const analise = await analisarTeologicamente(
+      tema,
+      passagem,
+      profundidade,
+      versaoBiblica,
+    );
     res.json({ sucesso: true, analise });
   } catch (error: unknown) {
     res
@@ -62,17 +96,19 @@ router.post("/analysis", async (req: Request, res: Response) => {
   }
 });
 
-// Explicar passagem
 router.post("/explain", async (req: Request, res: Response) => {
   try {
-    const { referencia } = req.body as { referencia: string };
+    const { referencia, versaoBiblica = "ARA" } = req.body as {
+      referencia: string;
+      versaoBiblica?: VersaoBiblica;
+    };
 
     if (!referencia) {
-      res.status(400).json({ error: "Referência bíblica é obrigatória" });
+      res.status(400).json({ error: "Referencia biblica e obrigatoria" });
       return;
     }
 
-    const explicacao = await explicarPassagem(referencia);
+    const explicacao = await explicarPassagem(referencia, versaoBiblica);
     res.json({ sucesso: true, explicacao });
   } catch (error: unknown) {
     res
@@ -81,18 +117,66 @@ router.post("/explain", async (req: Request, res: Response) => {
   }
 });
 
-// Criar cronograma de pregações
 router.post("/schedule", async (req: Request, res: Response) => {
   try {
-    const { mes, ano, temas, estilo = "Pentecostal" } = req.body;
+    const {
+      mes,
+      ano,
+      temas,
+      estilo = "Pentecostal",
+      versaoBiblica = "ARA",
+    } = req.body as {
+      mes: number;
+      ano: number;
+      temas?: string[];
+      estilo?: string;
+      versaoBiblica?: VersaoBiblica;
+    };
 
     if (!mes || !ano) {
-      res.status(400).json({ error: "Mês e ano são obrigatórios" });
+      res.status(400).json({ error: "Mes e ano sao obrigatorios" });
       return;
     }
 
-    const cronograma = await gerarCronogramaPregacoes(mes, ano, estilo, temas);
+    const cronograma = await gerarCronogramaPregacoes(
+      mes,
+      ano,
+      estilo,
+      versaoBiblica,
+      temas,
+    );
     res.json({ sucesso: true, cronograma });
+  } catch (error: unknown) {
+    res
+      .status(500)
+      .json({ error: getErrorMessage(error, "Erro interno do servidor") });
+  }
+});
+
+router.post("/pastoral-letter", async (req: Request, res: Response) => {
+  try {
+    const {
+      tema,
+      objetivo = "edificar, orientar e fortalecer a igreja",
+      publicoAlvo = "lideranca, membros e cooperadores do GCEU",
+      tom = "pastoral, acolhedor e firme",
+      versaoBiblica = "ARA",
+    } = req.body as PastoralLetterRequest;
+
+    if (!tema) {
+      res.status(400).json({ error: "Tema e obrigatorio" });
+      return;
+    }
+
+    const carta = await gerarCartaPastoralGceu(
+      tema,
+      objetivo,
+      publicoAlvo,
+      tom,
+      versaoBiblica,
+    );
+
+    res.json({ sucesso: true, carta });
   } catch (error: unknown) {
     res
       .status(500)

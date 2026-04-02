@@ -1,10 +1,10 @@
-.sermon-outline {
+.pastoral-letter {
   padding: 1.5rem;
   max-width: 960px;
   margin: 0 auto;
 }
 
-.input-section {
+.pastoral-letter .input-section {
   padding: 2rem;
   border-radius: 28px;
   color: #fff7ea;
@@ -15,97 +15,54 @@
   box-shadow: 0 24px 60px rgba(73, 28, 16, 0.18);
 }
 
-.input-section h2 {
+.pastoral-letter h2 {
   margin-top: 0;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.6rem;
   font-size: 1.7rem;
 }
 
-.feature-highlight {
+.pastoral-letter .subtitle {
   margin-top: 0;
   margin-bottom: 1.5rem;
   color: rgba(255, 244, 224, 0.92);
   line-height: 1.7;
 }
 
-.form-group {
+.pastoral-letter .form-group {
   margin-bottom: 1.4rem;
 }
 
-.form-group label {
+.pastoral-letter .form-group label {
   display: block;
   font-weight: 700;
   margin-bottom: 0.5rem;
 }
 
-.form-group input,
-.form-group select {
+.pastoral-letter .form-group input,
+.pastoral-letter .form-group select {
   width: 100%;
   padding: 0.85rem 1rem;
   border: 1px solid rgba(111, 29, 27, 0.16);
   border-radius: 16px;
   font-size: 1rem;
-  font-family: inherit;
   color: #2d160f;
   background: rgba(255, 249, 240, 0.94);
 }
 
-.form-group input:focus,
-.form-group select:focus {
+.pastoral-letter .form-group input:focus,
+.pastoral-letter .form-group select:focus {
   outline: none;
   border-color: rgba(246, 198, 103, 0.72);
   box-shadow: 0 0 0 4px rgba(246, 198, 103, 0.14);
 }
 
-.form-group input:disabled,
-.form-group select:disabled {
-  background-color: rgba(243, 232, 219, 0.85);
-  cursor: not-allowed;
-}
-
-.form-row {
+.pastoral-letter .form-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
 }
 
-.form-row-3 {
-  grid-template-columns: 1fr 1fr 1fr;
-}
-
-.options-section {
-  margin-bottom: 1.5rem;
-  padding: 1rem 1.05rem;
-  border-radius: 20px;
-  background: rgba(255, 249, 240, 0.14);
-  border: 1px solid rgba(255, 223, 176, 0.14);
-}
-
-.options-title {
-  margin-top: 0;
-  margin-bottom: 0.9rem;
-  font-weight: 700;
-}
-
-.option-item {
-  display: flex;
-  align-items: center;
-  gap: 0.65rem;
-  margin-bottom: 0.75rem;
-  cursor: pointer;
-}
-
-.option-item:last-child {
-  margin-bottom: 0;
-}
-
-.option-item input {
-  width: auto;
-  margin: 0;
-  accent-color: #f6c667;
-}
-
-.btn-primary {
+.pastoral-letter .btn-primary {
   width: 100%;
   padding: 0.9rem 1.5rem;
   background: linear-gradient(135deg, #fff3dd 0%, #f6c667 100%);
@@ -115,21 +72,15 @@
   font-size: 1rem;
   font-weight: 800;
   cursor: pointer;
-  transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
-.btn-primary:hover:not(:disabled) {
+.pastoral-letter .btn-primary:hover:not(:disabled) {
   transform: translateY(-2px);
   box-shadow: 0 16px 30px rgba(44, 17, 10, 0.18);
-  filter: saturate(1.05);
 }
 
-.btn-primary:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-}
-
-.result-section {
+.pastoral-letter .result-section {
   background: rgba(255, 251, 245, 0.9);
   border: 1px solid rgba(111, 29, 27, 0.1);
   border-radius: 28px;
@@ -137,7 +88,7 @@
   box-shadow: 0 18px 42px rgba(78, 33, 20, 0.09);
 }
 
-.result-header {
+.pastoral-letter .result-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -145,69 +96,50 @@
   gap: 1rem;
 }
 
-.result-header h3 {
+.pastoral-letter .result-header h3 {
   margin: 0;
   color: #6f1d1b;
 }
 
-.btn-copy {
+.pastoral-letter .btn-copy {
   padding: 0.65rem 1rem;
   background: rgba(111, 29, 27, 0.08);
   color: #6f1d1b;
   border: 1px solid rgba(111, 29, 27, 0.16);
   border-radius: 14px;
   cursor: pointer;
-  transition: transform 0.25s ease, background 0.25s ease;
 }
 
-.btn-copy:hover {
-  background: rgba(111, 29, 27, 0.14);
-  transform: translateY(-1px);
-}
-
-.markdown-content {
+.pastoral-letter .markdown-content {
   color: #3c2419;
   line-height: 1.85;
 }
 
-.markdown-content h1,
-.markdown-content h2,
-.markdown-content h3 {
+.pastoral-letter .markdown-content h1,
+.pastoral-letter .markdown-content h2,
+.pastoral-letter .markdown-content h3 {
   color: #8c2f1c;
   margin-top: 1.5rem;
   margin-bottom: 0.6rem;
 }
 
-.markdown-content ul,
-.markdown-content ol {
-  margin-left: 1.5rem;
-}
-
-.markdown-content li {
-  margin-bottom: 0.5rem;
-}
-
 @media (max-width: 768px) {
-  .sermon-outline {
+  .pastoral-letter {
     padding: 1rem 0;
   }
 
-  .input-section,
-  .result-section {
+  .pastoral-letter .input-section,
+  .pastoral-letter .result-section {
     padding: 1.4rem;
     border-radius: 22px;
   }
 
-  .form-row {
+  .pastoral-letter .form-row {
     grid-template-columns: 1fr;
   }
 
-  .result-header {
+  .pastoral-letter .result-header {
     flex-direction: column;
     align-items: flex-start;
-  }
-
-  .btn-copy {
-    width: 100%;
   }
 }

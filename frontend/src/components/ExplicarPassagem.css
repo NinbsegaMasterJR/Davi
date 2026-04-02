@@ -1,29 +1,31 @@
 .explicar-passagem {
-  max-width: 900px;
+  max-width: 960px;
   margin: 0 auto;
+  padding: 1.5rem;
 }
 
 .explicar-passagem .input-section {
-  background: white;
-  border-radius: 16px;
+  background:
+    radial-gradient(circle at top left, rgba(255, 220, 162, 0.18), transparent 24%),
+    linear-gradient(135deg, rgba(255, 252, 247, 0.95) 0%, rgba(247, 237, 222, 0.94) 100%);
+  border-radius: 28px;
   padding: 2rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 18px 42px rgba(78, 33, 20, 0.09);
   margin-bottom: 2rem;
+  border: 1px solid rgba(111, 29, 27, 0.1);
 }
 
 .explicar-passagem h2 {
   margin: 0 0 0.5rem 0;
   font-size: 1.8rem;
-  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #6f1d1b;
 }
 
 .explicar-passagem .subtitle {
-  color: #666;
+  color: #6b4a3a;
   margin: 0 0 1.5rem 0;
-  font-size: 0.95rem;
+  font-size: 0.98rem;
+  line-height: 1.7;
 }
 
 .explicar-passagem .form-group {
@@ -32,24 +34,27 @@
 
 .explicar-passagem .form-group label {
   display: block;
-  font-weight: 600;
+  font-weight: 700;
   margin-bottom: 0.5rem;
-  color: #333;
+  color: #3c2419;
 }
 
 .explicar-passagem .form-group input {
   width: 100%;
-  padding: 0.75rem 1rem;
-  border: 2px solid #e0e0e0;
-  border-radius: 8px;
+  padding: 0.85rem 1rem;
+  border: 1px solid rgba(111, 29, 27, 0.14);
+  border-radius: 16px;
   font-size: 1rem;
-  transition: border-color 0.3s ease;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
   box-sizing: border-box;
+  color: #2d160f;
+  background: rgba(255, 253, 249, 0.96);
 }
 
 .explicar-passagem .form-group input:focus {
   outline: none;
-  border-color: #f093fb;
+  border-color: rgba(178, 58, 36, 0.45);
+  box-shadow: 0 0 0 4px rgba(178, 58, 36, 0.1);
 }
 
 .exemplos {
@@ -59,24 +64,22 @@
   align-items: center;
   margin-bottom: 1.5rem;
   font-size: 0.9rem;
-  color: #666;
+  color: #6b4a3a;
 }
 
 .btn-exemplo {
-  background: #f5f5f5;
-  border: 1px solid #e0e0e0;
-  border-radius: 20px;
-  padding: 0.3rem 0.8rem;
+  background: rgba(111, 29, 27, 0.06);
+  border: 1px solid rgba(111, 29, 27, 0.12);
+  border-radius: 999px;
+  padding: 0.45rem 0.85rem;
   font-size: 0.85rem;
   cursor: pointer;
-  color: #555;
+  color: #6f1d1b;
   transition: all 0.2s ease;
 }
 
 .btn-exemplo:hover {
-  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-  color: white;
-  border-color: transparent;
+  background: rgba(111, 29, 27, 0.12);
 }
 
 .btn-exemplo:disabled {
@@ -85,13 +88,13 @@
 }
 
 .explicar-passagem .btn-primary {
-  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-  color: white;
+  background: linear-gradient(135deg, #7f1d1d 0%, #ba4a1f 100%);
+  color: #fff7ea;
   border: none;
-  padding: 0.9rem 2rem;
-  border-radius: 8px;
+  padding: 0.95rem 2rem;
+  border-radius: 16px;
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
   transition: all 0.3s ease;
   width: 100%;
@@ -99,7 +102,7 @@
 
 .explicar-passagem .btn-primary:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(240, 147, 251, 0.4);
+  box-shadow: 0 14px 30px rgba(111, 29, 27, 0.18);
 }
 
 .explicar-passagem .btn-primary:disabled {
@@ -108,10 +111,11 @@
 }
 
 .explicar-passagem .result-section {
-  background: white;
-  border-radius: 16px;
+  background: rgba(255, 251, 245, 0.9);
+  border-radius: 28px;
   padding: 2rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 18px 42px rgba(78, 33, 20, 0.09);
+  border: 1px solid rgba(111, 29, 27, 0.1);
 }
 
 .explicar-passagem .result-header {
@@ -126,70 +130,77 @@
 .explicar-passagem .result-header h3 {
   margin: 0;
   font-size: 1.3rem;
-  color: #333;
+  color: #6f1d1b;
 }
 
 .explicar-passagem .btn-copy {
-  background: #f5f5f5;
-  border: 1px solid #e0e0e0;
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
+  background: rgba(111, 29, 27, 0.08);
+  border: 1px solid rgba(111, 29, 27, 0.16);
+  padding: 0.6rem 1rem;
+  border-radius: 14px;
   cursor: pointer;
   font-size: 0.9rem;
   transition: all 0.2s ease;
-  color: #333;
+  color: #6f1d1b;
 }
 
 .explicar-passagem .btn-copy:hover {
-  background: #e0e0e0;
+  background: rgba(111, 29, 27, 0.14);
 }
 
-.markdown-content {
-  line-height: 1.8;
-  color: #333;
+.explicar-passagem .markdown-content {
+  line-height: 1.85;
+  color: #3c2419;
 }
 
-.markdown-content h1,
-.markdown-content h2,
-.markdown-content h3 {
-  color: #444;
+.explicar-passagem .markdown-content h1,
+.explicar-passagem .markdown-content h2,
+.explicar-passagem .markdown-content h3 {
+  color: #8c2f1c;
   margin-top: 1.5rem;
 }
 
-.markdown-content p {
+.explicar-passagem .markdown-content p {
   margin-bottom: 1rem;
 }
 
-.markdown-content ul,
-.markdown-content ol {
+.explicar-passagem .markdown-content ul,
+.explicar-passagem .markdown-content ol {
   padding-left: 1.5rem;
   margin-bottom: 1rem;
 }
 
-.markdown-content li {
+.explicar-passagem .markdown-content li {
   margin-bottom: 0.5rem;
 }
 
-.markdown-content strong {
-  color: #222;
+.explicar-passagem .markdown-content strong {
+  color: #4d271b;
 }
 
-.markdown-content blockquote {
-  border-left: 4px solid #f093fb;
-  padding-left: 1rem;
+.explicar-passagem .markdown-content blockquote {
+  border-left: 4px solid #ba4a1f;
+  padding: 0.75rem 1rem;
   margin: 1rem 0;
-  color: #555;
+  color: #6b4a3a;
   font-style: italic;
+  background: rgba(255, 242, 227, 0.9);
+  border-radius: 0 14px 14px 0;
 }
 
 @media (max-width: 768px) {
+  .explicar-passagem {
+    padding: 1rem 0;
+  }
+
   .explicar-passagem .input-section,
   .explicar-passagem .result-section {
-    padding: 1.5rem;
+    padding: 1.4rem;
+    border-radius: 22px;
   }
 
   .explicar-passagem h2 {
-    font-size: 1.4rem;
+    font-size: 1.45rem;
   }
 
   .explicar-passagem .result-header {

@@ -1,5 +1,10 @@
 import React, { useState } from "react";
-import { versesAPI, type Versiculo } from "../services/api";
+import {
+  versesAPI,
+  BIBLE_VERSION_OPTIONS,
+  type BibleVersion,
+  type Versiculo,
+} from "../services/api";
 import { useApp } from "../context/AppContext";
 import { getErrorMessage } from "../utils/httpError";
 import "./VersesSuggestion.css";
@@ -7,6 +12,7 @@ import "./VersesSuggestion.css";
 export const VersesSuggestion: React.FC = () => {
   const [tema, setTema] = useState("");
   const [limite, setLimite] = useState(5);
+  const [versaoBiblica, setVersaoBiblica] = useState<BibleVersion>("ARA");
   const [versiculos, setVersiculos] = useState<Versiculo[]>([]);
   const [carregando, setCarregando] = useState(false);
 
@@ -20,11 +26,11 @@ export const VersesSuggestion: React.FC = () => {
 
     setCarregando(true);
     try {
-      const response = await versesAPI.suggest(tema, limite);
+      const response = await versesAPI.suggest(tema, limite, versaoBiblica);
       setVersiculos(response.data.versiculos);
-      showSuccess(`${response.data.versiculos.length} versículos encontrados!`);
+      showSuccess(`${response.data.versiculos.length} versiculos encontrados!`);
     } catch (error: unknown) {
-      showError(getErrorMessage(error, "Erro ao buscar versículos"));
+      showError(getErrorMessage(error, "Erro ao buscar versiculos"));
     } finally {
       setCarregando(false);
     }
@@ -33,10 +39,14 @@ export const VersesSuggestion: React.FC = () => {
   return (
     <div className="verses-suggestion">
       <div className="search-section">
-        <h2>📖 Sugerir Versículos por Tema</h2>
+        <h2>Sugerir Versiculos por Tema</h2>
+        <p className="feature-highlight">
+          Encontre textos que dialogam com o foco da sua mensagem e ampliam sua
+          base biblica com rapidez.
+        </p>
 
         <div className="form-group">
-          <label htmlFor="tema">Tema:</label>
+          <label htmlFor="tema">Tema, assunto ou necessidade da igreja:</label>
           <input
             id="tema"
             type="text"
@@ -44,13 +54,13 @@ export const VersesSuggestion: React.FC = () => {
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               setTema(e.target.value)
             }
-            placeholder="Ex: Amor, Esperança, Salvação..."
+            placeholder="Ex: Consolacao, Santidade, Esperanca em meio a prova..."
             disabled={carregando}
           />
         </div>
 
         <div className="form-group">
-          <label htmlFor="limite">Quantos versículos?</label>
+          <label htmlFor="limite">Quantidade de referencias:</label>
           <select
             id="limite"
             value={limite}
@@ -59,21 +69,39 @@ export const VersesSuggestion: React.FC = () => {
             }
             disabled={carregando}
           >
-            <option value={3}>3 versículos</option>
-            <option value={5}>5 versículos</option>
-            <option value={10}>10 versículos</option>
-            <option value={15}>15 versículos</option>
+            <option value={3}>3 versiculos</option>
+            <option value={5}>5 versiculos</option>
+            <option value={10}>10 versiculos</option>
+            <option value={15}>15 versiculos</option>
+          </select>
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="versao-biblica-versiculos">Versao biblica:</label>
+          <select
+            id="versao-biblica-versiculos"
+            value={versaoBiblica}
+            onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+              setVersaoBiblica(e.target.value as BibleVersion)
+            }
+            disabled={carregando}
+          >
+            {BIBLE_VERSION_OPTIONS.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
           </select>
         </div>
 
         <button onClick={buscar} disabled={carregando} className="btn-search">
-          {carregando ? "🔍 Buscando..." : "🔍 Buscar Versículos"}
+          {carregando ? "Buscando referencias..." : "Buscar Versiculos"}
         </button>
       </div>
 
       {versiculos.length > 0 && (
         <div className="results-section">
-          <h3>✨ Versículos Encontrados:</h3>
+          <h3>Versiculos encontrados:</h3>
           <div className="verses-list">
             {versiculos.map((verso, index) => (
               <div key={index} className="verso-card">

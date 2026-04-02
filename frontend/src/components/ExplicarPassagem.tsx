@@ -1,12 +1,17 @@
 import React, { useState } from "react";
-import { sermonAPI } from "../services/api";
+import ReactMarkdown from "react-markdown";
+import {
+  sermonAPI,
+  BIBLE_VERSION_OPTIONS,
+  type BibleVersion,
+} from "../services/api";
 import { useApp } from "../context/AppContext";
 import { getErrorMessage } from "../utils/httpError";
 import "./ExplicarPassagem.css";
-import ReactMarkdown from "react-markdown";
 
 export const ExplicarPassagem: React.FC = () => {
   const [referencia, setReferencia] = useState("");
+  const [versaoBiblica, setVersaoBiblica] = useState<BibleVersion>("ARA");
   const [resultado, setResultado] = useState("");
   const [carregando, setCarregando] = useState(false);
 
@@ -14,15 +19,18 @@ export const ExplicarPassagem: React.FC = () => {
 
   const explicar = async () => {
     if (!referencia.trim()) {
-      showError("Por favor, informe uma passagem bíblica");
+      showError("Por favor, informe uma passagem biblica");
       return;
     }
 
     setCarregando(true);
     try {
-      const response = await sermonAPI.explainPassage(referencia);
+      const response = await sermonAPI.explainPassage(
+        referencia,
+        versaoBiblica,
+      );
       setResultado(response.data.explicacao);
-      showSuccess("Explicação gerada com sucesso!");
+      showSuccess("Explicacao gerada com sucesso!");
     } catch (error: unknown) {
       showError(getErrorMessage(error, "Erro ao explicar passagem"));
     } finally {
@@ -32,20 +40,20 @@ export const ExplicarPassagem: React.FC = () => {
 
   const copiar = () => {
     navigator.clipboard.writeText(resultado);
-    showSuccess("Copiado para a área de transferência!");
+    showSuccess("Copiado para a area de transferencia!");
   };
 
   return (
     <div className="explicar-passagem">
       <div className="input-section">
-        <h2>✝️ Explicar Passagem Bíblica</h2>
+        <h2>Explicar Passagem Biblica</h2>
         <p className="subtitle">
-          Obtenha uma explicação detalhada de qualquer passagem bíblica com
-          contexto histórico e aplicação prática.
+          Receba uma leitura clara do texto com contexto, sentido central e
+          direcoes para ensino e pregacao.
         </p>
 
         <div className="form-group">
-          <label htmlFor="referencia">Passagem Bíblica:</label>
+          <label htmlFor="referencia">Referencia biblica:</label>
           <input
             id="referencia"
             type="text"
@@ -54,14 +62,32 @@ export const ExplicarPassagem: React.FC = () => {
               setReferencia(e.target.value)
             }
             onKeyDown={(e) => e.key === "Enter" && explicar()}
-            placeholder="Ex: João 3:16, Romanos 8:28, Salmos 23..."
+            placeholder="Ex: Joao 3:16, Romanos 8:28, Salmos 23..."
             disabled={carregando}
           />
         </div>
 
+        <div className="form-group">
+          <label htmlFor="versao-biblica-explicacao">Versao biblica:</label>
+          <select
+            id="versao-biblica-explicacao"
+            value={versaoBiblica}
+            onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+              setVersaoBiblica(e.target.value as BibleVersion)
+            }
+            disabled={carregando}
+          >
+            {BIBLE_VERSION_OPTIONS.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </div>
+
         <div className="exemplos">
-          <span>Exemplos rápidos:</span>
-          {["João 3:16", "Romanos 8:28", "Salmos 23", "Filipenses 4:13"].map(
+          <span>Exemplos para comecar:</span>
+          {["Joao 3:16", "Romanos 8:28", "Salmos 23", "Filipenses 4:13"].map(
             (ex) => (
               <button
                 key={ex}
@@ -80,16 +106,16 @@ export const ExplicarPassagem: React.FC = () => {
           disabled={carregando}
           className="btn-primary"
         >
-          {carregando ? "⏳ Explicando..." : "✝️ Explicar Passagem"}
+          {carregando ? "Explicando texto..." : "Explicar Passagem"}
         </button>
       </div>
 
       {resultado && (
         <div className="result-section">
           <div className="result-header">
-            <h3>📖 Explicação: {referencia}</h3>
+            <h3>Explicacao de {referencia}</h3>
             <button onClick={copiar} className="btn-copy">
-              📋 Copiar
+              Copiar
             </button>
           </div>
           <div className="markdown-content">
