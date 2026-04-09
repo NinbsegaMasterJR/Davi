@@ -7,6 +7,7 @@ import {
 } from "../services/api";
 import { useApp } from "../context/AppContext";
 import { getErrorMessage } from "../utils/httpError";
+import { formatVersesAsText } from "../utils/resultFormatting";
 import "./VersesSuggestion.css";
 
 export const VersesSuggestion: React.FC = () => {
@@ -16,7 +17,7 @@ export const VersesSuggestion: React.FC = () => {
   const [versiculos, setVersiculos] = useState<Versiculo[]>([]);
   const [carregando, setCarregando] = useState(false);
 
-  const { showSuccess, showError } = useApp();
+  const { showSuccess, showError, saveDocument } = useApp();
 
   const buscar = async () => {
     if (!tema.trim()) {
@@ -28,6 +29,19 @@ export const VersesSuggestion: React.FC = () => {
     try {
       const response = await versesAPI.suggest(tema, limite, versaoBiblica);
       setVersiculos(response.data.versiculos);
+      saveDocument({
+        toolId: "verses",
+        toolLabel: "Versiculos",
+        title: `Versiculos sobre: ${tema}`,
+        query: tema,
+        summary: `${response.data.versiculos.length} referencias em ${versaoBiblica}`,
+        content: formatVersesAsText(
+          `Versiculos sobre: ${tema}`,
+          tema,
+          response.data.versiculos,
+        ),
+        contentType: "text",
+      });
       showSuccess(`${response.data.versiculos.length} versiculos encontrados!`);
     } catch (error: unknown) {
       showError(getErrorMessage(error, "Erro ao buscar versiculos"));
@@ -101,6 +115,11 @@ export const VersesSuggestion: React.FC = () => {
 
       {versiculos.length > 0 && (
         <div className="results-section">
+          <div className="tool-status tool-status-warn">
+            <strong>Conferencia recomendada</strong>
+            As referencias abaixo sao geradas com apoio de IA. Revise os textos
+            biblicos na sua fonte de confianca antes de ministrar.
+          </div>
           <h3>Versiculos encontrados:</h3>
           <div className="verses-list">
             {versiculos.map((verso, index) => (

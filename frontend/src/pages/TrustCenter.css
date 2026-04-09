@@ -1,0 +1,32 @@
+.trust-center-page {
+  display: grid;
+  gap: 1.3rem;
+}
+
+.trust-center-hero,
+.trust-center-card {
+  padding: 1.8rem;
+  border-radius: 28px;
+  border: 1px solid rgba(111, 29, 27, 0.1);
+  background: rgba(255, 251, 245, 0.9);
+  box-shadow: var(--shadow-soft);
+}
+
+.trust-center-hero h1,
+.trust-center-card h2 {
+  margin: 0;
+  color: #6f1d1b;
+}
+
+.trust-center-hero p,
+.trust-center-card p {
+  margin: 0.6rem 0 0;
+  line-height: 1.75;
+  color: #5d4033;
+}
+
+.trust-center-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+}

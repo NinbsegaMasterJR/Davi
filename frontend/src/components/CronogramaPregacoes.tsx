@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import ReactMarkdown from "react-markdown";
 import {
   sermonAPI,
   BIBLE_VERSION_OPTIONS,
   type BibleVersion,
 } from "../services/api";
 import { useApp } from "../context/AppContext";
+import { ResultPanel } from "./ResultPanel";
 import { getErrorMessage } from "../utils/httpError";
 import "./CronogramaPregacoes.css";
 
@@ -43,7 +43,24 @@ export const CronogramaPregacoes: React.FC = () => {
   const [resultado, setResultado] = useState("");
   const [carregando, setCarregando] = useState(false);
 
-  const { showSuccess, showError } = useApp();
+  const { showSuccess, showError, saveDocument } = useApp();
+  const presets = [
+    {
+      label: "Serie familia",
+      estilo: "Arminiana",
+      temas: "Familia, educacao de filhos, restauracao do lar, alianca",
+    },
+    {
+      label: "Serie avivamento",
+      estilo: "Arminio-Wesleyana",
+      temas: "Oracao, consagracao, arrependimento, poder do Espirito",
+    },
+    {
+      label: "Serie discipulado",
+      estilo: "Arminiana",
+      temas: "Identidade em Cristo, servico, maturidade, missao",
+    },
+  ];
 
   const gerarCronograma = async () => {
     setCarregando(true);
@@ -61,17 +78,21 @@ export const CronogramaPregacoes: React.FC = () => {
         versaoBiblica,
       );
       setResultado(response.data.cronograma);
+      saveDocument({
+        toolId: "schedule",
+        toolLabel: "Cronograma",
+        title: `Cronograma: ${MESES[mes - 1]}/${ano}`,
+        query: temas || `${MESES[mes - 1]}/${ano}`,
+        summary: `${estilo} • ${versaoBiblica}`,
+        content: response.data.cronograma,
+        contentType: "markdown",
+      });
       showSuccess("Cronograma gerado com sucesso!");
     } catch (error: unknown) {
       showError(getErrorMessage(error, "Erro ao gerar cronograma"));
     } finally {
       setCarregando(false);
     }
-  };
-
-  const copiar = () => {
-    navigator.clipboard.writeText(resultado);
-    showSuccess("Cronograma copiado!");
   };
 
   const anosDisponiveis = Array.from({ length: 5 }, (_, i) => anoAtual + i - 1);
@@ -84,6 +105,23 @@ export const CronogramaPregacoes: React.FC = () => {
           Organize o mes com temas, titulos e textos base para cada oportunidade
           de ministracao.
         </p>
+
+        <div className="preset-row" aria-label="Presets de cronograma">
+          {presets.map((preset) => (
+            <button
+              key={preset.label}
+              type="button"
+              className="preset-chip"
+              onClick={() => {
+                setEstilo(preset.estilo);
+                setTemas(preset.temas);
+              }}
+              disabled={carregando}
+            >
+              {preset.label}
+            </button>
+          ))}
+        </div>
 
         <div className="form-row-3 form-row-4">
           <div className="form-group">
@@ -190,19 +228,11 @@ export const CronogramaPregacoes: React.FC = () => {
       </div>
 
       {resultado && (
-        <div className="result-section">
-          <div className="result-header">
-            <h3>
-              Cronograma de {MESES[mes - 1]}/{ano}
-            </h3>
-            <button onClick={copiar} className="btn-copy">
-              Copiar
-            </button>
-          </div>
-          <div className="markdown-content">
-            <ReactMarkdown>{resultado}</ReactMarkdown>
-          </div>
-        </div>
+        <ResultPanel
+          title={`Cronograma: ${MESES[mes - 1]}/${ano}`}
+          content={resultado}
+          contentType="markdown"
+        />
       )}
     </div>
   );

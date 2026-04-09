@@ -6,6 +6,7 @@ import {
 } from "../services/api";
 import { useApp } from "../context/AppContext";
 import { getErrorMessage } from "../utils/httpError";
+import { formatVersesAsText } from "../utils/resultFormatting";
 import "./Concordancia.css";
 
 interface VersoResult {
@@ -22,7 +23,7 @@ export const Concordancia: React.FC = () => {
   const [totalResultados, setTotalResultados] = useState(0);
   const [carregando, setCarregando] = useState(false);
 
-  const { showSuccess, showError } = useApp();
+  const { showSuccess, showError, saveDocument } = useApp();
 
   const buscar = async () => {
     if (!palavra.trim()) {
@@ -39,6 +40,19 @@ export const Concordancia: React.FC = () => {
       );
       setResultados(response.data.resultados);
       setTotalResultados(response.data.total);
+      saveDocument({
+        toolId: "concordance",
+        toolLabel: "Concordancia",
+        title: `Concordancia: ${palavra}`,
+        query: palavra,
+        summary: `${response.data.total} resultados em ${versaoBiblica}`,
+        content: formatVersesAsText(
+          `Concordancia: ${palavra}`,
+          palavra,
+          response.data.resultados,
+        ),
+        contentType: "text",
+      });
       showSuccess(`${response.data.total} resultados encontrados!`);
     } catch (error: unknown) {
       showError(getErrorMessage(error, "Erro ao buscar concordancia"));
@@ -123,6 +137,11 @@ export const Concordancia: React.FC = () => {
 
       {resultados.length > 0 && (
         <div className="results-section">
+          <div className="tool-status tool-status-warn">
+            <strong>Conferencia recomendada</strong>
+            Use esta concordancia como ponto de partida e confirme citacoes e
+            redacoes biblicas antes de publicar ou pregar.
+          </div>
           <div className="results-header">
             <h3>
               Resultados para <em>"{palavra}"</em>

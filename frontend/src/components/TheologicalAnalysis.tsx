@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import ReactMarkdown from "react-markdown";
 import {
   analysisAPI,
   BIBLE_VERSION_OPTIONS,
   type BibleVersion,
 } from "../services/api";
 import { useApp } from "../context/AppContext";
+import { ResultPanel } from "./ResultPanel";
 import { getErrorMessage } from "../utils/httpError";
 import "./TheologicalAnalysis.css";
 
@@ -17,7 +17,27 @@ export const TheologicalAnalysis: React.FC = () => {
   const [resultado, setResultado] = useState("");
   const [carregando, setCarregando] = useState(false);
 
-  const { showSuccess, showError } = useApp();
+  const { showSuccess, showError, saveDocument } = useApp();
+  const presets = [
+    {
+      label: "Doutrina da graca",
+      tema: "Justificacao pela fe",
+      passagem: "Romanos 3:28",
+      profundidade: "medio",
+    },
+    {
+      label: "Vida crista",
+      tema: "Santificacao",
+      passagem: "1 Pedro 1:15-16",
+      profundidade: "avancado",
+    },
+    {
+      label: "Escatologia",
+      tema: "Esperanca da volta de Cristo",
+      passagem: "1 Tessalonicenses 4:13-18",
+      profundidade: "medio",
+    },
+  ];
 
   const analisar = async () => {
     if (!tema.trim()) {
@@ -34,6 +54,15 @@ export const TheologicalAnalysis: React.FC = () => {
         versaoBiblica,
       );
       setResultado(response.data.analise);
+      saveDocument({
+        toolId: "analysis",
+        toolLabel: "Analise",
+        title: `Analise: ${tema}`,
+        query: tema,
+        summary: `${profundidade} • ${versaoBiblica}${passagem ? ` • ${passagem}` : ""}`,
+        content: response.data.analise,
+        contentType: "markdown",
+      });
       showSuccess("Analise gerada com sucesso!");
     } catch (error: unknown) {
       showError(getErrorMessage(error, "Erro ao gerar analise"));
@@ -50,6 +79,24 @@ export const TheologicalAnalysis: React.FC = () => {
           Aprofunde temas doutrinarios com mais contexto, mais leitura biblica e
           mais clareza para ensino e pregacao.
         </p>
+
+        <div className="preset-row" aria-label="Presets de analise">
+          {presets.map((preset) => (
+            <button
+              key={preset.label}
+              type="button"
+              className="preset-chip"
+              onClick={() => {
+                setTema(preset.tema);
+                setPassagem(preset.passagem);
+                setProfundidade(preset.profundidade);
+              }}
+              disabled={carregando}
+            >
+              {preset.label}
+            </button>
+          ))}
+        </div>
 
         <div className="form-group">
           <label htmlFor="tema">Tema teologico ou doutrinario:</label>
@@ -123,14 +170,11 @@ export const TheologicalAnalysis: React.FC = () => {
       </div>
 
       {resultado && (
-        <div className="result-section">
-          <div className="result-header">
-            <h3>Analise teologica:</h3>
-          </div>
-          <div className="markdown-content">
-            <ReactMarkdown>{resultado}</ReactMarkdown>
-          </div>
-        </div>
+        <ResultPanel
+          title={`Analise: ${tema}`}
+          content={resultado}
+          contentType="markdown"
+        />
       )}
     </div>
   );

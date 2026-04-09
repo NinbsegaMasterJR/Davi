@@ -82,6 +82,29 @@
   color: rgba(255, 242, 224, 0.9);
 }
 
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+  margin-top: 1.4rem;
+}
+
+.hero-action {
+  padding: 0.85rem 1.2rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 219, 154, 0.28);
+  background: rgba(255, 246, 232, 0.08);
+  color: #fff4df;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.hero-action.primary {
+  background: linear-gradient(135deg, #fff3dd 0%, #f6c667 100%);
+  color: #5a2618;
+  border-color: transparent;
+}
+
 .hero-highlights {
   display: flex;
   gap: 0.8rem;
@@ -107,6 +130,60 @@
   background: rgba(255, 249, 241, 0.74);
   border: 1px solid rgba(111, 29, 27, 0.1);
   box-shadow: var(--shadow-soft);
+}
+
+.tool-overview,
+.trust-panel {
+  display: grid;
+  gap: 1.2rem;
+  padding: 1.5rem;
+  border-radius: 28px;
+  background: rgba(255, 249, 241, 0.8);
+  border: 1px solid rgba(111, 29, 27, 0.1);
+  box-shadow: var(--shadow-soft);
+}
+
+.tool-overview-copy h2,
+.trust-panel h2 {
+  margin: 0.15rem 0 0.45rem;
+  color: #6f1d1b;
+}
+
+.tool-overview-copy p,
+.trust-panel p {
+  margin: 0;
+  line-height: 1.7;
+}
+
+.tool-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.9rem;
+}
+
+.tool-card {
+  display: grid;
+  gap: 0.4rem;
+  text-align: left;
+  padding: 1.15rem;
+  border-radius: 22px;
+  border: 1px solid rgba(111, 29, 27, 0.12);
+  background: rgba(255, 252, 247, 0.94);
+  color: #3c2419;
+  cursor: pointer;
+}
+
+.tool-card.active {
+  border-color: rgba(178, 58, 36, 0.28);
+  box-shadow: 0 16px 30px rgba(83, 34, 22, 0.08);
+}
+
+.tool-card-eyebrow {
+  color: #8c2f1c;
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
 }
 
 .tab {
@@ -137,6 +214,15 @@
 
 .main-content {
   flex: 1;
+}
+
+.tool-loader {
+  padding: 1.5rem;
+  border-radius: 24px;
+  background: rgba(255, 251, 245, 0.9);
+  border: 1px solid rgba(111, 29, 27, 0.1);
+  color: #6f1d1b;
+  box-shadow: var(--shadow-soft);
 }
 
 .footer {
@@ -176,10 +262,20 @@
     font-size: 1rem;
   }
 
+  .hero-actions {
+    flex-direction: column;
+  }
+
   .nav-tabs {
     flex-wrap: nowrap;
     overflow-x: auto;
     padding: 0.8rem;
+  }
+
+  .tool-overview,
+  .trust-panel {
+    padding: 1.2rem;
+    border-radius: 22px;
   }
 
   .tab {

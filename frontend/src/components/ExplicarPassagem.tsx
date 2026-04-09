@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import ReactMarkdown from "react-markdown";
 import {
   sermonAPI,
   BIBLE_VERSION_OPTIONS,
   type BibleVersion,
 } from "../services/api";
 import { useApp } from "../context/AppContext";
+import { ResultPanel } from "./ResultPanel";
 import { getErrorMessage } from "../utils/httpError";
 import "./ExplicarPassagem.css";
 
@@ -15,7 +15,7 @@ export const ExplicarPassagem: React.FC = () => {
   const [resultado, setResultado] = useState("");
   const [carregando, setCarregando] = useState(false);
 
-  const { showSuccess, showError } = useApp();
+  const { showSuccess, showError, saveDocument } = useApp();
 
   const explicar = async () => {
     if (!referencia.trim()) {
@@ -30,17 +30,21 @@ export const ExplicarPassagem: React.FC = () => {
         versaoBiblica,
       );
       setResultado(response.data.explicacao);
+      saveDocument({
+        toolId: "explain",
+        toolLabel: "Passagem",
+        title: `Passagem: ${referencia}`,
+        query: referencia,
+        summary: `Explicacao em ${versaoBiblica}`,
+        content: response.data.explicacao,
+        contentType: "markdown",
+      });
       showSuccess("Explicacao gerada com sucesso!");
     } catch (error: unknown) {
       showError(getErrorMessage(error, "Erro ao explicar passagem"));
     } finally {
       setCarregando(false);
     }
-  };
-
-  const copiar = () => {
-    navigator.clipboard.writeText(resultado);
-    showSuccess("Copiado para a area de transferencia!");
   };
 
   return (
@@ -111,17 +115,11 @@ export const ExplicarPassagem: React.FC = () => {
       </div>
 
       {resultado && (
-        <div className="result-section">
-          <div className="result-header">
-            <h3>Explicacao de {referencia}</h3>
-            <button onClick={copiar} className="btn-copy">
-              Copiar
-            </button>
-          </div>
-          <div className="markdown-content">
-            <ReactMarkdown>{resultado}</ReactMarkdown>
-          </div>
-        </div>
+        <ResultPanel
+          title={`Passagem: ${referencia}`}
+          content={resultado}
+          contentType="markdown"
+        />
       )}
     </div>
   );

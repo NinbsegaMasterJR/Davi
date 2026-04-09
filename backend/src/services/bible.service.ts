@@ -3,6 +3,7 @@ import {
   buscarConcordanciaIA,
   type VersaoBiblica,
 } from "./ia.service";
+import { createNotImplementedError } from "../utils/validation";
 
 interface Verso {
   referencia: string;
@@ -40,20 +41,10 @@ export async function obterTextoCompletoBiblia(
   referencia: string,
   versaoBiblica: VersaoBiblica = "ARA",
 ): Promise<Verso> {
-  try {
-    const resultados = await sugerirVersiculosPorTema(
-      referencia,
-      1,
-      versaoBiblica,
-    );
-    if (resultados.length > 0) return resultados[0];
-    return {
-      referencia,
-      texto: "Versiculo nao encontrado.",
-      versao: versaoBiblica,
-    };
-  } catch (error) {
-    console.error("Erro ao obter texto biblico:", error);
-    throw error;
-  }
+  void referencia;
+  void versaoBiblica;
+
+  throw createNotImplementedError(
+    "Consulta de texto biblico integral ainda nao esta disponivel com fonte verificada nesta versao do projeto.",
+  );
 }

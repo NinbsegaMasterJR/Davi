@@ -38,6 +38,22 @@ body {
   flex-direction: column;
 }
 
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -3rem;
+  z-index: 200;
+  padding: 0.75rem 1rem;
+  border-radius: 999px;
+  background: #fff4df;
+  color: #5a2618;
+  font-weight: 700;
+}
+
+.skip-link:focus {
+  top: 1rem;
+}
+
 .app-navbar {
   position: sticky;
   top: 0;
@@ -166,6 +182,14 @@ body {
   opacity: 0.9;
 }
 
+.api-status-badge {
+  padding: 0.35rem 0.8rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  background: rgba(255, 248, 237, 0.14);
+  border: 1px solid rgba(255, 248, 237, 0.16);
+}
+
 .api-status-button {
   border: 1px solid rgba(255, 246, 232, 0.22);
   background: rgba(255, 248, 237, 0.12);
@@ -202,6 +226,15 @@ body {
   max-width: 1240px;
   margin: 0 auto;
   padding: 2rem 1.25rem 2.5rem;
+}
+
+.page-loading {
+  padding: 2rem;
+  border-radius: 24px;
+  background: rgba(255, 251, 245, 0.9);
+  border: 1px solid rgba(111, 29, 27, 0.1);
+  color: #6f1d1b;
+  box-shadow: var(--shadow-soft);
 }
 
 @media (max-width: 768px) {

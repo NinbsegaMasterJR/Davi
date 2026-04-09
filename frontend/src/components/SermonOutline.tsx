@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import ReactMarkdown from "react-markdown";
 import {
   sermonAPI,
   BIBLE_VERSION_OPTIONS,
   type BibleVersion,
 } from "../services/api";
 import { useApp } from "../context/AppContext";
+import { ResultPanel } from "./ResultPanel";
 import { getErrorMessage } from "../utils/httpError";
 import "./SermonOutline.css";
 
@@ -21,7 +21,36 @@ export const SermonOutline: React.FC = () => {
   const [resultado, setResultado] = useState("");
   const [carregando, setCarregando] = useState(false);
 
-  const { showSuccess, showError } = useApp();
+  const { showSuccess, showError, saveDocument } = useApp();
+  const presets = [
+    {
+      label: "Culto de domingo",
+      tema: "Fe que persevera",
+      estilo: "Arminiana",
+      duracao: 35,
+      exegese: true,
+      ilustracao: true,
+      aplicacaoPratica: true,
+    },
+    {
+      label: "Escola biblica",
+      tema: "Santificacao na vida crista",
+      estilo: "Arminio-Wesleyana",
+      duracao: 45,
+      exegese: true,
+      ilustracao: false,
+      aplicacaoPratica: true,
+    },
+    {
+      label: "Culto jovem",
+      tema: "Chamado e identidade em Cristo",
+      estilo: "Arminiana",
+      duracao: 30,
+      exegese: false,
+      ilustracao: true,
+      aplicacaoPratica: true,
+    },
+  ];
 
   const gerar = async () => {
     if (!tema.trim()) {
@@ -43,17 +72,21 @@ export const SermonOutline: React.FC = () => {
         },
       );
       setResultado(response.data.esboco);
+      saveDocument({
+        toolId: "outline",
+        toolLabel: "Esboco",
+        title: `Esboco: ${tema}`,
+        query: tema,
+        summary: `${estilo} • ${duracao} min • ${versaoBiblica}`,
+        content: response.data.esboco,
+        contentType: "markdown",
+      });
       showSuccess("Esboco gerado com sucesso!");
     } catch (error: unknown) {
       showError(getErrorMessage(error, "Erro ao gerar esboco"));
     } finally {
       setCarregando(false);
     }
-  };
-
-  const copiar = () => {
-    navigator.clipboard.writeText(resultado);
-    showSuccess("Copiado para a area de transferencia!");
   };
 
   return (
@@ -64,6 +97,27 @@ export const SermonOutline: React.FC = () => {
           Monte uma base de mensagem com estrutura clara e escolha quais secoes
           complementares deseja incluir antes de gerar.
         </p>
+
+        <div className="preset-row" aria-label="Presets de esboco">
+          {presets.map((preset) => (
+            <button
+              key={preset.label}
+              type="button"
+              className="preset-chip"
+              onClick={() => {
+                setTema(preset.tema);
+                setEstilo(preset.estilo);
+                setDuracao(preset.duracao);
+                setIncluirExegese(preset.exegese);
+                setIncluirIlustracao(preset.ilustracao);
+                setIncluirAplicacaoPratica(preset.aplicacaoPratica);
+              }}
+              disabled={carregando}
+            >
+              {preset.label}
+            </button>
+          ))}
+        </div>
 
         <div className="form-group">
           <label htmlFor="tema">Tema ou enfoque da mensagem:</label>
@@ -175,17 +229,11 @@ export const SermonOutline: React.FC = () => {
       </div>
 
       {resultado && (
-        <div className="result-section">
-          <div className="result-header">
-            <h3>Esboco gerado:</h3>
-            <button onClick={copiar} className="btn-copy">
-              Copiar
-            </button>
-          </div>
-          <div className="markdown-content">
-            <ReactMarkdown>{resultado}</ReactMarkdown>
-          </div>
-        </div>
+        <ResultPanel
+          title={`Esboco: ${tema}`}
+          content={resultado}
+          contentType="markdown"
+        />
       )}
     </div>
   );

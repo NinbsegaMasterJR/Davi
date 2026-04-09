@@ -5,12 +5,15 @@ import sermonRoutes from "./routes/sermon.routes";
 import versesRoutes from "./routes/verses.routes";
 import concordanceRoutes from "./routes/concordance.routes";
 import analysisRoutes from "./routes/analysis.routes";
+import { createRateLimit } from "./middleware/rateLimit";
 import { getErrorMessage, getErrorStatus } from "./utils/httpError";
 
 dotenv.config();
 
 const app: Express = express();
 const port = process.env.PORT || 3001;
+app.set("trust proxy", 1);
+
 const configuredOrigins = (process.env.CORS_ORIGIN || "")
   .split(",")
   .map((origin) => origin.trim())
@@ -50,8 +53,15 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use((req: Request, res: Response, next: NextFunction) => {
+  res.setHeader("X-Content-Type-Options", "nosniff");
+  res.setHeader("X-Frame-Options", "DENY");
+  res.setHeader("Referrer-Policy", "no-referrer");
+  res.setHeader("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
+  next();
+});
+app.use(express.json({ limit: "64kb" }));
+app.use(express.urlencoded({ extended: true, limit: "64kb" }));
 
 app.get("/health", (req: Request, res: Response) => {
   void req;
@@ -61,6 +71,15 @@ app.get("/health", (req: Request, res: Response) => {
     groqConfigured: Boolean(process.env.GROQ_API_KEY),
   });
 });
+
+app.use(
+  "/api",
+  createRateLimit({
+    maxRequests: 30,
+    windowMs: 60 * 1000,
+    message: "Muitas requisicoes em pouco tempo. Tente novamente em instantes.",
+  }),
+);
 
 app.use("/api/sermons", sermonRoutes);
 app.use("/api/verses", versesRoutes);

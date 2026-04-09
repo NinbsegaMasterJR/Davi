@@ -8,6 +8,13 @@ import {
   type VersaoBiblica,
 } from "../services/ia.service";
 import { getErrorMessage } from "../utils/httpError";
+import {
+  parseBibleVersion,
+  parseInteger,
+  parseStringList,
+  sanitizeOptionalText,
+  sanitizeText,
+} from "../utils/validation";
 
 const router = Router();
 
@@ -42,22 +49,21 @@ router.post("/outline", async (req: Request, res: Response) => {
   try {
     const {
       tema,
-      estilo = "Pentecostal",
-      duracao = 30,
-      versaoBiblica = "ARA",
-      secoesOpcionais,
-    } = req.body as SermonRequest;
-
-    if (!tema) {
-      res.status(400).json({ error: "Tema e obrigatorio" });
-      return;
-    }
-
-    const esboco = await gerarEsbocoPregacao(
-      tema,
       estilo,
       duracao,
       versaoBiblica,
+      secoesOpcionais,
+    } = req.body as SermonRequest;
+
+    const esboco = await gerarEsbocoPregacao(
+      sanitizeText(tema, "Tema", { minLength: 3, maxLength: 120 }),
+      sanitizeText(estilo, "Linha teologica", {
+        minLength: 3,
+        maxLength: 40,
+        fallback: "Pentecostal",
+      }),
+      parseInteger(duracao, "Duracao", { min: 10, max: 120, fallback: 30 }),
+      parseBibleVersion(versaoBiblica),
       secoesOpcionais,
     );
     res.json({ sucesso: true, esboco });
@@ -73,20 +79,20 @@ router.post("/analysis", async (req: Request, res: Response) => {
     const {
       tema,
       passagem,
-      profundidade = "medio",
-      versaoBiblica = "ARA",
-    } = req.body as AnalysisRequest;
-
-    if (!tema) {
-      res.status(400).json({ error: "Tema e obrigatorio" });
-      return;
-    }
-
-    const analise = await analisarTeologicamente(
-      tema,
-      passagem,
       profundidade,
       versaoBiblica,
+    } = req.body as AnalysisRequest;
+
+    const analise = await analisarTeologicamente(
+      sanitizeText(tema, "Tema", { minLength: 3, maxLength: 120 }),
+      sanitizeOptionalText(passagem, "Passagem", {
+        minLength: 2,
+        maxLength: 60,
+      }),
+      profundidade === "basico" || profundidade === "medio" || profundidade === "avancado"
+        ? profundidade
+        : "medio",
+      parseBibleVersion(versaoBiblica),
     );
     res.json({ sucesso: true, analise });
   } catch (error: unknown) {
@@ -98,17 +104,18 @@ router.post("/analysis", async (req: Request, res: Response) => {
 
 router.post("/explain", async (req: Request, res: Response) => {
   try {
-    const { referencia, versaoBiblica = "ARA" } = req.body as {
+    const { referencia, versaoBiblica } = req.body as {
       referencia: string;
       versaoBiblica?: VersaoBiblica;
     };
 
-    if (!referencia) {
-      res.status(400).json({ error: "Referencia biblica e obrigatoria" });
-      return;
-    }
-
-    const explicacao = await explicarPassagem(referencia, versaoBiblica);
+    const explicacao = await explicarPassagem(
+      sanitizeText(referencia, "Referencia biblica", {
+        minLength: 2,
+        maxLength: 60,
+      }),
+      parseBibleVersion(versaoBiblica),
+    );
     res.json({ sucesso: true, explicacao });
   } catch (error: unknown) {
     res
@@ -123,8 +130,8 @@ router.post("/schedule", async (req: Request, res: Response) => {
       mes,
       ano,
       temas,
-      estilo = "Pentecostal",
-      versaoBiblica = "ARA",
+      estilo,
+      versaoBiblica,
     } = req.body as {
       mes: number;
       ano: number;
@@ -133,17 +140,20 @@ router.post("/schedule", async (req: Request, res: Response) => {
       versaoBiblica?: VersaoBiblica;
     };
 
-    if (!mes || !ano) {
-      res.status(400).json({ error: "Mes e ano sao obrigatorios" });
-      return;
-    }
-
     const cronograma = await gerarCronogramaPregacoes(
-      mes,
-      ano,
-      estilo,
-      versaoBiblica,
-      temas,
+      parseInteger(mes, "Mes", { min: 1, max: 12, fallback: 1 }),
+      parseInteger(ano, "Ano", {
+        min: new Date().getFullYear() - 1,
+        max: new Date().getFullYear() + 5,
+        fallback: new Date().getFullYear(),
+      }),
+      sanitizeText(estilo, "Linha teologica", {
+        minLength: 3,
+        maxLength: 40,
+        fallback: "Pentecostal",
+      }),
+      parseBibleVersion(versaoBiblica),
+      parseStringList(temas, "Temas", { maxItems: 12, maxItemLength: 60 }),
     );
     res.json({ sucesso: true, cronograma });
   } catch (error: unknown) {
@@ -157,23 +167,30 @@ router.post("/pastoral-letter", async (req: Request, res: Response) => {
   try {
     const {
       tema,
-      objetivo = "edificar, orientar e fortalecer a igreja",
-      publicoAlvo = "lideranca, membros e cooperadores do GCEU",
-      tom = "pastoral, acolhedor e firme",
-      versaoBiblica = "ARA",
-    } = req.body as PastoralLetterRequest;
-
-    if (!tema) {
-      res.status(400).json({ error: "Tema e obrigatorio" });
-      return;
-    }
-
-    const carta = await gerarCartaPastoralGceu(
-      tema,
       objetivo,
       publicoAlvo,
       tom,
       versaoBiblica,
+    } = req.body as PastoralLetterRequest;
+
+    const carta = await gerarCartaPastoralGceu(
+      sanitizeText(tema, "Tema", { minLength: 3, maxLength: 120 }),
+      sanitizeText(objetivo, "Objetivo pastoral", {
+        minLength: 8,
+        maxLength: 180,
+        fallback: "edificar, orientar e fortalecer a igreja",
+      }),
+      sanitizeText(publicoAlvo, "Publico-alvo", {
+        minLength: 3,
+        maxLength: 120,
+        fallback: "lideranca, membros e cooperadores do GCEU",
+      }),
+      sanitizeText(tom, "Tom da carta", {
+        minLength: 3,
+        maxLength: 80,
+        fallback: "pastoral, acolhedor e firme",
+      }),
+      parseBibleVersion(versaoBiblica),
     );
 
     res.json({ sucesso: true, carta });

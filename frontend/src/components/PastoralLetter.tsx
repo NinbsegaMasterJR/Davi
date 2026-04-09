@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import ReactMarkdown from "react-markdown";
 import {
   sermonAPI,
   BIBLE_VERSION_OPTIONS,
   type BibleVersion,
 } from "../services/api";
 import { useApp } from "../context/AppContext";
+import { ResultPanel } from "./ResultPanel";
 import { getErrorMessage } from "../utils/httpError";
 import "./PastoralLetter.css";
 
@@ -22,7 +22,30 @@ export const PastoralLetter: React.FC = () => {
   const [resultado, setResultado] = useState("");
   const [carregando, setCarregando] = useState(false);
 
-  const { showSuccess, showError } = useApp();
+  const { showSuccess, showError, saveDocument } = useApp();
+  const presets = [
+    {
+      label: "Chamada a unidade",
+      tema: "Unidade da igreja",
+      objetivo: "edificar a comunhao e alinhar a igreja",
+      publicoAlvo: "membros, lideranca e cooperadores",
+      tom: "pastoral, acolhedor e firme",
+    },
+    {
+      label: "Tempo de oracao",
+      tema: "Consagracao e oracao",
+      objetivo: "convocar a igreja para um tempo de busca",
+      publicoAlvo: "toda a congregacao",
+      tom: "pastoral, inspirador e convocatorio",
+    },
+    {
+      label: "Aviso ministerial",
+      tema: "Postura e testemunho cristao",
+      objetivo: "orientar a igreja com maturidade e clareza",
+      publicoAlvo: "membros e obreiros",
+      tom: "pastoral, sereno e assertivo",
+    },
+  ];
 
   const gerarCarta = async () => {
     if (!tema.trim()) {
@@ -40,17 +63,21 @@ export const PastoralLetter: React.FC = () => {
         versaoBiblica,
       );
       setResultado(response.data.carta);
+      saveDocument({
+        toolId: "pastoral-letter",
+        toolLabel: "Carta GCEU",
+        title: `Carta pastoral: ${tema}`,
+        query: tema,
+        summary: `${publicoAlvo} • ${versaoBiblica}`,
+        content: response.data.carta,
+        contentType: "markdown",
+      });
       showSuccess("Carta pastoral gerada com sucesso!");
     } catch (error: unknown) {
       showError(getErrorMessage(error, "Erro ao gerar carta pastoral"));
     } finally {
       setCarregando(false);
     }
-  };
-
-  const copiar = () => {
-    navigator.clipboard.writeText(resultado);
-    showSuccess("Carta pastoral copiada!");
   };
 
   return (
@@ -61,6 +88,25 @@ export const PastoralLetter: React.FC = () => {
           Gere uma carta pastoral com tom ministerial, referencias biblicas e
           direcionamento pronto para leitura, adaptacao ou envio.
         </p>
+
+        <div className="preset-row" aria-label="Presets de carta pastoral">
+          {presets.map((preset) => (
+            <button
+              key={preset.label}
+              type="button"
+              className="preset-chip"
+              onClick={() => {
+                setTema(preset.tema);
+                setObjetivo(preset.objetivo);
+                setPublicoAlvo(preset.publicoAlvo);
+                setTom(preset.tom);
+              }}
+              disabled={carregando}
+            >
+              {preset.label}
+            </button>
+          ))}
+        </div>
 
         <div className="form-group">
           <label htmlFor="tema-carta">Tema central da carta:</label>
@@ -145,17 +191,11 @@ export const PastoralLetter: React.FC = () => {
       </div>
 
       {resultado && (
-        <div className="result-section">
-          <div className="result-header">
-            <h3>Carta pastoral gerada:</h3>
-            <button onClick={copiar} className="btn-copy">
-              Copiar
-            </button>
-          </div>
-          <div className="markdown-content">
-            <ReactMarkdown>{resultado}</ReactMarkdown>
-          </div>
-        </div>
+        <ResultPanel
+          title={`Carta pastoral: ${tema}`}
+          content={resultado}
+          contentType="markdown"
+        />
       )}
     </div>
   );

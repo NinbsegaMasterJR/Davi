@@ -1,6 +1,7 @@
 import Groq from "groq-sdk";
 
 let groqClient: Groq | null = null;
+const GROQ_MODEL = process.env.GROQ_MODEL || "mixtral-8x7b-32768";
 
 export type VersaoBiblica = "ARA" | "ARC" | "ARCF" | "KING_JAMES";
 
@@ -34,6 +35,49 @@ function getNomeVersaoBiblica(versao: VersaoBiblica = "ARA"): string {
   }
 }
 
+async function criarResposta(messages: Array<{ role: "user"; content: string }>, maxTokens: number) {
+  const groq = getGroqClient();
+
+  return groq.chat.completions.create({
+    model: GROQ_MODEL,
+    temperature: 0.4,
+    max_tokens: maxTokens,
+    messages,
+  });
+}
+
+function parseVerseArray(content: string): VersoIA[] {
+  const jsonMatch = content.match(/\[[\s\S]*\]/);
+  if (!jsonMatch) {
+    return [];
+  }
+
+  const parsed = JSON.parse(jsonMatch[0]) as unknown;
+  if (!Array.isArray(parsed)) {
+    return [];
+  }
+
+  return parsed
+    .filter(
+      (item): item is VersoIA =>
+        typeof item === "object" &&
+        item !== null &&
+        "referencia" in item &&
+        "texto" in item &&
+        typeof item.referencia === "string" &&
+        typeof item.texto === "string",
+    )
+    .map((item) => ({
+      referencia: item.referencia.trim(),
+      texto: item.texto.trim(),
+      versao:
+        typeof item.versao === "string" && item.versao.trim()
+          ? item.versao.trim()
+          : "ARA",
+    }))
+    .filter((item) => item.referencia && item.texto);
+}
+
 export async function gerarEsbocoPregacao(
   tema: string,
   estilo: string,
@@ -46,7 +90,6 @@ export async function gerarEsbocoPregacao(
   },
 ): Promise<string> {
   try {
-    const groq = getGroqClient();
     const incluirExegese = secoesOpcionais?.exegese ?? false;
     const incluirIlustracao = secoesOpcionais?.ilustracao ?? false;
     const incluirAplicacaoPratica =
@@ -102,11 +145,7 @@ ${instrucoesOpcionais}
 Formato: Use Markdown bem estruturado, com titulos e subtitulos claros.
 Se possivel, faca o resultado soar pronto para ser pregado.`;
 
-    const response = await groq.chat.completions.create({
-      model: "mixtral-8x7b-32768",
-      max_tokens: 2000,
-      messages: [{ role: "user", content: prompt }],
-    });
+    const response = await criarResposta([{ role: "user", content: prompt }], 2000);
 
     return response.choices[0]?.message?.content || "Erro ao gerar esboco";
   } catch (error) {
@@ -122,7 +161,6 @@ export async function analisarTeologicamente(
   versaoBiblica: VersaoBiblica = "ARA",
 ): Promise<string> {
   try {
-    const groq = getGroqClient();
     const passagemText = passagem ? ` Passagem especifica: ${passagem}` : "";
     const nomeVersao = getNomeVersaoBiblica(versaoBiblica);
     const nivelDetalhe =
@@ -144,11 +182,7 @@ A analise deve cobrir:
 Use referencias e citacoes biblicas em ${nomeVersao}.
 Formate com Markdown bem estruturado.`;
 
-    const response = await groq.chat.completions.create({
-      model: "mixtral-8x7b-32768",
-      max_tokens: 2500,
-      messages: [{ role: "user", content: prompt }],
-    });
+    const response = await criarResposta([{ role: "user", content: prompt }], 2500);
 
     return response.choices[0]?.message?.content || "Erro ao analisar";
   } catch (error) {
@@ -162,7 +196,6 @@ export async function explicarPassagem(
   versaoBiblica: VersaoBiblica = "ARA",
 ): Promise<string> {
   try {
-    const groq = getGroqClient();
     const nomeVersao = getNomeVersaoBiblica(versaoBiblica);
     const prompt = `Explique detalhadamente a passagem biblica: ${referencia}
 
@@ -177,11 +210,7 @@ Sua explicacao deve incluir:
 Use a versao ${nomeVersao} ao citar o texto biblico.
 Seja claro e acessivel.`;
 
-    const response = await groq.chat.completions.create({
-      model: "mixtral-8x7b-32768",
-      max_tokens: 2000,
-      messages: [{ role: "user", content: prompt }],
-    });
+    const response = await criarResposta([{ role: "user", content: prompt }], 2000);
 
     return response.choices[0]?.message?.content || "Erro ao explicar";
   } catch (error) {
@@ -202,7 +231,6 @@ export async function sugerirVersiculosPorTema(
   versaoBiblica: VersaoBiblica = "ARA",
 ): Promise<VersoIA[]> {
   try {
-    const groq = getGroqClient();
     const nomeVersao = getNomeVersaoBiblica(versaoBiblica);
     const prompt = `Liste exatamente ${quantidade} versiculos biblicos relevantes sobre o tema "${tema}".
 Retorne APENAS um array JSON valido, sem texto adicional, no seguinte formato:
@@ -210,18 +238,13 @@ Retorne APENAS um array JSON valido, sem texto adicional, no seguinte formato:
   {"referencia": "Joao 3:16", "texto": "Porque Deus amou o mundo de tal maneira que deu o seu Filho unigenito...", "versao": "${versaoBiblica}"},
   {"referencia": "Romanos 8:28", "texto": "Sabemos que todas as coisas cooperam para o bem...", "versao": "${versaoBiblica}"}
 ]
-Use a versao ${nomeVersao} e textos precisos.`;
+Use a versao ${nomeVersao}.
+Nao invente referencias. Se nao tiver confianca suficiente em alguma citacao, omita esse item.`;
 
-    const response = await groq.chat.completions.create({
-      model: "mixtral-8x7b-32768",
-      max_tokens: 1500,
-      messages: [{ role: "user", content: prompt }],
-    });
+    const response = await criarResposta([{ role: "user", content: prompt }], 1500);
 
     const content = response.choices[0]?.message?.content || "[]";
-    const jsonMatch = content.match(/\[[\s\S]*\]/);
-    if (!jsonMatch) return [];
-    return JSON.parse(jsonMatch[0]) as VersoIA[];
+    return parseVerseArray(content).slice(0, quantidade);
   } catch (error) {
     console.error("Erro ao sugerir versiculos:", error);
     throw error;
@@ -234,25 +257,19 @@ export async function buscarConcordanciaIA(
   versaoBiblica: VersaoBiblica = "ARA",
 ): Promise<VersoIA[]> {
   try {
-    const groq = getGroqClient();
     const nomeVersao = getNomeVersaoBiblica(versaoBiblica);
     const prompt = `Encontre ${limite} versiculos biblicos que contenham ou se relacionem diretamente com a palavra/conceito "${palavra}".
 Retorne APENAS um array JSON valido, sem texto adicional, no formato:
 [
   {"referencia": "Salmos 119:105", "texto": "Lampada para os meus pes e tua palavra...", "versao": "${versaoBiblica}"}
 ]
-Use a versao ${nomeVersao} e textos precisos.`;
+Use a versao ${nomeVersao}.
+Nao invente referencias. Se nao tiver confianca suficiente em alguma citacao, omita esse item.`;
 
-    const response = await groq.chat.completions.create({
-      model: "mixtral-8x7b-32768",
-      max_tokens: 1500,
-      messages: [{ role: "user", content: prompt }],
-    });
+    const response = await criarResposta([{ role: "user", content: prompt }], 1500);
 
     const content = response.choices[0]?.message?.content || "[]";
-    const jsonMatch = content.match(/\[[\s\S]*\]/);
-    if (!jsonMatch) return [];
-    return JSON.parse(jsonMatch[0]) as VersoIA[];
+    return parseVerseArray(content).slice(0, limite);
   } catch (error) {
     console.error("Erro ao buscar concordancia:", error);
     throw error;
@@ -267,7 +284,6 @@ export async function gerarCronogramaPregacoes(
   temas?: string[],
 ): Promise<string> {
   try {
-    const groq = getGroqClient();
     const nomeVersao = getNomeVersaoBiblica(versaoBiblica);
     const nomesMeses = [
       "Janeiro",
@@ -302,11 +318,7 @@ O cronograma deve incluir:
 
 Formate com Markdown bem estruturado, organizado por semana/domingo.`;
 
-    const response = await groq.chat.completions.create({
-      model: "mixtral-8x7b-32768",
-      max_tokens: 2000,
-      messages: [{ role: "user", content: prompt }],
-    });
+    const response = await criarResposta([{ role: "user", content: prompt }], 2000);
 
     return response.choices[0]?.message?.content || "Erro ao gerar cronograma";
   } catch (error) {
@@ -323,7 +335,6 @@ export async function gerarCartaPastoralGceu(
   versaoBiblica: VersaoBiblica = "ARA",
 ): Promise<string> {
   try {
-    const groq = getGroqClient();
     const nomeVersao = getNomeVersaoBiblica(versaoBiblica);
     const prompt = `Voce e um redator pastoral experiente. Crie uma carta pastoral para GCEU sobre "${tema}".
 
@@ -349,11 +360,7 @@ Regras:
 
 Entregue um texto pronto para leitura, adaptacao ou envio.`;
 
-    const response = await groq.chat.completions.create({
-      model: "mixtral-8x7b-32768",
-      max_tokens: 2200,
-      messages: [{ role: "user", content: prompt }],
-    });
+    const response = await criarResposta([{ role: "user", content: prompt }], 2200);
 
     return (
       response.choices[0]?.message?.content || "Erro ao gerar carta pastoral"

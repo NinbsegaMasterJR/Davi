@@ -4,6 +4,11 @@ import {
   type VersaoBiblica,
 } from "../services/ia.service";
 import { getErrorMessage } from "../utils/httpError";
+import {
+  parseBibleVersion,
+  sanitizeOptionalText,
+  sanitizeText,
+} from "../utils/validation";
 
 const router = Router();
 
@@ -11,9 +16,9 @@ router.post("/theological", async (req: Request, res: Response) => {
   try {
     const {
       tema,
-      profundidade = "medio",
+      profundidade,
       passagem,
-      versaoBiblica = "ARA",
+      versaoBiblica,
     } = req.body as {
       tema: string;
       profundidade?: "basico" | "medio" | "avancado";
@@ -21,16 +26,16 @@ router.post("/theological", async (req: Request, res: Response) => {
       versaoBiblica?: VersaoBiblica;
     };
 
-    if (!tema) {
-      res.status(400).json({ error: "Tema e obrigatorio" });
-      return;
-    }
-
     const analise = await analisarTeologicamente(
-      tema,
-      passagem,
-      profundidade,
-      versaoBiblica,
+      sanitizeText(tema, "Tema", { minLength: 3, maxLength: 120 }),
+      sanitizeOptionalText(passagem, "Passagem", {
+        minLength: 2,
+        maxLength: 60,
+      }),
+      profundidade === "basico" || profundidade === "medio" || profundidade === "avancado"
+        ? profundidade
+        : "medio",
+      parseBibleVersion(versaoBiblica),
     );
     res.json({ sucesso: true, tema, profundidade, analise });
   } catch (error: unknown) {
