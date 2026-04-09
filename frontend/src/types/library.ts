@@ -13,6 +13,15 @@ export interface SavedDocument {
   favorite: boolean;
 }
 
+export interface SavedDraft {
+  toolId: string;
+  toolLabel: string;
+  title: string;
+  summary?: string;
+  values: Record<string, unknown>;
+  updatedAt: string;
+}
+
 export interface SaveDocumentInput {
   toolId: string;
   toolLabel: string;
@@ -21,4 +30,12 @@ export interface SaveDocumentInput {
   summary?: string;
   content: string;
   contentType: SavedContentType;
+}
+
+export interface SaveDraftInput {
+  toolId: string;
+  toolLabel: string;
+  title: string;
+  summary?: string;
+  values: Record<string, unknown>;
 }

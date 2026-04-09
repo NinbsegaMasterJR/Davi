@@ -1,18 +1,20 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import {
   sermonAPI,
   BIBLE_VERSION_OPTIONS,
   type BibleVersion,
 } from "../services/api";
 import { useApp } from "../context/AppContext";
+import { useToolDraft } from "../hooks/useToolDraft";
 import { ResultPanel } from "./ResultPanel";
+import { ToolDraftBar } from "./ToolDraftBar";
 import { getErrorMessage } from "../utils/httpError";
 import "./CronogramaPregacoes.css";
 
 const MESES = [
   "Janeiro",
   "Fevereiro",
-  "Marco",
+  "Março",
   "Abril",
   "Maio",
   "Junho",
@@ -26,7 +28,7 @@ const MESES = [
 
 const LINHAS_TEOLOGICAS = [
   "Arminiana",
-  "Arminio-Wesleyana",
+  "Armínio-Wesleyana",
   "Calvinista",
   "Luterana",
 ];
@@ -42,27 +44,61 @@ export const CronogramaPregacoes: React.FC = () => {
   const [temas, setTemas] = useState("");
   const [resultado, setResultado] = useState("");
   const [carregando, setCarregando] = useState(false);
+  const [jaGerou, setJaGerou] = useState(false);
 
   const { showSuccess, showError, saveDocument } = useApp();
+  const draftValues = useMemo(
+    () => ({
+      mes,
+      ano,
+      estilo,
+      versaoBiblica,
+      temas,
+    }),
+    [ano, estilo, mes, temas, versaoBiblica],
+  );
+  const { draftUpdatedAt, hasDraft, clearSavedDraft } = useToolDraft({
+    toolId: "schedule",
+    toolLabel: "Cronograma",
+    title: `Cronograma: ${MESES[mes - 1]}/${ano}`,
+    summary: `${estilo} | ${versaoBiblica}`,
+    values: draftValues,
+    onRestore: (draft) => {
+      setMes(
+        typeof draft.mes === "number" ? draft.mes : Number(draft.mes) || mesAtual,
+      );
+      setAno(
+        typeof draft.ano === "number" ? draft.ano : Number(draft.ano) || anoAtual,
+      );
+      setEstilo(typeof draft.estilo === "string" ? draft.estilo : "Arminiana");
+      setVersaoBiblica(
+        typeof draft.versaoBiblica === "string"
+          ? (draft.versaoBiblica as BibleVersion)
+          : "ARA",
+      );
+      setTemas(typeof draft.temas === "string" ? draft.temas : "");
+    },
+  });
   const presets = [
     {
-      label: "Serie familia",
+      label: "Série família",
       estilo: "Arminiana",
-      temas: "Familia, educacao de filhos, restauracao do lar, alianca",
+      temas: "Família, educação de filhos, restauração do lar, aliança",
     },
     {
-      label: "Serie avivamento",
-      estilo: "Arminio-Wesleyana",
-      temas: "Oracao, consagracao, arrependimento, poder do Espirito",
+      label: "Série avivamento",
+      estilo: "Armínio-Wesleyana",
+      temas: "Oração, consagração, arrependimento, poder do Espírito",
     },
     {
-      label: "Serie discipulado",
+      label: "Série discipulado",
       estilo: "Arminiana",
-      temas: "Identidade em Cristo, servico, maturidade, missao",
+      temas: "Identidade em Cristo, serviço, maturidade, missão",
     },
   ];
 
   const gerarCronograma = async () => {
+    setJaGerou(true);
     setCarregando(true);
     try {
       const temasArray = temas
@@ -100,11 +136,29 @@ export const CronogramaPregacoes: React.FC = () => {
   return (
     <div className="cronograma-pregacoes">
       <div className="input-section">
-        <h2>Cronograma de Pregacoes</h2>
+        <h2>Cronograma de Pregações</h2>
         <p className="subtitle">
-          Organize o mes com temas, titulos e textos base para cada oportunidade
-          de ministracao.
+          Organize o mês com temas, títulos e textos base para cada oportunidade
+          de ministração.
         </p>
+
+        <div className="tool-context-grid">
+          <div className="tool-context-card">
+            <span>Ideal para</span>
+            <strong>Planejamento ministerial</strong>
+            <p>Excelente para organizar sequência de domingos, séries curtas e frentes de ensino.</p>
+          </div>
+          <div className="tool-context-card">
+            <span>Entrega</span>
+            <strong>Calendário coerente</strong>
+            <p>Ajuda a distribuir temas com ritmo, variedade e alinhamento teológico ao longo do mês.</p>
+          </div>
+          <div className="tool-context-card">
+            <span>Revisão</span>
+            <strong>Ajuste a agenda real</strong>
+            <p>Considere santa ceia, conferências, convidados e calendário da igreja antes de fechar.</p>
+          </div>
+        </div>
 
         <div className="preset-row" aria-label="Presets de cronograma">
           {presets.map((preset) => (
@@ -125,7 +179,7 @@ export const CronogramaPregacoes: React.FC = () => {
 
         <div className="form-row-3 form-row-4">
           <div className="form-group">
-            <label htmlFor="mes">Mes de planejamento:</label>
+            <label htmlFor="mes">Mês de planejamento:</label>
             <select
               id="mes"
               value={mes}
@@ -161,7 +215,7 @@ export const CronogramaPregacoes: React.FC = () => {
           </div>
 
           <div className="form-group">
-            <label htmlFor="estilo">Linha teologica:</label>
+            <label htmlFor="estilo">Linha teológica:</label>
             <select
               id="estilo"
               value={estilo}
@@ -179,7 +233,7 @@ export const CronogramaPregacoes: React.FC = () => {
           </div>
 
           <div className="form-group">
-            <label htmlFor="versao-biblica-cronograma">Versao biblica:</label>
+            <label htmlFor="versao-biblica-cronograma">Versão bíblica:</label>
             <select
               id="versao-biblica-cronograma"
               value={versaoBiblica}
@@ -201,7 +255,7 @@ export const CronogramaPregacoes: React.FC = () => {
           <label htmlFor="temas">
             Temas sugeridos{" "}
             <span className="label-hint">
-              (opcional, separados por virgula)
+              (opcional, separados por vírgula)
             </span>
           </label>
           <input
@@ -211,10 +265,23 @@ export const CronogramaPregacoes: React.FC = () => {
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               setTemas(e.target.value)
             }
-            placeholder="Ex: Fe perseverante, Familia, Avivamento, Graca..."
+            placeholder="Ex: Fé perseverante, Família, Avivamento, Graça..."
             disabled={carregando}
           />
         </div>
+
+        <div className="tool-helper-row">
+          <span className="tool-helper-chip">Ajuda a evitar repetição de temas</span>
+          <span className="tool-helper-chip">Bom para séries mensais e domingos seguidos</span>
+          <span className="tool-helper-chip">Depois ajuste com o calendário real da igreja</span>
+        </div>
+
+        <ToolDraftBar
+          hasDraft={hasDraft}
+          draftUpdatedAt={draftUpdatedAt}
+          note="Mês, ano, linha teológica e ideias de série ficam guardados para você continuar o planejamento"
+          onClearDraft={clearSavedDraft}
+        />
 
         <button
           onClick={gerarCronograma}
@@ -225,6 +292,39 @@ export const CronogramaPregacoes: React.FC = () => {
             ? "Montando cronograma..."
             : `Gerar Cronograma de ${MESES[mes - 1]}/${ano}`}
         </button>
+
+        <div className="tool-feedback-stack" aria-live="polite">
+          {carregando ? (
+            <div className="tool-state-card loading">
+              <span className="tool-state-kicker">Planejamento em andamento</span>
+              <strong>Distribuindo temas e textos ao longo do período</strong>
+              <p>
+                Estou organizando o mês para equilibrar ritmo, foco ministerial
+                e coerência entre os domingos.
+              </p>
+              <div className="tool-state-points">
+                <span>Sequência mensal</span>
+                <span>Variedade de temas</span>
+                <span>Texto base sugerido</span>
+              </div>
+            </div>
+          ) : !resultado ? (
+            <div className="tool-state-card empty">
+              <span className="tool-state-kicker">
+                {jaGerou ? "Pronto para replanejar" : "Antes de montar o cronograma"}
+              </span>
+              <strong>
+                {jaGerou
+                  ? "Troque o mês, a linha teológica ou os temas sugeridos para gerar outra versão."
+                  : "Escolha o mês e, se quiser, indique alguns eixos temáticos para guiar a série."}
+              </strong>
+              <p>
+                Quanto mais claro for o objetivo do período, mais útil fica o
+                cronograma para o seu calendário ministerial.
+              </p>
+            </div>
+          ) : null}
+        </div>
       </div>
 
       {resultado && (

@@ -1,6 +1,6 @@
 @echo off
 REM =========================================================
-REM  Pregador IA - Script de Inicialização
+REM  Scriptura - Script de Inicialização
 REM  Inicia Backend + Frontend + Abre o navegador
 REM =========================================================
 
@@ -8,7 +8,7 @@ setlocal enabledelayedexpansion
 
 echo.
 echo ============================================
-echo   PREGADOR IA - Assistente de Pregacoes
+echo   SCRIPTURA - Assistente de Pregacoes
 echo ============================================
 echo.
 
@@ -47,18 +47,18 @@ if not exist "%FRONTEND_DIR%" (
     exit /b 1
 )
 
-echo [INFO] Iniciando Pregador IA...
+echo [INFO] Iniciando Scriptura...
 echo [INFO] Package manager esperado: npm 11.9.0
 echo.
 
 REM Abrir terminal do Backend
 echo [1/3] Iniciando Backend em http://localhost:3001...
-start "Pregador IA - Backend" cmd /k "cd %BACKEND_DIR% && npm run dev"
+start "Scriptura - Backend" cmd /k "cd %BACKEND_DIR% && npm run dev"
 timeout /t 3 /nobreak
 
 REM Abrir terminal do Frontend
 echo [2/3] Iniciando Frontend em http://localhost:3000...
-start "Pregador IA - Frontend" cmd /k "cd %FRONTEND_DIR% && npm run dev"
+start "Scriptura - Frontend" cmd /k "cd %FRONTEND_DIR% && npm run dev"
 timeout /t 5 /nobreak
 
 REM Abrir navegador
@@ -68,7 +68,7 @@ start "" http://localhost:3000
 
 echo.
 echo ============================================
-echo   ✓ Pregador IA iniciado com sucesso!
+echo   ✓ Scriptura iniciado com sucesso!
 echo.
 echo   Frontend:  http://localhost:3000
 echo   Backend:   http://localhost:3001

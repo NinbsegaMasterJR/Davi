@@ -1,51 +1,49 @@
-# Deploy Guide - Pregador IA
+# Deploy Guide - Scriptura
 
-Este projeto está padronizado para deploy no Railway.
+## URLs Publicas Atuais
 
-- Package manager: npm 11.9.0
-- Frontend: Railway com Root Directory `frontend`
-- Backend: Railway com Root Directory `backend`
-- IA: Groq via `GROQ_API_KEY`
+- Frontend: `https://scriptura-web.vercel.app`
+- Backend: `https://scriptura-web-api.vercel.app`
 
-## Guia canônico
+## Stack de Publicacao
 
-Use [RAILWAY_DEPLOY.md](RAILWAY_DEPLOY.md) como referência principal.
+- Frontend: Vercel
+- Backend: Vercel
+- Package manager: `npm@11.9.0`
 
-## Resumo rápido
+## Variaveis de Producao
 
 ### Frontend
 
-```txt
-Service Name: frontend
-Runtime: Node.js
-Root Directory: frontend
-Build Command: npm install && npm run build
-Start Command: npx vite preview --host 0.0.0.0 --port $PORT
-Environment Variable: VITE_API_URL=https://seu-backend.up.railway.app
+```env
+VITE_API_URL=https://scriptura-web-api.vercel.app
 ```
 
 ### Backend
 
-```txt
-Service Name: backend
-Runtime: Node.js
-Root Directory: backend
-Build Command: npm install && npm run build
-Start Command: npm start
-Environment Variables:
+```env
 GROQ_API_KEY=gsk_sua_chave
-CORS_ORIGIN=https://seu-frontend.up.railway.app
 NODE_ENV=production
+CORS_ORIGIN=https://scriptura-web.vercel.app
 ```
 
-## Validação
+## Validacao
 
-1. Abra `https://seu-backend.up.railway.app/health`
-2. Abra o frontend publicado
-3. Gere um esboço e teste concordância, análise e explicação de passagem
+1. Abra `https://scriptura-web-api.vercel.app/health`
+2. Abra `https://scriptura-web.vercel.app`
+3. Teste esboco, analise, versiculos e workspace
 
-## Resposta esperada do health check
+Resposta esperada:
 
 ```json
-{ "status": "OK", "message": "Pregador IA API is running" }
+{ "status": "OK", "message": "Scriptura API is running" }
 ```
+
+## Redeploy
+
+```bash
+npm run lint
+npm run build
+```
+
+Se publicar em outro ambiente, substitua `VITE_API_URL` e `CORS_ORIGIN` pelas URLs do novo dominio.

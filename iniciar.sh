@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # =========================================================
-# Pregador IA - Script de Inicialização (Linux/Mac)
+# Scriptura - Script de Inicialização (Linux/Mac)
 # Inicia Backend + Frontend
 # =========================================================
 
@@ -11,7 +11,7 @@ FRONTEND_DIR="$SCRIPT_DIR/frontend"
 
 echo ""
 echo "============================================"
-echo "  PREGADOR IA - Assistente de Pregações"
+echo "  SCRIPTURA - Assistente de Pregações"
 echo "============================================"
 echo ""
 
@@ -40,14 +40,14 @@ if [ ! -d "$FRONTEND_DIR" ]; then
     exit 1
 fi
 
-echo "[INFO] Iniciando Pregador IA..."
+echo "[INFO] Iniciando Scriptura..."
 echo "[INFO] Package manager esperado: npm 11.9.0"
 echo ""
 
 # Função para cleanup ao sair
 cleanup() {
     echo ""
-    echo "Encerrando Pregador IA..."
+    echo "Encerrando Scriptura..."
     kill $BACKEND_PID $FRONTEND_PID 2>/dev/null
     exit 0
 }
@@ -75,7 +75,7 @@ fi
 
 echo ""
 echo "============================================"
-echo "  ✓ Pregador IA iniciado com sucesso!"
+echo "  ✓ Scriptura iniciado com sucesso!"
 echo ""
 echo "  Frontend:  http://localhost:3000"
 echo "  Backend:   http://localhost:3001"

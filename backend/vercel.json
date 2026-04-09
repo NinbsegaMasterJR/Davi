@@ -1,19 +1,9 @@
 {
-  "version": 2,
-  "builds": [
-    {
-      "src": "package.json",
-      "use": "@vercel/node"
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "express",
+  "functions": {
+    "src/server.ts": {
+      "maxDuration": 60
     }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "dist/server.js"
-    }
-  ],
-  "env": {
-    "GROQ_API_KEY": "@groq_api_key",
-    "CORS_ORIGIN": "https://pregador-ia.vercel.app"
   }
 }

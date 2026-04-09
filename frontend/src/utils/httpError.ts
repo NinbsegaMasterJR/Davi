@@ -11,7 +11,7 @@ export function getErrorMessage(error: unknown, fallback: string): string {
     }
 
     if (!error.response) {
-      return "Nao foi possivel conectar com o servidor. Verifique se o backend esta ativo.";
+      return "Não foi possível conectar com o servidor. Verifique se o backend está ativo.";
     }
 
     return error.message || fallback;

@@ -1,5 +1,6 @@
 import axios from "axios";
 import API_BASE_URL from "../config";
+import type { WorkspaceSession, WorkspaceSnapshot } from "../types/workspace";
 
 const normalizedApiBaseUrl = API_BASE_URL.replace(/\/$/, "");
 const apiBaseUrl = import.meta.env.DEV
@@ -158,6 +159,21 @@ export interface ConcordanceResponse {
   resultados: Versiculo[];
 }
 
+export interface WorkspaceStatusResponse {
+  sucesso: boolean;
+  configured: boolean;
+}
+
+export interface WorkspaceSessionResponse {
+  sucesso: boolean;
+  session: WorkspaceSession;
+}
+
+export interface WorkspaceSnapshotResponse {
+  sucesso: boolean;
+  snapshot: WorkspaceSnapshot;
+}
+
 export const concordanceAPI = {
   search: (
     palavra: string,
@@ -181,6 +197,43 @@ export const analysisAPI = {
       profundidade,
       passagem,
       versaoBiblica,
+  }),
+};
+
+export const workspaceSyncAPI = {
+  getStatus: () => api.get<WorkspaceStatusResponse>("/workspace/status"),
+
+  register: (displayName: string, passphrase: string) =>
+    api.post<WorkspaceSessionResponse>("/workspace/register", {
+      displayName,
+      passphrase,
+    }),
+
+  login: (workspaceId: string, passphrase: string) =>
+    api.post<WorkspaceSessionResponse>("/workspace/login", {
+      workspaceId,
+      passphrase,
+    }),
+
+  getSession: (token: string) =>
+    api.get<WorkspaceSessionResponse>("/workspace/session", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }),
+
+  getSnapshot: (token: string) =>
+    api.get<WorkspaceSnapshotResponse>("/workspace/snapshot", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }),
+
+  saveSnapshot: (token: string, snapshot: WorkspaceSnapshot) =>
+    api.put<WorkspaceSnapshotResponse>("/workspace/snapshot", snapshot, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     }),
 };
 

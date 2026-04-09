@@ -7,79 +7,100 @@ interface AboutProps {
   githubUrl: string;
 }
 
+const VALUE_CARDS = [
+  {
+    title: "Clareza de preparo",
+    text: "O produto ajuda a sair da página em branco com fluxo, contexto e base para revisar.",
+  },
+  {
+    title: "Profundidade ajustável",
+    text: "Cada ferramenta tenta equilibrar agilidade com leitura bíblica e densidade pastoral.",
+  },
+  {
+    title: "Responsabilidade real",
+    text: "A proposta não é automatizar o púlpito, e sim organizar melhor o trabalho ministerial.",
+  },
+];
+
 export const About: React.FC<AboutProps> = ({ onBackHome, githubUrl }) => {
   const [expandedFaq, setExpandedFaq] = useState<number | null>(null);
 
   const faqs = [
     {
-      pergunta: "Como funciona o Pregador IA?",
+      pergunta: "Como funciona o Scriptura?",
       resposta:
-        "O Pregador IA usa inteligencia artificial para gerar esbocos de pregacoes, analises teologicas e sugestoes de versiculos. Voce informa um tema ou passagem, e a plataforma devolve uma base estruturada em segundos.",
+        "Você informa um tema, passagem ou necessidade ministerial, e a plataforma devolve uma base estruturada para revisar, adaptar e aprofundar.",
     },
     {
-      pergunta: "E realmente gratis?",
+      pergunta: "É realmente grátis?",
       resposta:
-        "Sim. A proposta atual do projeto e oferecer uso simples e direto, sem cadastro obrigatorio e sem barreiras para comecar.",
+        "Sim. Hoje a proposta é oferecer uso direto, sem cadastro obrigatório e sem barreiras para começar.",
     },
     {
       pergunta: "Posso usar com celular?",
       resposta:
-        "Sim. O site funciona em qualquer navegador: computador, tablet ou celular. E totalmente responsivo.",
+        "Sim. O site foi pensado para funcionar em computador, tablet e celular, com layout responsivo.",
     },
     {
-      pergunta: "Como posso salvar meus esbocos?",
+      pergunta: "Como salvo o que gerei?",
       resposta:
-        "Voce pode salvar na biblioteca local do navegador, copiar o resultado ou exportar em mais de um formato.",
+        "Os resultados podem ser guardados na biblioteca local do navegador, copiados ou exportados em vários formatos.",
     },
     {
-      pergunta: "A IA substitui estudo biblico?",
+      pergunta: "A IA substitui estudo bíblico?",
       resposta:
-        "Nao. O produto foi desenhado para apoiar o preparo, acelerar organizacao e sugerir caminhos, mas a revisao pastoral continua indispensavel.",
+        "Não. O produto apoia organização, pesquisa e estrutura, mas a revisão pastoral continua indispensável.",
     },
   ];
 
   return (
     <div className="about-page">
-      <div className="about-hero">
+      <section className="about-hero">
         <div className="about-hero-brand">
           <div className="about-logo-shell">
             <BrandLogo className="about-logo" />
           </div>
           <div>
-            <span className="about-kicker">Ministerio, estudo e preparo</span>
-            <h1>Pregador IA</h1>
+            <span className="about-kicker">Ministério, estudo e preparo</span>
+            <h1>Scriptura</h1>
           </div>
         </div>
         <p>
-          Uma plataforma pensada para apoiar pregadores, pastores e lideres na
-          construcao de mensagens biblicas com mais clareza, profundidade e
-          direcao.
+          Uma plataforma criada para apoiar pregadores, pastores e líderes na
+          construção de mensagens bíblicas com mais clareza, profundidade e
+          direção de trabalho.
         </p>
-      </div>
+      </section>
 
       <div className="about-container">
-        <section className="about-section">
-          <h2>O que e o projeto</h2>
-          <p>
-            Pregador IA e uma ferramenta de apoio ministerial criada para ajudar
-            pregadores, pastores, lideres e servos que desejam preparar
-            mensagens com base biblica, organizacao e aplicacao pratica.
-          </p>
-          <p>
-            Com ajuda de inteligencia artificial, a plataforma acelera o preparo
-            sem substituir a sensibilidade espiritual, entregando esbocos,
-            analises, explicacoes e referencias que servem como base para
-            desenvolver uma mensagem mais consistente.
-          </p>
+        <section className="about-section about-intro">
+          <div>
+            <p className="section-kicker">O que é o projeto</p>
+            <h2>Um workspace ministerial para transformar intuição em material revisável</h2>
+            <p>
+              O Scriptura nasceu para ajudar no preparo de mensagens,
+              estudos, séries e comunicações pastorais sem substituir
+              sensibilidade espiritual, leitura bíblica nem critério pastoral.
+            </p>
+          </div>
+          <div className="about-value-grid">
+            {VALUE_CARDS.map((card) => (
+              <article key={card.title} className="about-value-card">
+                <h3>{card.title}</h3>
+                <p>{card.text}</p>
+              </article>
+            ))}
+          </div>
         </section>
 
         <section className="about-section">
-          <h2>Como comecar</h2>
+          <p className="section-kicker">Como começar</p>
+          <h2>Do foco ministerial ao resultado em cinco passos</h2>
           <div className="steps">
             {[
               "Escolha a ferramenta",
               "Informe tema, passagem ou foco ministerial",
-              "Ajuste estilo, profundidade e opcoes",
+              "Ajuste estilo, profundidade e opções",
               "Gere o resultado",
               "Revise, ore e adapte a sua realidade",
             ].map((step, index) => (
@@ -92,7 +113,8 @@ export const About: React.FC<AboutProps> = ({ onBackHome, githubUrl }) => {
         </section>
 
         <section className="about-section">
-          <h2>Perguntas frequentes</h2>
+          <p className="section-kicker">Perguntas frequentes</p>
+          <h2>Dúvidas comuns antes de entrar no workspace</h2>
           <div className="faq">
             {faqs.map((faq, index) => (
               <div key={faq.pergunta} className="faq-item">
@@ -120,12 +142,14 @@ export const About: React.FC<AboutProps> = ({ onBackHome, githubUrl }) => {
         </section>
 
         <section className="about-section about-contact">
-          <h2>Acompanhar evolucao</h2>
-          <p>
-            O repositorio no GitHub e hoje o canal principal para acompanhar o
-            roadmap, sugerir melhorias e relatar pontos que ainda podemos
-            fortalecer.
-          </p>
+          <div>
+            <p className="section-kicker">Acompanhar evolução</p>
+            <h2>GitHub continua sendo o centro do roadmap e do feedback</h2>
+            <p>
+              O repositório é hoje o melhor lugar para acompanhar o produto,
+              sugerir melhorias e relatar pontos que ainda podemos fortalecer.
+            </p>
+          </div>
           <div className="contact-links">
             <a
               href={githubUrl}
@@ -148,15 +172,15 @@ export const About: React.FC<AboutProps> = ({ onBackHome, githubUrl }) => {
               className="contact-btn secondary"
               onClick={onBackHome}
             >
-              Voltar ao app
+              Voltar ao workspace
             </button>
           </div>
         </section>
       </div>
 
       <footer className="about-footer">
-        <p>2026 Pregador IA - Preparacao inteligente para mensagens biblicas</p>
-        <p>Desenvolvido para apoiar pregadores, pastores e lideres em seu preparo</p>
+        <p>2026 Scriptura - Preparação inteligente para mensagens bíblicas</p>
+        <p>Desenvolvido para apoiar pregadores, pastores e líderes em seu preparo</p>
       </footer>
     </div>
   );

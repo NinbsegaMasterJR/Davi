@@ -14,11 +14,15 @@ function slugify(value: string): string {
 export function downloadContent(
   title: string,
   content: string,
-  extension: "txt" | "md" | "html",
+  extension: "txt" | "md" | "html" | "json",
 ): void {
-  const filename = `${slugify(title) || "pregador-ia-documento"}.${extension}`;
+  const filename = `${slugify(title) || "scriptura-documento"}.${extension}`;
   const mimeType =
-    extension === "html" ? "text/html;charset=utf-8" : "text/plain;charset=utf-8";
+    extension === "html"
+      ? "text/html;charset=utf-8"
+      : extension === "json"
+        ? "application/json;charset=utf-8"
+        : "text/plain;charset=utf-8";
 
   const blob = new Blob([content], { type: mimeType });
   const url = URL.createObjectURL(blob);
@@ -36,7 +40,7 @@ export function printContent(
 ): void {
   const popup = window.open("", "_blank", "width=1024,height=768");
   if (!popup) {
-    throw new Error("Nao foi possivel abrir a janela de impressao.");
+    throw new Error("Não foi possível abrir a janela de impressão.");
   }
 
   popup.document.open();

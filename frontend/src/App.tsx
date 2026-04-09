@@ -3,6 +3,11 @@ import type { ActiveTab } from "./pages/Home";
 import { AppProvider } from "./context/AppContext";
 import { API_ENDPOINTS } from "./config";
 import { BrandLogo } from "./components/BrandLogo";
+import {
+  LAST_TAB_STORAGE_KEY,
+  LEGACY_LAST_TAB_STORAGE_KEY,
+  readStorageItem,
+} from "./utils/workspaceSnapshot";
 import "./App.css";
 
 const Landing = lazy(() =>
@@ -39,12 +44,12 @@ const GITHUB_REPO_URL = "https://github.com/NinsegaMasterJr/Gerador.P-Web";
 const DEFAULT_TAB: ActiveTab = "outline";
 
 const TAB_TITLES: Record<ActiveTab, string> = {
-  outline: "Esboco de Pregacao",
-  verses: "Versiculos por Tema",
-  analysis: "Analise Teologica",
+  outline: "Esboço de Pregação",
+  verses: "Versículos por Tema",
+  analysis: "Análise Teológica",
   explain: "Explicar Passagem",
-  concordance: "Concordancia Biblica",
-  schedule: "Cronograma de Pregacoes",
+  concordance: "Concordância Bíblica",
+  schedule: "Cronograma de Pregações",
   "pastoral-letter": "Carta Pastoral",
 };
 
@@ -52,38 +57,51 @@ function isActiveTab(value: string): value is ActiveTab {
   return value in TAB_TITLES;
 }
 
+function loadLastVisitedTab(): ActiveTab {
+  const stored = readStorageItem(
+    LAST_TAB_STORAGE_KEY,
+    LEGACY_LAST_TAB_STORAGE_KEY,
+  );
+  return stored && isActiveTab(stored) ? stored : DEFAULT_TAB;
+}
+
 function parseHash(hash: string): { page: PageType; tab: ActiveTab } {
   const cleanedHash = hash.replace(/^#/, "").replace(/^\/?/, "");
+  const lastVisitedTab = loadLastVisitedTab();
 
   if (!cleanedHash || cleanedHash === "inicio" || cleanedHash === "landing") {
-    return { page: "landing", tab: DEFAULT_TAB };
+    return { page: "landing", tab: lastVisitedTab };
   }
 
   if (cleanedHash === "recursos") {
-    return { page: "resources", tab: DEFAULT_TAB };
+    return { page: "resources", tab: lastVisitedTab };
   }
 
   if (cleanedHash === "sobre" || cleanedHash === "about") {
-    return { page: "about", tab: DEFAULT_TAB };
+    return { page: "about", tab: lastVisitedTab };
   }
 
   if (cleanedHash === "confianca") {
-    return { page: "trust", tab: DEFAULT_TAB };
+    return { page: "trust", tab: lastVisitedTab };
   }
 
   if (cleanedHash === "contato") {
-    return { page: "contact", tab: DEFAULT_TAB };
+    return { page: "contact", tab: lastVisitedTab };
+  }
+
+  if (cleanedHash === "app" || cleanedHash === "workspace") {
+    return { page: "app", tab: lastVisitedTab };
   }
 
   if (cleanedHash.startsWith("app/") || cleanedHash.startsWith("ferramenta/")) {
     const tab = cleanedHash.split("/")[1];
     return {
       page: "app",
-      tab: tab && isActiveTab(tab) ? tab : DEFAULT_TAB,
+      tab: tab && isActiveTab(tab) ? tab : lastVisitedTab,
     };
   }
 
-  return { page: "landing", tab: DEFAULT_TAB };
+  return { page: "landing", tab: lastVisitedTab };
 }
 
 function buildHash(page: PageType, tab: ActiveTab): string {
@@ -170,17 +188,21 @@ function App() {
   useEffect(() => {
     document.title =
       currentPage === "about"
-        ? "Pregador IA | Sobre o projeto"
+        ? "Scriptura | Sobre o projeto"
         : currentPage === "resources"
-          ? "Pregador IA | Recursos"
+          ? "Scriptura | Recursos"
           : currentPage === "trust"
-            ? "Pregador IA | Confianca e privacidade"
+            ? "Scriptura | Confiança e privacidade"
             : currentPage === "contact"
-              ? "Pregador IA | Contato"
+              ? "Scriptura | Contato"
               : currentPage === "landing"
-                ? "Pregador IA | Preparacao biblica com apoio inteligente"
-                : `Pregador IA | ${TAB_TITLES[currentTab]}`;
+                ? "Scriptura | Preparação bíblica com apoio inteligente"
+                : `Scriptura | ${TAB_TITLES[currentTab]}`;
   }, [currentPage, currentTab]);
+
+  useEffect(() => {
+    window.localStorage.setItem(LAST_TAB_STORAGE_KEY, currentTab);
+  }, [currentTab]);
 
   const navigateToPage = (page: PageType, nextTab: ActiveTab = currentTab) => {
     setCurrentPage(page);
@@ -190,12 +212,12 @@ function App() {
 
   const statusMessage =
     apiStatus === "checking"
-      ? "Verificando conexao com a API..."
+      ? "Verificando conexão com a API..."
       : apiStatus === "offline"
-        ? "API offline. Inicie o backend para gerar conteudo."
+        ? "API offline. Inicie o backend para gerar conteúdo."
         : groqConfigured
-          ? "API online e pronta para gerar conteudo."
-          : "API online, mas a GROQ_API_KEY nao esta configurada no backend.";
+          ? "API online e pronta para gerar conteúdo."
+          : "API online, mas a GROQ_API_KEY não está configurada no backend.";
 
   const statusClass =
     apiStatus === "online" && groqConfigured
@@ -204,63 +226,74 @@ function App() {
         ? "status-warn"
         : "status-error";
 
+  const pageLabel =
+    currentPage === "app"
+      ? TAB_TITLES[currentTab]
+      : currentPage === "landing"
+        ? "Landing editorial"
+        : "Página institucional";
+
   return (
     <AppProvider>
       <div className="app">
         <a href="#main-content" className="skip-link">
-          Pular para o conteudo principal
+          Pular para o conteúdo principal
         </a>
         <nav className="app-navbar">
           <div className="navbar-content">
-            <button className="logo" onClick={() => navigateToPage("landing")}>
-              <span className="logo-mark">
-                <BrandLogo className="brand-logo" />
-              </span>
-              <span className="logo-copy">
-                <strong>Pregador IA</strong>
-                <small>Esbocos, analise e estudo biblico com identidade propria</small>
-              </span>
-            </button>
-            <div className="nav-links">
-              <button
-                className={`nav-link ${currentPage === "landing" ? "active" : ""}`}
-                onClick={() => navigateToPage("landing")}
-              >
-                Inicio
+            <div className="navbar-primary">
+              <button className="logo" onClick={() => navigateToPage("landing")}>
+                <span className="logo-mark">
+                  <BrandLogo className="brand-logo" />
+                </span>
+                <span className="logo-copy">
+                  <strong>Scriptura</strong>
+                  <small>Preparo bíblico com critério, ritmo e profundidade</small>
+                </span>
               </button>
-              <button
-                className={`nav-link ${currentPage === "app" ? "active" : ""}`}
-                onClick={() => navigateToPage("app")}
-              >
-                App
-              </button>
-              <button
-                className={`nav-link ${currentPage === "resources" ? "active" : ""}`}
-                onClick={() => navigateToPage("resources")}
-              >
-                Recursos
-              </button>
-              <button
-                className={`nav-link ${currentPage === "about" ? "active" : ""}`}
-                onClick={() => navigateToPage("about")}
-              >
-                Sobre
-              </button>
-              <button
-                className={`nav-link ${currentPage === "trust" ? "active" : ""}`}
-                onClick={() => navigateToPage("trust")}
-              >
-                Confianca
-              </button>
-              <button
-                className={`nav-link ${currentPage === "contact" ? "active" : ""}`}
-                onClick={() => navigateToPage("contact")}
-              >
-                Contato
-              </button>
+              <div className="nav-links">
+                <button
+                  className={`nav-link ${currentPage === "landing" ? "active" : ""}`}
+                  onClick={() => navigateToPage("landing")}
+                >
+                  Início
+                </button>
+                <button
+                  className={`nav-link ${currentPage === "app" ? "active" : ""}`}
+                  onClick={() => navigateToPage("app")}
+                >
+                  Workspace
+                </button>
+                <button
+                  className={`nav-link ${currentPage === "resources" ? "active" : ""}`}
+                  onClick={() => navigateToPage("resources")}
+                >
+                  Recursos
+                </button>
+                <button
+                  className={`nav-link ${currentPage === "about" ? "active" : ""}`}
+                  onClick={() => navigateToPage("about")}
+                >
+                  Sobre
+                </button>
+                <button
+                  className={`nav-link ${currentPage === "trust" ? "active" : ""}`}
+                  onClick={() => navigateToPage("trust")}
+                >
+                  Confiança
+                </button>
+                <button
+                  className={`nav-link ${currentPage === "contact" ? "active" : ""}`}
+                  onClick={() => navigateToPage("contact")}
+                >
+                  Contato
+                </button>
+              </div>
+            </div>
+            <div className="nav-side">
               <a
                 href={GITHUB_REPO_URL}
-                className="nav-link"
+                className="nav-link nav-link-secondary"
                 target="_blank"
                 rel="noreferrer"
               >
@@ -269,18 +302,18 @@ function App() {
             </div>
           </div>
           <div className={`api-status ${statusClass}`}>
-            <span>{statusMessage}</span>
-            <div className="api-status-actions">
-              <span className="api-status-badge">
-                {currentPage === "app"
-                  ? TAB_TITLES[currentTab]
-                  : currentPage === "landing"
-                    ? "Landing page"
-                    : "Pagina institucional"}
+            <div className="api-status-copy">
+              <span className="api-status-label">
+                <span className="status-dot" aria-hidden="true" />
+                Ambiente publicado
               </span>
+              <strong>{statusMessage}</strong>
+            </div>
+            <div className="api-status-actions">
+              <span className="api-status-badge">{pageLabel}</span>
               {lastCheckedAt && (
                 <span className="api-status-meta">
-                  Ultima verificacao: {lastCheckedAt}
+                  Última verificação: {lastCheckedAt}
                 </span>
               )}
               <button
@@ -295,7 +328,7 @@ function App() {
         </nav>
 
         <main className="app-main" id="main-content">
-          <Suspense fallback={<div className="page-loading">Carregando pagina...</div>}>
+          <Suspense fallback={<div className="page-loading">Carregando página...</div>}>
             {currentPage === "landing" && (
               <Landing
                 onEnterApp={() => navigateToPage("app")}

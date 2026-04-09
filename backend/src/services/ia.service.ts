@@ -1,7 +1,7 @@
 import Groq from "groq-sdk";
 
 let groqClient: Groq | null = null;
-const GROQ_MODEL = process.env.GROQ_MODEL || "mixtral-8x7b-32768";
+const GROQ_MODEL = process.env.GROQ_MODEL || "llama-3.3-70b-versatile";
 
 export type VersaoBiblica = "ARA" | "ARC" | "ARCF" | "KING_JAMES";
 

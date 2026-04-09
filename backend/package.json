@@ -1,8 +1,8 @@
 {
-  "name": "pregador-ia-backend",
+  "name": "scriptura-backend",
   "version": "1.0.0",
   "packageManager": "npm@11.9.0",
-  "description": "Backend API para Pregador IA - Assistente de Pregações",
+  "description": "Backend API para Scriptura - Assistente de Pregações",
   "main": "dist/server.js",
   "scripts": {
     "dev": "tsx watch src/server.ts",
@@ -19,6 +19,7 @@
   "author": "Davi Trabalhos",
   "license": "MIT",
   "dependencies": {
+    "@vercel/blob": "^2.3.3",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",

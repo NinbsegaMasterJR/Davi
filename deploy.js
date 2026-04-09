@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * Script de Deploy para Pregador IA
+ * Script de Deploy para Scriptura
  * Automatiza verificações para deploy em produção
  */
 
@@ -12,7 +12,7 @@ const REQUIRED_PACKAGE_MANAGER = "npm@11.9.0";
 
 console.log(`
 ╔════════════════════════════════════════╗
-║     PREGADOR IA - Deploy Tool          ║
+║     SCRIPTURA - Deploy Tool          ║
 ║     Versão 1.0.0                       ║
 ╚════════════════════════════════════════╝
 `);

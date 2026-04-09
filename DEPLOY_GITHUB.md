@@ -1,91 +1,50 @@
-# 🚀 Guia Completo: GitHub + Railway
+# Guia Completo: GitHub + Deploy
 
-## Informações do projeto
+## Repositorio
 
-- Usuário GitHub: NinsegaMasterJr
-- Repositório: Gerador.P-Web
-- Método: GitHub + Railway
-- Package manager: npm 11.9.0
+- GitHub: `https://github.com/NinsegaMasterJr/Gerador.P-Web`
+- Projeto: `Gerador.P-Web`
+- Marca atual: `Scriptura`
 
-## PASSO 1: Criar o repositório no GitHub
+## Producoes Atuais
 
-1. Vá para https://github.com/new
-2. Crie o repositório `Gerador.P-Web`
-3. Deixe a inicialização vazia se já tiver o código local
+- Frontend: `https://scriptura-web.vercel.app`
+- Backend: `https://scriptura-web-api.vercel.app`
 
-## PASSO 2: Enviar o projeto local
-
-Pré-requisito: Git instalado no Windows.
+## Enviar o Projeto para o GitHub
 
 ```powershell
 cd "c:\Users\prdav\OneDrive\Trabalhos-Davi\Gerador.P-Web"
 git init
 git add .
-git commit -m "Inicial: Pregador IA Web"
+git commit -m "Inicial: Scriptura Web"
 git branch -M main
 git remote add origin https://github.com/NinsegaMasterJr/Gerador.P-Web.git
 git push -u origin main
 ```
 
-## PASSO 3: Criar o projeto no Railway
+## Variaveis de Producao
 
-1. Acesse https://railway.app
-2. Crie um projeto conectado ao GitHub
-3. Selecione o repositório `Gerador.P-Web`
+### Frontend
 
-## PASSO 4: Criar o serviço frontend
-
-Configure assim:
-
-```txt
-Service Name: frontend
-Root Directory: frontend
-Build Command: npm install && npm run build
-Start Command: npx vite preview --host 0.0.0.0 --port $PORT
+```env
+VITE_API_URL=https://scriptura-web-api.vercel.app
 ```
 
-Variável de ambiente:
+### Backend
 
-```txt
-VITE_API_URL=https://seu-backend.up.railway.app
-```
-
-## PASSO 5: Criar o serviço backend
-
-Configure assim:
-
-```txt
-Service Name: backend
-Root Directory: backend
-Build Command: npm install && npm run build
-Start Command: npm start
-```
-
-Variáveis de ambiente:
-
-```txt
+```env
 GROQ_API_KEY=gsk_sua_chave
-CORS_ORIGIN=https://seu-frontend.up.railway.app
 NODE_ENV=production
+CORS_ORIGIN=https://scriptura-web.vercel.app
 ```
 
-## PASSO 6: Testar produção
+## Testar
 
-1. Abra `https://seu-backend.up.railway.app/health`
-2. Abra o frontend publicado
-3. Teste esboço, versículos, análise, concordância e explicação de passagem
+1. Abra `https://scriptura-web-api.vercel.app/health`
+2. Abra `https://scriptura-web.vercel.app`
+3. Verifique a geracao de conteudo
 
-## Checklist final
+## Observacao
 
-- [ ] Repositório criado no GitHub
-- [ ] Código enviado com `git push`
-- [ ] Serviço frontend criado no Railway
-- [ ] Serviço backend criado no Railway
-- [ ] `VITE_API_URL` configurada
-- [ ] `GROQ_API_KEY` configurada
-- [ ] `CORS_ORIGIN` configurada
-- [ ] Site testado em produção
-
-## Observação
-
-Para o passo a passo mais detalhado, use [RAILWAY_DEPLOY.md](RAILWAY_DEPLOY.md).
+Se voce for publicar uma copia sua em outro dominio, troque as URLs acima pelas do seu ambiente.

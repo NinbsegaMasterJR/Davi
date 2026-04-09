@@ -1,64 +1,46 @@
-# 🚀 Colocar Pregador IA no Ar - Guia Rápido
+# Colocar Scriptura no Ar - Guia Rapido
 
-## ⚡ TL;DR
+## URLs Atuais
 
-1. Envie o repositório para o GitHub
-2. Crie dois serviços no Railway: `frontend` e `backend`
-3. Configure `VITE_API_URL`, `GROQ_API_KEY` e `CORS_ORIGIN`
-4. Aguarde o deploy e teste a rota `/health`
+- Frontend: `https://scriptura-web.vercel.app`
+- Backend: `https://scriptura-web-api.vercel.app`
 
-## Stack atual de deploy
+## TL;DR
 
-- Package manager: npm 11.9.0
-- Frontend: Railway com Root Directory `frontend`
-- Backend: Railway com Root Directory `backend`
-- IA: Groq
+1. Configure as variaveis de ambiente.
+2. Rode `npm run lint` e `npm run build`.
+3. Publique frontend e backend.
+4. Teste `/health` e a geracao de conteudo.
 
-## Configuração rápida
+## Variaveis
 
-### Serviço frontend
+### Frontend
 
-```txt
-Root Directory: frontend
-Build Command: npm install && npm run build
-Start Command: npx vite preview --host 0.0.0.0 --port $PORT
-VITE_API_URL=https://seu-backend.up.railway.app
+```env
+VITE_API_URL=https://scriptura-web-api.vercel.app
 ```
 
-### Serviço backend
+### Backend
 
-```txt
-Root Directory: backend
-Build Command: npm install && npm run build
-Start Command: npm start
+```env
 GROQ_API_KEY=gsk_sua_chave
-CORS_ORIGIN=https://seu-frontend.up.railway.app
 NODE_ENV=production
+CORS_ORIGIN=https://scriptura-web.vercel.app
 ```
 
-## Checklist final
-
-- [ ] Repositório enviado ao GitHub
-- [ ] Frontend publicado no Railway
-- [ ] Backend publicado no Railway
-- [ ] Variáveis de ambiente configuradas
-- [ ] Teste em `/health` funcionando
-- [ ] Geração de conteúdo funcionando no frontend
-
-## Teste rápido
-
-Verifique se o backend responde em:
+## Teste Rapido
 
 ```txt
-https://seu-backend.up.railway.app/health
+https://scriptura-web-api.vercel.app/health
 ```
 
 Resposta esperada:
 
 ```json
-{ "status": "OK", "message": "Pregador IA API is running" }
+{ "status": "OK", "message": "Scriptura API is running" }
 ```
 
-## Guia completo
+## Referencias
 
-Se precisar do passo a passo completo, use [RAILWAY_DEPLOY.md](RAILWAY_DEPLOY.md).
+- Deploy resumido: [DEPLOY.md](DEPLOY.md)
+- Railway: [RAILWAY_DEPLOY.md](RAILWAY_DEPLOY.md)

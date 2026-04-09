@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import ReactMarkdown from "react-markdown";
 import { useApp } from "../context/AppContext";
 import type { SavedContentType } from "../types/library";
@@ -21,14 +21,22 @@ export const ResultPanel: React.FC<ResultPanelProps> = ({
   onToggleFavorite,
 }) => {
   const { showSuccess, showError } = useApp();
+  const panelRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    panelRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  }, [content, title]);
 
   const copyText = async () => {
     try {
       await navigator.clipboard.writeText(content);
-      showSuccess("Conteudo copiado.");
+      showSuccess("Conteúdo copiado.");
     } catch (error) {
       void error;
-      showError("Nao foi possivel copiar o conteudo.");
+      showError("Não foi possível copiar o conteúdo.");
     }
   };
 
@@ -41,7 +49,7 @@ export const ResultPanel: React.FC<ResultPanelProps> = ({
           "text/html": new Blob([html], { type: "text/html" }),
         });
         await navigator.clipboard.write([item]);
-        showSuccess("Conteudo copiado com formatacao.");
+        showSuccess("Conteúdo copiado com formatação.");
         return;
       }
 
@@ -49,7 +57,7 @@ export const ResultPanel: React.FC<ResultPanelProps> = ({
       showSuccess("Copiado em texto simples.");
     } catch (error) {
       void error;
-      showError("Nao foi possivel copiar com formatacao.");
+      showError("Não foi possível copiar com formatação.");
     }
   };
 
@@ -67,15 +75,15 @@ export const ResultPanel: React.FC<ResultPanelProps> = ({
   const handlePrint = () => {
     try {
       printContent(title, content, contentType);
-      showSuccess("Janela de impressao aberta.");
+      showSuccess("Janela de impressão aberta.");
     } catch (error) {
       void error;
-      showError("Nao foi possivel abrir a impressao.");
+      showError("Não foi possível abrir a impressão.");
     }
   };
 
   return (
-    <div className="tool-result">
+    <div className="tool-result" ref={panelRef}>
       <div className="tool-result-header">
         <div>
           <p className="tool-result-kicker">Resultado pronto para revisar</p>
@@ -108,7 +116,12 @@ export const ResultPanel: React.FC<ResultPanelProps> = ({
         </div>
       </div>
 
-      <div className="markdown-content tool-result-body">
+      <div className="tool-panel-note">
+        <strong>Próximo passo sugerido</strong>
+        Revise o texto, ajuste ao contexto da igreja e use os atalhos abaixo para copiar, exportar ou imprimir. Este resultado também fica salvo automaticamente na biblioteca local deste navegador.
+      </div>
+
+      <div className="markdown-content tool-result-body" aria-live="polite">
         {contentType === "markdown" ? (
           <ReactMarkdown>{content}</ReactMarkdown>
         ) : (

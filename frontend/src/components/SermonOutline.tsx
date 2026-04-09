@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import {
   sermonAPI,
   BIBLE_VERSION_OPTIONS,
   type BibleVersion,
 } from "../services/api";
 import { useApp } from "../context/AppContext";
+import { useToolDraft } from "../hooks/useToolDraft";
 import { ResultPanel } from "./ResultPanel";
+import { ToolDraftBar } from "./ToolDraftBar";
 import { getErrorMessage } from "../utils/httpError";
 import "./SermonOutline.css";
 
@@ -20,12 +22,57 @@ export const SermonOutline: React.FC = () => {
     useState(false);
   const [resultado, setResultado] = useState("");
   const [carregando, setCarregando] = useState(false);
+  const [jaGerou, setJaGerou] = useState(false);
 
   const { showSuccess, showError, saveDocument } = useApp();
+  const draftValues = useMemo(
+    () => ({
+      tema,
+      estilo,
+      duracao,
+      versaoBiblica,
+      incluirExegese,
+      incluirIlustracao,
+      incluirAplicacaoPratica,
+    }),
+    [
+      duracao,
+      estilo,
+      incluirAplicacaoPratica,
+      incluirExegese,
+      incluirIlustracao,
+      tema,
+      versaoBiblica,
+    ],
+  );
+  const { draftUpdatedAt, hasDraft, clearSavedDraft } = useToolDraft({
+    toolId: "outline",
+    toolLabel: "Esboço",
+    title: tema.trim() ? `Esboço: ${tema}` : "Esboço em andamento",
+    summary: `${estilo} | ${duracao} min | ${versaoBiblica}`,
+    values: draftValues,
+    onRestore: (draft) => {
+      setTema(typeof draft.tema === "string" ? draft.tema : "");
+      setEstilo(typeof draft.estilo === "string" ? draft.estilo : "Arminiana");
+      setDuracao(
+        typeof draft.duracao === "number"
+          ? draft.duracao
+          : Number(draft.duracao) || 30,
+      );
+      setVersaoBiblica(
+        typeof draft.versaoBiblica === "string"
+          ? (draft.versaoBiblica as BibleVersion)
+          : "ARA",
+      );
+      setIncluirExegese(Boolean(draft.incluirExegese));
+      setIncluirIlustracao(Boolean(draft.incluirIlustracao));
+      setIncluirAplicacaoPratica(Boolean(draft.incluirAplicacaoPratica));
+    },
+  });
   const presets = [
     {
       label: "Culto de domingo",
-      tema: "Fe que persevera",
+      tema: "Fé que persevera",
       estilo: "Arminiana",
       duracao: 35,
       exegese: true,
@@ -33,8 +80,8 @@ export const SermonOutline: React.FC = () => {
       aplicacaoPratica: true,
     },
     {
-      label: "Escola biblica",
-      tema: "Santificacao na vida crista",
+      label: "Escola bíblica",
+      tema: "Santificação na vida cristã",
       estilo: "Arminio-Wesleyana",
       duracao: 45,
       exegese: true,
@@ -58,6 +105,7 @@ export const SermonOutline: React.FC = () => {
       return;
     }
 
+    setJaGerou(true);
     setCarregando(true);
     try {
       const response = await sermonAPI.generateOutline(
@@ -74,16 +122,16 @@ export const SermonOutline: React.FC = () => {
       setResultado(response.data.esboco);
       saveDocument({
         toolId: "outline",
-        toolLabel: "Esboco",
-        title: `Esboco: ${tema}`,
+        toolLabel: "Esboço",
+        title: `Esboço: ${tema}`,
         query: tema,
         summary: `${estilo} • ${duracao} min • ${versaoBiblica}`,
         content: response.data.esboco,
         contentType: "markdown",
       });
-      showSuccess("Esboco gerado com sucesso!");
+      showSuccess("Esboço gerado com sucesso!");
     } catch (error: unknown) {
-      showError(getErrorMessage(error, "Erro ao gerar esboco"));
+      showError(getErrorMessage(error, "Erro ao gerar esboço"));
     } finally {
       setCarregando(false);
     }
@@ -92,13 +140,31 @@ export const SermonOutline: React.FC = () => {
   return (
     <div className="sermon-outline">
       <div className="input-section">
-        <h2>Gerar Esboco de Pregacao</h2>
+        <h2>Gerar Esboço de Pregação</h2>
         <p className="feature-highlight">
-          Monte uma base de mensagem com estrutura clara e escolha quais secoes
+          Monte uma base de mensagem com estrutura clara e escolha quais seções
           complementares deseja incluir antes de gerar.
         </p>
 
-        <div className="preset-row" aria-label="Presets de esboco">
+        <div className="tool-context-grid">
+          <div className="tool-context-card">
+            <span>Ideal para</span>
+            <strong>Quando o tema já existe</strong>
+            <p>Transforma uma intuição ministerial em fluxo pregável com mais rapidez.</p>
+          </div>
+          <div className="tool-context-card">
+            <span>Entrega</span>
+            <strong>Estrutura pronta para lapidar</strong>
+            <p>Título, texto base, desenvolvimento, conclusão e apoio bíblico no mesmo rascunho.</p>
+          </div>
+          <div className="tool-context-card">
+            <span>Revisão</span>
+            <strong>Conferência pastoral</strong>
+            <p>Use o resultado como base e ajuste tom, referências e aplicação à sua igreja.</p>
+          </div>
+        </div>
+
+        <div className="preset-row" aria-label="Presets de esboço">
           {presets.map((preset) => (
             <button
               key={preset.label}
@@ -128,14 +194,14 @@ export const SermonOutline: React.FC = () => {
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               setTema(e.target.value)
             }
-            placeholder="Ex: Fe que persevera, Graca redentora, Chamado ao arrependimento..."
+            placeholder="Ex: Fé que persevera, Graça redentora, Chamado ao arrependimento..."
             disabled={carregando}
           />
         </div>
 
         <div className="form-row form-row-3">
           <div className="form-group">
-            <label htmlFor="estilo">Linha teologica:</label>
+            <label htmlFor="estilo">Linha teológica:</label>
             <select
               id="estilo"
               value={estilo}
@@ -144,15 +210,15 @@ export const SermonOutline: React.FC = () => {
               }
               disabled={carregando}
             >
-              <option>Arminiana</option>
-              <option>Arminio-Wesleyana</option>
-              <option>Calvinista</option>
-              <option>Luterana</option>
+              <option value="Arminiana">Arminiana</option>
+              <option value="Arminio-Wesleyana">Armínio-Wesleyana</option>
+              <option value="Calvinista">Calvinista</option>
+              <option value="Luterana">Luterana</option>
             </select>
           </div>
 
           <div className="form-group">
-            <label htmlFor="duracao">Duracao estimada (min):</label>
+            <label htmlFor="duracao">Duração estimada (min):</label>
             <input
               id="duracao"
               type="number"
@@ -165,7 +231,7 @@ export const SermonOutline: React.FC = () => {
           </div>
 
           <div className="form-group">
-            <label htmlFor="versao-biblica-esboco">Versao biblica:</label>
+            <label htmlFor="versao-biblica-esboco">Versão bíblica:</label>
             <select
               id="versao-biblica-esboco"
               value={versaoBiblica}
@@ -184,7 +250,7 @@ export const SermonOutline: React.FC = () => {
         </div>
 
         <div className="options-section">
-          <p className="options-title">Secoes opcionais para enriquecer o esboco</p>
+          <p className="options-title">Seções opcionais para enriquecer o esboço</p>
 
           <label className="option-item">
             <input
@@ -207,7 +273,7 @@ export const SermonOutline: React.FC = () => {
               }
               disabled={carregando}
             />
-            <span>Incluir ilustracao para o momento da mensagem</span>
+            <span>Incluir ilustração para o momento da mensagem</span>
           </label>
 
           <label className="option-item">
@@ -219,18 +285,65 @@ export const SermonOutline: React.FC = () => {
               }
               disabled={carregando}
             />
-            <span>Incluir aplicacao pratica para a igreja</span>
+            <span>Incluir aplicação prática para a igreja</span>
           </label>
         </div>
 
+        <div className="tool-helper-row">
+          <span className="tool-helper-chip">Salva automaticamente na biblioteca local</span>
+          <span className="tool-helper-chip">Bom para sair da página em branco</span>
+          <span className="tool-helper-chip">Depois você pode exportar em markdown, HTML ou PDF</span>
+        </div>
+
+        <ToolDraftBar
+          hasDraft={hasDraft}
+          draftUpdatedAt={draftUpdatedAt}
+          note="Tema, linha teológica e seções opcionais ficam guardados neste navegador"
+          onClearDraft={clearSavedDraft}
+        />
+
         <button onClick={gerar} disabled={carregando} className="btn-primary">
-          {carregando ? "Gerando estrutura..." : "Gerar Esboco"}
+          {carregando ? "Gerando estrutura..." : "Gerar Esboço"}
         </button>
+
+        <div className="tool-feedback-stack" aria-live="polite">
+          {carregando ? (
+            <div className="tool-state-card loading">
+              <span className="tool-state-kicker">Gerando esboço</span>
+              <strong>Montando a estrutura principal da mensagem</strong>
+              <p>
+                Estou organizando título, texto base, desenvolvimento e
+                aplicações para te devolver um rascunho mais pregável.
+              </p>
+              <div className="tool-state-points">
+                <span>Estrutura da mensagem</span>
+                <span>Base bíblica</span>
+                <span>Seções opcionais</span>
+              </div>
+            </div>
+          ) : !resultado ? (
+            <div className="tool-state-card empty">
+              <span className="tool-state-kicker">
+                {jaGerou ? "Pronto para nova tentativa" : "Antes de gerar"}
+              </span>
+              <strong>
+                {jaGerou
+                  ? "Você pode ajustar o tema ou as seções e gerar novamente."
+                  : "Defina o tema, a linha teológica e as seções que quer incluir."}
+              </strong>
+              <p>
+                Um bom ponto de partida costuma ser um tema curto, uma duração
+                realista e pelo menos uma decisão clara sobre exegese,
+                ilustração ou aplicação prática.
+              </p>
+            </div>
+          ) : null}
+        </div>
       </div>
 
       {resultado && (
         <ResultPanel
-          title={`Esboco: ${tema}`}
+          title={`Esboço: ${tema}`}
           content={resultado}
           contentType="markdown"
         />

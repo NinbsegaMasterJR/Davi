@@ -3,29 +3,46 @@ import "./TrustCenter.css";
 
 const TRUST_ITEMS = [
   {
-    title: "Transparencia",
-    text: "Sugestoes de versiculos e concordancia podem usar IA como apoio de descoberta. Sempre recomendamos revisao pastoral e biblica.",
+    title: "Transparência de uso",
+    text: "Sugestões de versículos, concordância e rascunhos usam IA como apoio de descoberta e preparação, nunca como substituta de revisão bíblica.",
   },
   {
-    title: "Responsabilidade",
-    text: "O app ajuda a organizar e acelerar o preparo, mas nao substitui leitura do texto, oracao, criterio ministerial nem estudo serio.",
+    title: "Responsabilidade pastoral",
+    text: "O app ajuda a organizar e acelerar o preparo, mas não substitui leitura do texto, oração, critério ministerial nem estudo sério.",
   },
   {
     title: "Privacidade local",
-    text: "A biblioteca do navegador fica salva localmente no dispositivo. Sem conta, nao existe sincronizacao automatica entre aparelhos.",
+    text: "A biblioteca fica salva localmente no navegador. Sem conta, não existe sincronização automática entre aparelhos.",
   },
+];
+
+const PRACTICES = [
+  "Confira referências e citações em sua fonte bíblica de confiança.",
+  "Ajuste o tom do texto ao contexto real da igreja local.",
+  "Use as respostas como base de trabalho, não como versão final automática.",
 ];
 
 export const TrustCenter: React.FC = () => {
   return (
     <div className="trust-center-page">
       <section className="trust-center-hero">
-        <p className="section-kicker">Confianca</p>
-        <h1>Como o Pregador IA trata limites, uso responsavel e privacidade</h1>
-        <p>
-          Esta pagina existe para deixar claro o papel da IA no produto e o que
-          ainda precisa de revisao humana antes de ensino, publicacao ou pregacao.
-        </p>
+        <div>
+          <p className="section-kicker">Confiança</p>
+          <h1>Como o Scriptura trata limites, responsabilidade e privacidade</h1>
+          <p>
+            Esta página existe para deixar claro o papel da IA no produto e o
+            que continua exigindo revisão humana antes de ensino, publicação ou
+            pregação.
+          </p>
+        </div>
+        <div className="trust-center-note">
+          <span>Posicionamento</span>
+          <strong>IA como apoio de preparo. Critério pastoral como decisão final.</strong>
+          <p>
+            O produto foi desenhado para acelerar organização e pesquisa sem
+            esconder seus limites nem romantizar automação.
+          </p>
+        </div>
       </section>
 
       <section className="trust-center-grid">
@@ -35,6 +52,21 @@ export const TrustCenter: React.FC = () => {
             <p>{item.text}</p>
           </article>
         ))}
+      </section>
+
+      <section className="trust-center-practices">
+        <div>
+          <p className="section-kicker">Boas práticas</p>
+          <h2>Como usar o app com mais segurança ministerial</h2>
+        </div>
+        <div className="trust-center-practice-list">
+          {PRACTICES.map((item, index) => (
+            <article key={item} className="trust-center-practice">
+              <span>0{index + 1}</span>
+              <p>{item}</p>
+            </article>
+          ))}
+        </div>
       </section>
     </div>
   );
