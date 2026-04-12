@@ -4,6 +4,7 @@ import "./Landing.css";
 
 interface LandingProps {
   onEnterApp: () => void;
+  onCreateOutline: () => void;
   onOpenResources: () => void;
   onOpenTrust: () => void;
 }
@@ -47,6 +48,7 @@ const JOURNEY = [
 
 export const Landing: React.FC<LandingProps> = ({
   onEnterApp,
+  onCreateOutline,
   onOpenResources,
   onOpenTrust,
 }) => {
@@ -71,7 +73,10 @@ export const Landing: React.FC<LandingProps> = ({
           </p>
 
           <div className="landing-actions">
-            <button type="button" className="landing-btn primary" onClick={onEnterApp}>
+            <button type="button" className="landing-btn primary" onClick={onCreateOutline}>
+              Criar esboço agora
+            </button>
+            <button type="button" className="landing-btn" onClick={onEnterApp}>
               Abrir o workspace
             </button>
             <button type="button" className="landing-btn" onClick={onOpenResources}>

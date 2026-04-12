@@ -2,8 +2,16 @@ import Groq from "groq-sdk";
 
 let groqClient: Groq | null = null;
 const GROQ_MODEL = process.env.GROQ_MODEL || "llama-3.3-70b-versatile";
+const BIBLICAL_REVIEW_SYSTEM_PROMPT =
+  "Voce apoia preparo biblico e pastoral. Nunca apresente saidas como infaliveis. Ao citar textos biblicos, prefira referencias e citacoes curtas, oriente conferencia em fonte biblica confiavel e preserve responsabilidade pastoral, contexto local e revisao doutrinaria.";
 
 export type VersaoBiblica = "ARA" | "ARC" | "ARCF" | "KING_JAMES";
+export type AcaoRefinamento =
+  | "encurtar"
+  | "aprofundar"
+  | "jovens"
+  | "perguntas"
+  | "slides";
 
 function getGroqClient(): Groq {
   const apiKey = process.env.GROQ_API_KEY;
@@ -35,15 +43,41 @@ function getNomeVersaoBiblica(versao: VersaoBiblica = "ARA"): string {
   }
 }
 
-async function criarResposta(messages: Array<{ role: "user"; content: string }>, maxTokens: number) {
+async function criarResposta(
+  messages: Array<{ role: "system" | "user"; content: string }>,
+  maxTokens: number,
+) {
   const groq = getGroqClient();
 
   return groq.chat.completions.create({
     model: GROQ_MODEL,
     temperature: 0.4,
     max_tokens: maxTokens,
-    messages,
+    messages: [
+      {
+        role: "system",
+        content: BIBLICAL_REVIEW_SYSTEM_PROMPT,
+      },
+      ...messages,
+    ],
   });
+}
+
+function getInstrucaoRefinamento(acao: AcaoRefinamento): string {
+  switch (acao) {
+    case "encurtar":
+      return "Encurte o material, mantenha a ideia central e preserve as referencias principais.";
+    case "aprofundar":
+      return "Aprofunde o material com mais contexto, conexoes biblicas e aplicacao pastoral, sem perder clareza.";
+    case "jovens":
+      return "Adapte a linguagem para jovens, com exemplos mais proximos do cotidiano e tom pastoral direto.";
+    case "perguntas":
+      return "Transforme o material em perguntas para conversa em GCEU ou pequeno grupo, com abertura, discussao e aplicacao.";
+    case "slides":
+      return "Transforme o material em roteiro de slides, com titulo, blocos curtos, texto base e sugestao de fechamento.";
+    default:
+      return "Refine o material mantendo fidelidade biblica, clareza e aplicacao pastoral.";
+  }
 }
 
 function parseVerseArray(content: string): VersoIA[] {
@@ -83,69 +117,49 @@ export async function gerarEsbocoPregacao(
   estilo: string,
   duracao: number,
   versaoBiblica: VersaoBiblica = "ARA",
-  secoesOpcionais?: {
-    exegese?: boolean;
-    ilustracao?: boolean;
-    aplicacaoPratica?: boolean;
-  },
 ): Promise<string> {
   try {
-    const incluirExegese = secoesOpcionais?.exegese ?? false;
-    const incluirIlustracao = secoesOpcionais?.ilustracao ?? false;
-    const incluirAplicacaoPratica =
-      secoesOpcionais?.aplicacaoPratica ?? false;
     const nomeVersao = getNomeVersaoBiblica(versaoBiblica);
-
-    const secoesExtras = [
-      incluirExegese ? "5. Exegese" : null,
-      incluirIlustracao ? `${incluirExegese ? 6 : 5}. Ilustracao` : null,
-      incluirAplicacaoPratica
-        ? `${5 + Number(incluirExegese) + Number(incluirIlustracao)}. Aplicacao pratica`
-        : null,
-    ]
-      .filter(Boolean)
-      .join("\n");
-
-    const numeroConclusao =
-      5 +
-      Number(incluirExegese) +
-      Number(incluirIlustracao) +
-      Number(incluirAplicacaoPratica);
-    const numeroVersiculos = numeroConclusao + 1;
-
-    const instrucoesOpcionais = [
-      incluirExegese
-        ? '- Inclua a secao "Exegese" com contexto historico, contexto literario, palavras-chave do texto e a verdade central da passagem'
-        : '- Nao inclua a secao "Exegese"',
-      incluirIlustracao
-        ? '- Inclua a secao "Ilustracao" com pelo menos 1 exemplo concreto, memoravel e fiel a mensagem biblica'
-        : '- Nao inclua a secao "Ilustracao"',
-      incluirAplicacaoPratica
-        ? '- Inclua a secao "Aplicacao pratica" com pelo menos 3 aplicacoes objetivas em lista numerada'
-        : '- Nao inclua a secao "Aplicacao pratica"',
-    ].join("\n");
 
     const prompt = `Voce e um especialista em pregacoes pentecostais. Crie um esboco estruturado de pregacao sobre o tema "${tema}" no estilo "${estilo}" com duracao aproximada de ${duracao} minutos.
 
-O esboco deve ter obrigatoriamente, nesta ordem:
-1. Titulo atrativo
-2. Versiculo base
-3. Introducao
-4. Desenvolvimento (3-4 pontos relacionados)
-${secoesExtras ? `${secoesExtras}\n` : ""}${numeroConclusao}. Conclusao com apelo
-${numeroVersiculos}. Versiculos de apoio sugeridos
+O esboco deve seguir obrigatoriamente esta estrutura, nesta ordem, com estes rotulos:
+1. TEMA:
+2. TEXTO:
+3. IDEIA CENTRAL DO TEXTO:
+4. OBJETIVO GERAL DO ESBOCO:
+5. OBJETIVO ESPECIFICO DO ESBOCO:
+6. TESE DO ESBOCO:
+7. FRASE DE TRANSICAO DO ESBOCO PARA COLOCAR COMO SUGESTAO:
+8. ESBOCO:
+   I. INTRODUCAO:
+   DESENVOLVIMENTO:
+   II. TOPICO 1 (SUBTEMA DO ESBOCO)
+   2.1 EXEGESE
+   2.2 APLICACAO PRATICA
+   III. TOPICO 2 (SUBTEMA DO ESBOCO)
+   3.1 EXEGESE
+   3.2 APLICACAO PRATICA
+   IV. TOPICO 3 (SUBTEMA DO ESBOCO)
+   4.1 EXEGESE
+   4.2 APLICACAO PRATICA
+   V. CONCLUSAO
 
 Regras importantes:
-- Sempre respeite exatamente as secoes opcionais solicitadas
-${instrucoesOpcionais}
+- Nao crie secoes principais fora da estrutura acima
+- Escolha um texto biblico principal coerente com o tema e coloque em "TEXTO"
+- Em cada topico, substitua "(SUBTEMA DO ESBOCO)" por um subtitulo claro e relacionado a tese
+- Em cada "EXEGESE", explique o contexto, o sentido do texto e a ideia teologica do ponto
+- Em cada "APLICACAO PRATICA", mostre como a igreja deve responder ao ponto pregado
+- A conclusao deve retomar a tese, resumir os tres topicos e terminar com apelo pastoral
 - Use referencias e citacoes biblicas em ${nomeVersao}
 - Evite respostas genericas, rasas ou repetitivas
 - Responda em portugues
 
-Formato: Use Markdown bem estruturado, com titulos e subtitulos claros.
+Formato: Use Markdown bem estruturado e mantenha os titulos exatamente na ordem solicitada.
 Se possivel, faca o resultado soar pronto para ser pregado.`;
 
-    const response = await criarResposta([{ role: "user", content: prompt }], 2000);
+    const response = await criarResposta([{ role: "user", content: prompt }], 3000);
 
     return response.choices[0]?.message?.content || "Erro ao gerar esboco";
   } catch (error) {
@@ -367,6 +381,39 @@ Entregue um texto pronto para leitura, adaptacao ou envio.`;
     );
   } catch (error) {
     console.error("Erro ao gerar carta pastoral:", error);
+    throw error;
+  }
+}
+
+export async function refinarMaterialGerado(
+  titulo: string,
+  conteudo: string,
+  acao: AcaoRefinamento,
+): Promise<string> {
+  try {
+    const instrucao = getInstrucaoRefinamento(acao);
+    const prompt = `Refine o material pastoral abaixo.
+
+Titulo: ${titulo}
+
+Pedido de ajuste:
+${instrucao}
+
+Regras:
+- Mantenha a resposta em portugues
+- Preserve a intencao original do material
+- Nao invente texto biblico longo nem trate referencias como verificadas
+- Inclua ao final uma pequena secao "Conferencia antes de usar" com pontos de revisao biblica e pastoral
+- Formate em Markdown claro
+
+Material original:
+${conteudo}`;
+
+    const response = await criarResposta([{ role: "user", content: prompt }], 2600);
+
+    return response.choices[0]?.message?.content || "Erro ao refinar material";
+  } catch (error) {
+    console.error("Erro ao refinar material:", error);
     throw error;
   }
 }

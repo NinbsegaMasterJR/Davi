@@ -1,23 +1,46 @@
-const envApiUrl = import.meta.env.VITE_API_URL?.trim() || "";
+const envApiUrl = (import.meta.env.VITE_API_URL?.trim() || "").replace(/\/$/, "");
 
-const API_BASE_URL = envApiUrl || (import.meta.env.DEV ? "http://localhost:3001" : "");
+function resolveApiBaseUrl(): string {
+  if (import.meta.env.DEV) {
+    return "";
+  }
+
+  if (typeof window !== "undefined") {
+    const isLocalHost =
+      window.location.hostname === "localhost" ||
+      window.location.hostname === "127.0.0.1";
+
+    if (isLocalHost) {
+      return "http://localhost:3001";
+    }
+  }
+
+  return envApiUrl;
+}
+
+function buildEndpoint(path: string): string {
+  const apiBaseUrl = resolveApiBaseUrl();
+  return apiBaseUrl ? `${apiBaseUrl}${path}` : path;
+}
+
+const API_BASE_URL = resolveApiBaseUrl();
 
 export const API_ENDPOINTS = {
   SERMONS: {
-    OUTLINE: `${API_BASE_URL}/api/sermons/outline`,
-    ANALYSIS: `${API_BASE_URL}/api/sermons/analysis`,
-    EXPLAIN: `${API_BASE_URL}/api/sermons/explain`,
+    OUTLINE: buildEndpoint("/api/sermons/outline"),
+    ANALYSIS: buildEndpoint("/api/sermons/analysis"),
+    EXPLAIN: buildEndpoint("/api/sermons/explain"),
   },
   VERSES: {
-    SUGGEST: `${API_BASE_URL}/api/verses/suggest`,
+    SUGGEST: buildEndpoint("/api/verses/suggest"),
   },
   CONCORDANCE: {
-    SEARCH: `${API_BASE_URL}/api/concordance/search`,
+    SEARCH: buildEndpoint("/api/concordance/search"),
   },
   ANALYSIS: {
-    THEOLOGICAL: `${API_BASE_URL}/api/analysis/theological`,
+    THEOLOGICAL: buildEndpoint("/api/analysis/theological"),
   },
-  HEALTH: `${API_BASE_URL}/health`,
+  HEALTH: buildEndpoint("/health"),
 };
 
 export default API_BASE_URL;

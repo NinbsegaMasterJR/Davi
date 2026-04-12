@@ -180,6 +180,20 @@ body {
   flex-shrink: 0;
 }
 
+.nav-health-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.48rem 0.78rem;
+  border-radius: 999px;
+  color: #ddf3df;
+  background: rgba(69, 135, 84, 0.18);
+  border: 1px solid rgba(210, 240, 212, 0.18);
+  font-size: 0.78rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
 .nav-link {
   border: none;
   border-radius: 999px;
@@ -207,6 +221,18 @@ body {
 .nav-link-secondary {
   background: rgba(255, 246, 232, 0.08);
   border: 1px solid rgba(247, 212, 143, 0.16);
+}
+
+.nav-link-cta {
+  background: linear-gradient(135deg, #fff3dd 0%, #f2b75a 100%);
+  border-color: transparent;
+  color: #4f1f14;
+  box-shadow: 0 12px 22px rgba(44, 17, 10, 0.16);
+}
+
+.nav-link-cta:hover {
+  background: linear-gradient(135deg, #fff8eb 0%, #f7d48f 100%);
+  color: #3d140d;
 }
 
 .api-status {

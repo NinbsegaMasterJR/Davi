@@ -22,14 +22,27 @@ const configuredOrigins = (process.env.CORS_ORIGIN || "")
   .filter(Boolean);
 
 function isAllowedOrigin(origin: string): boolean {
+  if (configuredOrigins.includes(origin)) {
+    return true;
+  }
+
+  let url: URL;
+
+  try {
+    url = new URL(origin);
+  } catch (error) {
+    void error;
+    return false;
+  }
+
+  const hostname = url.hostname.toLowerCase();
+
   return (
-    origin === "http://localhost:3000" ||
-    origin === "http://localhost:3001" ||
-    origin.includes("vercel.app") ||
-    origin.includes("onrender.com") ||
-    origin.includes("up.railway.app") ||
-    origin.includes("localhost") ||
-    configuredOrigins.includes(origin)
+    hostname === "localhost" ||
+    hostname === "127.0.0.1" ||
+    hostname.endsWith(".vercel.app") ||
+    hostname.endsWith(".onrender.com") ||
+    hostname.endsWith(".up.railway.app")
   );
 }
 
@@ -60,6 +73,15 @@ app.use((req: Request, res: Response, next: NextFunction) => {
   res.setHeader("X-Frame-Options", "DENY");
   res.setHeader("Referrer-Policy", "no-referrer");
   res.setHeader("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
+  res.setHeader("X-DNS-Prefetch-Control", "off");
+
+  if (process.env.NODE_ENV === "production") {
+    res.setHeader(
+      "Strict-Transport-Security",
+      "max-age=15552000; includeSubDomains",
+    );
+  }
+
   void req;
   next();
 });

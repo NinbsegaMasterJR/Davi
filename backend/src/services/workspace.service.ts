@@ -15,6 +15,7 @@ interface WorkspaceDocument {
   contentType: SavedContentType;
   createdAt: string;
   favorite: boolean;
+  tags?: string[];
 }
 
 interface WorkspaceDraft {
@@ -126,6 +127,23 @@ function normalizeOptionalText(
   return normalized ? normalized.slice(0, maxLength) : undefined;
 }
 
+function normalizeTags(value: unknown): string[] | undefined {
+  if (!Array.isArray(value)) {
+    return undefined;
+  }
+
+  const tags = Array.from(
+    new Set(
+      value
+        .map((entry) => normalizeOptionalText(entry, 28))
+        .filter((entry): entry is string => Boolean(entry))
+        .slice(0, 8),
+    ),
+  );
+
+  return tags.length > 0 ? tags : undefined;
+}
+
 function normalizeLongText(
   value: unknown,
   maxLength: number,
@@ -189,6 +207,7 @@ function normalizeDocument(
     contentType: normalizeContentType(item.contentType),
     createdAt: normalizeIsoDate(item.createdAt),
     favorite: Boolean(item.favorite),
+    tags: normalizeTags(item.tags),
   };
 }
 

@@ -1,4 +1,4 @@
-import React, { Suspense, lazy, useMemo } from "react";
+import React, { Suspense, lazy, useEffect, useMemo } from "react";
 import { BrandLogo } from "../components/BrandLogo";
 import { LibraryPanel } from "../components/LibraryPanel";
 import { WorkspaceSyncPanel } from "../components/WorkspaceSyncPanel";
@@ -53,6 +53,8 @@ export type ActiveTab =
 interface HomeProps {
   activeTab: ActiveTab;
   onTabChange: (tab: ActiveTab) => void;
+  focusToolOnOpen?: boolean;
+  onToolFocused?: () => void;
 }
 
 const TOOL_CARDS: Array<{
@@ -67,7 +69,7 @@ const TOOL_CARDS: Array<{
     title: "Montar esboço",
     eyebrow: "Púlpito",
     description:
-      "Abra a mensagem com uma estrutura clara e seções opcionais para aprofundar aplicação, ilustração e exegese.",
+      "Abra a mensagem com tema, texto, objetivos, tese, exegese por tópico e aplicação prática.",
     outcome: "Entrega um esboço pronto para revisar e adaptar.",
   },
   {
@@ -239,7 +241,12 @@ function renderTool(activeTab: ActiveTab) {
   }
 }
 
-export const Home: React.FC<HomeProps> = ({ activeTab, onTabChange }) => {
+export const Home: React.FC<HomeProps> = ({
+  activeTab,
+  onTabChange,
+  focusToolOnOpen = false,
+  onToolFocused,
+}) => {
   const {
     library,
     drafts,
@@ -323,6 +330,18 @@ export const Home: React.FC<HomeProps> = ({ activeTab, onTabChange }) => {
     });
   };
 
+  useEffect(() => {
+    if (!focusToolOnOpen) {
+      return;
+    }
+
+    document.getElementById("workspace-tool-area")?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+    onToolFocused?.();
+  }, [focusToolOnOpen, onToolFocused]);
+
   return (
     <div className="home">
       <header className="workspace-hero">
@@ -370,6 +389,88 @@ export const Home: React.FC<HomeProps> = ({ activeTab, onTabChange }) => {
           </button>
         </aside>
       </header>
+
+      <section className="workspace-shell" id="workspace-tool-area">
+        <div className="workspace-shell-header">
+          <div>
+            <p className="section-kicker">Área de trabalho</p>
+            <h2>Abra a ferramenta certa e avance sem perder contexto</h2>
+          </div>
+          <div className="workspace-shell-meta">
+            <span className="workspace-shell-chip">{activeTool.eyebrow}</span>
+            <span className="workspace-shell-chip muted">{activeTool.outcome}</span>
+          </div>
+        </div>
+
+        <nav
+          className="nav-tabs"
+          aria-label="Ferramentas do Scriptura"
+          role="tablist"
+        >
+          <button
+            className={`tab ${activeTab === "outline" ? "active" : ""}`}
+            onClick={() => onTabChange("outline")}
+            role="tab"
+            aria-selected={activeTab === "outline"}
+          >
+            Esboço
+          </button>
+          <button
+            className={`tab ${activeTab === "verses" ? "active" : ""}`}
+            onClick={() => onTabChange("verses")}
+            role="tab"
+            aria-selected={activeTab === "verses"}
+          >
+            Versículos
+          </button>
+          <button
+            className={`tab ${activeTab === "analysis" ? "active" : ""}`}
+            onClick={() => onTabChange("analysis")}
+            role="tab"
+            aria-selected={activeTab === "analysis"}
+          >
+            Análise
+          </button>
+          <button
+            className={`tab ${activeTab === "explain" ? "active" : ""}`}
+            onClick={() => onTabChange("explain")}
+            role="tab"
+            aria-selected={activeTab === "explain"}
+          >
+            Passagem
+          </button>
+          <button
+            className={`tab ${activeTab === "concordance" ? "active" : ""}`}
+            onClick={() => onTabChange("concordance")}
+            role="tab"
+            aria-selected={activeTab === "concordance"}
+          >
+            Concordância
+          </button>
+          <button
+            className={`tab ${activeTab === "schedule" ? "active" : ""}`}
+            onClick={() => onTabChange("schedule")}
+            role="tab"
+            aria-selected={activeTab === "schedule"}
+          >
+            Cronograma
+          </button>
+          <button
+            className={`tab ${activeTab === "pastoral-letter" ? "active" : ""}`}
+            onClick={() => onTabChange("pastoral-letter")}
+            role="tab"
+            aria-selected={activeTab === "pastoral-letter"}
+          >
+            Carta GCEU
+          </button>
+        </nav>
+
+        <main className="main-content">
+          <Suspense fallback={<div className="tool-loader">Carregando ferramenta...</div>}>
+            {renderTool(activeTab)}
+          </Suspense>
+        </main>
+      </section>
 
       <section className="workspace-flow">
         <div className="workspace-flow-copy">
@@ -589,88 +690,6 @@ export const Home: React.FC<HomeProps> = ({ activeTab, onTabChange }) => {
             </button>
           ))}
         </div>
-      </section>
-
-      <section className="workspace-shell">
-        <div className="workspace-shell-header">
-          <div>
-            <p className="section-kicker">Área de trabalho</p>
-            <h2>Abra a ferramenta certa e avance sem perder contexto</h2>
-          </div>
-          <div className="workspace-shell-meta">
-            <span className="workspace-shell-chip">{activeTool.eyebrow}</span>
-            <span className="workspace-shell-chip muted">{activeTool.outcome}</span>
-          </div>
-        </div>
-
-        <nav
-          className="nav-tabs"
-          aria-label="Ferramentas do Scriptura"
-          role="tablist"
-        >
-          <button
-            className={`tab ${activeTab === "outline" ? "active" : ""}`}
-            onClick={() => onTabChange("outline")}
-            role="tab"
-            aria-selected={activeTab === "outline"}
-          >
-            Esboço
-          </button>
-          <button
-            className={`tab ${activeTab === "verses" ? "active" : ""}`}
-            onClick={() => onTabChange("verses")}
-            role="tab"
-            aria-selected={activeTab === "verses"}
-          >
-            Versículos
-          </button>
-          <button
-            className={`tab ${activeTab === "analysis" ? "active" : ""}`}
-            onClick={() => onTabChange("analysis")}
-            role="tab"
-            aria-selected={activeTab === "analysis"}
-          >
-            Análise
-          </button>
-          <button
-            className={`tab ${activeTab === "explain" ? "active" : ""}`}
-            onClick={() => onTabChange("explain")}
-            role="tab"
-            aria-selected={activeTab === "explain"}
-          >
-            Passagem
-          </button>
-          <button
-            className={`tab ${activeTab === "concordance" ? "active" : ""}`}
-            onClick={() => onTabChange("concordance")}
-            role="tab"
-            aria-selected={activeTab === "concordance"}
-          >
-            Concordância
-          </button>
-          <button
-            className={`tab ${activeTab === "schedule" ? "active" : ""}`}
-            onClick={() => onTabChange("schedule")}
-            role="tab"
-            aria-selected={activeTab === "schedule"}
-          >
-            Cronograma
-          </button>
-          <button
-            className={`tab ${activeTab === "pastoral-letter" ? "active" : ""}`}
-            onClick={() => onTabChange("pastoral-letter")}
-            role="tab"
-            aria-selected={activeTab === "pastoral-letter"}
-          >
-            Carta GCEU
-          </button>
-        </nav>
-
-        <main className="main-content">
-          <Suspense fallback={<div className="tool-loader">Carregando ferramenta...</div>}>
-            {renderTool(activeTab)}
-          </Suspense>
-        </main>
       </section>
 
       <section className="trust-panel">

@@ -3,11 +3,11 @@ import API_BASE_URL from "../config";
 import type { WorkspaceSession, WorkspaceSnapshot } from "../types/workspace";
 
 const normalizedApiBaseUrl = API_BASE_URL.replace(/\/$/, "");
-const apiBaseUrl = import.meta.env.DEV
-  ? "/api"
-  : normalizedApiBaseUrl.endsWith("/api")
+const apiBaseUrl = normalizedApiBaseUrl
+  ? normalizedApiBaseUrl.endsWith("/api")
     ? normalizedApiBaseUrl
-    : `${normalizedApiBaseUrl}/api`;
+    : `${normalizedApiBaseUrl}/api`
+  : "/api";
 
 const api = axios.create({
   baseURL: apiBaseUrl,
@@ -76,6 +76,18 @@ export interface SermonScheduleResponse {
   cronograma: string;
 }
 
+export type RefinementAction =
+  | "encurtar"
+  | "aprofundar"
+  | "jovens"
+  | "perguntas"
+  | "slides";
+
+export interface RefinementResponse {
+  sucesso: boolean;
+  refined: string;
+}
+
 export const sermonAPI = {
   generateOutline: (
     tema: string,
@@ -139,6 +151,17 @@ export const sermonAPI = {
       publicoAlvo,
       tom,
       versaoBiblica,
+    }),
+
+  refineMaterial: (
+    title: string,
+    content: string,
+    action: RefinementAction,
+  ) =>
+    api.post<RefinementResponse>("/sermons/refine", {
+      title,
+      content,
+      action,
     }),
 };
 

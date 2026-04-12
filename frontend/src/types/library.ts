@@ -11,6 +11,7 @@ export interface SavedDocument {
   contentType: SavedContentType;
   createdAt: string;
   favorite: boolean;
+  tags?: string[];
 }
 
 export interface SavedDraft {
@@ -30,6 +31,7 @@ export interface SaveDocumentInput {
   summary?: string;
   content: string;
   contentType: SavedContentType;
+  tags?: string[];
 }
 
 export interface SaveDraftInput {

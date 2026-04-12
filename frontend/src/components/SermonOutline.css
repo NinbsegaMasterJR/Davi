@@ -87,6 +87,12 @@
   font-weight: 700;
 }
 
+.structure-note {
+  margin: 0;
+  color: rgba(255, 244, 224, 0.9);
+  line-height: 1.7;
+}
+
 .option-item {
   display: flex;
   align-items: center;

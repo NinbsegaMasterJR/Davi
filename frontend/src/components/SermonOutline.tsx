@@ -16,10 +16,6 @@ export const SermonOutline: React.FC = () => {
   const [estilo, setEstilo] = useState("Arminiana");
   const [duracao, setDuracao] = useState(30);
   const [versaoBiblica, setVersaoBiblica] = useState<BibleVersion>("ARA");
-  const [incluirExegese, setIncluirExegese] = useState(false);
-  const [incluirIlustracao, setIncluirIlustracao] = useState(false);
-  const [incluirAplicacaoPratica, setIncluirAplicacaoPratica] =
-    useState(false);
   const [resultado, setResultado] = useState("");
   const [carregando, setCarregando] = useState(false);
   const [jaGerou, setJaGerou] = useState(false);
@@ -31,19 +27,8 @@ export const SermonOutline: React.FC = () => {
       estilo,
       duracao,
       versaoBiblica,
-      incluirExegese,
-      incluirIlustracao,
-      incluirAplicacaoPratica,
     }),
-    [
-      duracao,
-      estilo,
-      incluirAplicacaoPratica,
-      incluirExegese,
-      incluirIlustracao,
-      tema,
-      versaoBiblica,
-    ],
+    [duracao, estilo, tema, versaoBiblica],
   );
   const { draftUpdatedAt, hasDraft, clearSavedDraft } = useToolDraft({
     toolId: "outline",
@@ -64,9 +49,6 @@ export const SermonOutline: React.FC = () => {
           ? (draft.versaoBiblica as BibleVersion)
           : "ARA",
       );
-      setIncluirExegese(Boolean(draft.incluirExegese));
-      setIncluirIlustracao(Boolean(draft.incluirIlustracao));
-      setIncluirAplicacaoPratica(Boolean(draft.incluirAplicacaoPratica));
     },
   });
   const presets = [
@@ -75,27 +57,18 @@ export const SermonOutline: React.FC = () => {
       tema: "Fé que persevera",
       estilo: "Arminiana",
       duracao: 35,
-      exegese: true,
-      ilustracao: true,
-      aplicacaoPratica: true,
     },
     {
       label: "Escola bíblica",
       tema: "Santificação na vida cristã",
       estilo: "Arminio-Wesleyana",
       duracao: 45,
-      exegese: true,
-      ilustracao: false,
-      aplicacaoPratica: true,
     },
     {
       label: "Culto jovem",
       tema: "Chamado e identidade em Cristo",
       estilo: "Arminiana",
       duracao: 30,
-      exegese: false,
-      ilustracao: true,
-      aplicacaoPratica: true,
     },
   ];
 
@@ -113,11 +86,6 @@ export const SermonOutline: React.FC = () => {
         estilo,
         duracao,
         versaoBiblica,
-        {
-          exegese: incluirExegese,
-          ilustracao: incluirIlustracao,
-          aplicacaoPratica: incluirAplicacaoPratica,
-        },
       );
       setResultado(response.data.esboco);
       saveDocument({
@@ -142,8 +110,8 @@ export const SermonOutline: React.FC = () => {
       <div className="input-section">
         <h2>Gerar Esboço de Pregação</h2>
         <p className="feature-highlight">
-          Monte uma base de mensagem com estrutura clara e escolha quais seções
-          complementares deseja incluir antes de gerar.
+          Monte uma base de mensagem com tema, texto, objetivos, tese,
+          transição, exegese por tópico e aplicação prática.
         </p>
 
         <div className="tool-context-grid">
@@ -155,7 +123,7 @@ export const SermonOutline: React.FC = () => {
           <div className="tool-context-card">
             <span>Entrega</span>
             <strong>Estrutura pronta para lapidar</strong>
-            <p>Título, texto base, desenvolvimento, conclusão e apoio bíblico no mesmo rascunho.</p>
+            <p>Tema, texto base, objetivos, desenvolvimento e conclusão no mesmo rascunho.</p>
           </div>
           <div className="tool-context-card">
             <span>Revisão</span>
@@ -174,9 +142,6 @@ export const SermonOutline: React.FC = () => {
                 setTema(preset.tema);
                 setEstilo(preset.estilo);
                 setDuracao(preset.duracao);
-                setIncluirExegese(preset.exegese);
-                setIncluirIlustracao(preset.ilustracao);
-                setIncluirAplicacaoPratica(preset.aplicacaoPratica);
               }}
               disabled={carregando}
             >
@@ -250,43 +215,11 @@ export const SermonOutline: React.FC = () => {
         </div>
 
         <div className="options-section">
-          <p className="options-title">Seções opcionais para enriquecer o esboço</p>
-
-          <label className="option-item">
-            <input
-              type="checkbox"
-              checked={incluirExegese}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setIncluirExegese(e.target.checked)
-              }
-              disabled={carregando}
-            />
-            <span>Incluir exegese do texto base</span>
-          </label>
-
-          <label className="option-item">
-            <input
-              type="checkbox"
-              checked={incluirIlustracao}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setIncluirIlustracao(e.target.checked)
-              }
-              disabled={carregando}
-            />
-            <span>Incluir ilustração para o momento da mensagem</span>
-          </label>
-
-          <label className="option-item">
-            <input
-              type="checkbox"
-              checked={incluirAplicacaoPratica}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setIncluirAplicacaoPratica(e.target.checked)
-              }
-              disabled={carregando}
-            />
-            <span>Incluir aplicação prática para a igreja</span>
-          </label>
+          <p className="options-title">Estrutura padrão dos esboços</p>
+          <p className="structure-note">
+            Tema, texto, ideia central, objetivos, tese, frase de transição,
+            introdução, três tópicos com exegese e aplicação prática, e conclusão.
+          </p>
         </div>
 
         <div className="tool-helper-row">
@@ -298,7 +231,7 @@ export const SermonOutline: React.FC = () => {
         <ToolDraftBar
           hasDraft={hasDraft}
           draftUpdatedAt={draftUpdatedAt}
-          note="Tema, linha teológica e seções opcionais ficam guardados neste navegador"
+          note="Tema, linha teológica, duração e versão bíblica ficam guardados neste navegador"
           onClearDraft={clearSavedDraft}
         />
 
@@ -312,13 +245,13 @@ export const SermonOutline: React.FC = () => {
               <span className="tool-state-kicker">Gerando esboço</span>
               <strong>Montando a estrutura principal da mensagem</strong>
               <p>
-                Estou organizando título, texto base, desenvolvimento e
+                Estou organizando tema, texto base, desenvolvimento e
                 aplicações para te devolver um rascunho mais pregável.
               </p>
               <div className="tool-state-points">
                 <span>Estrutura da mensagem</span>
                 <span>Base bíblica</span>
-                <span>Seções opcionais</span>
+                <span>Exegese e aplicação</span>
               </div>
             </div>
           ) : !resultado ? (
@@ -328,13 +261,12 @@ export const SermonOutline: React.FC = () => {
               </span>
               <strong>
                 {jaGerou
-                  ? "Você pode ajustar o tema ou as seções e gerar novamente."
-                  : "Defina o tema, a linha teológica e as seções que quer incluir."}
+                  ? "Você pode ajustar o tema e gerar novamente."
+                  : "Defina o tema, a linha teológica, a duração e a versão bíblica."}
               </strong>
               <p>
-                Um bom ponto de partida costuma ser um tema curto, uma duração
-                realista e pelo menos uma decisão clara sobre exegese,
-                ilustração ou aplicação prática.
+                Um bom ponto de partida costuma ser um tema curto e uma duração
+                realista para a mensagem que você quer preparar.
               </p>
             </div>
           ) : null}

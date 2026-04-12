@@ -532,7 +532,9 @@ export const WorkspaceSyncPanel: React.FC<WorkspaceSyncPanelProps> = ({
             <strong>Como usar sem perder dados</strong>
             Guarde seu Workspace ID e a chave de acesso. O app faz merge entre
             os dados locais e os dados da nuvem para preservar biblioteca e
-            rascunhos dos seus dispositivos.
+            rascunhos dos seus dispositivos. Para materiais sensíveis, mantenha
+            também um backup .json local e compartilhe o ID apenas com pessoas
+            autorizadas.
           </div>
 
           {session && (

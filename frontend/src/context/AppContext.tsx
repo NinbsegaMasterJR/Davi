@@ -41,6 +41,19 @@ const LEGACY_DRAFTS_STORAGE_KEY = "pregador-ia-drafts-v1";
 const ONBOARDING_STORAGE_KEY = "scriptura-onboarding-v1";
 const LEGACY_ONBOARDING_STORAGE_KEY = "pregador-ia-onboarding-v1";
 const MAX_LIBRARY_ITEMS = 30;
+const STOP_WORDS = new Set([
+  "para",
+  "sobre",
+  "com",
+  "por",
+  "uma",
+  "um",
+  "das",
+  "dos",
+  "que",
+  "como",
+  "tema",
+]);
 
 function loadStoredJson<T>(key: string, fallback: T, legacyKey?: string): T {
   const stored = readStorageItem(key, legacyKey);
@@ -77,6 +90,33 @@ function loadInitialOnboardingState(): boolean {
     false,
     LEGACY_ONBOARDING_STORAGE_KEY,
   );
+}
+
+function normalizeTag(value: string): string {
+  return value
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 28);
+}
+
+function buildDocumentTags(input: SaveDocumentInput): string[] {
+  const explicitTags = input.tags ?? [];
+  const queryTags = input.query
+    .split(/\s+/)
+    .map((word) => word.trim())
+    .filter((word) => word.length >= 4 && !STOP_WORDS.has(word.toLowerCase()))
+    .slice(0, 4);
+
+  return Array.from(
+    new Set(
+      [input.toolLabel, ...explicitTags, ...queryTags]
+        .map((tag) => normalizeTag(tag))
+        .filter(Boolean),
+    ),
+  ).slice(0, 6);
 }
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -125,6 +165,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
       id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
       createdAt: new Date().toISOString(),
       favorite: false,
+      tags: buildDocumentTags(input),
     };
 
     setLibrary((current) => [document, ...current].slice(0, MAX_LIBRARY_ITEMS));

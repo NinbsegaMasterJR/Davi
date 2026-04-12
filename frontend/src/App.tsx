@@ -129,6 +129,7 @@ function App() {
   const [apiStatus, setApiStatus] = useState<ApiStatus>("checking");
   const [groqConfigured, setGroqConfigured] = useState(true);
   const [lastCheckedAt, setLastCheckedAt] = useState<string>("");
+  const [focusToolOnOpen, setFocusToolOnOpen] = useState(false);
 
   const checkHealth = useCallback(async () => {
     setApiStatus((currentStatus) =>
@@ -210,6 +211,15 @@ function App() {
     window.location.hash = buildHash(page, nextTab);
   };
 
+  const openOutlineCreator = () => {
+    setFocusToolOnOpen(true);
+    navigateToPage("app", "outline");
+  };
+
+  const clearToolFocusRequest = useCallback(() => {
+    setFocusToolOnOpen(false);
+  }, []);
+
   const statusMessage =
     apiStatus === "checking"
       ? "Verificando conexão com a API..."
@@ -225,6 +235,7 @@ function App() {
       : apiStatus === "checking"
         ? "status-warn"
         : "status-error";
+  const apiReady = apiStatus === "online" && groqConfigured;
 
   const pageLabel =
     currentPage === "app"
@@ -291,6 +302,19 @@ function App() {
               </div>
             </div>
             <div className="nav-side">
+              {apiReady && (
+                <span className="nav-health-pill">
+                  <span className="status-dot" aria-hidden="true" />
+                  API online
+                </span>
+              )}
+              <button
+                type="button"
+                className="nav-link nav-link-secondary nav-link-cta"
+                onClick={openOutlineCreator}
+              >
+                Criar esboço
+              </button>
               <a
                 href={GITHUB_REPO_URL}
                 className="nav-link nav-link-secondary"
@@ -301,30 +325,32 @@ function App() {
               </a>
             </div>
           </div>
-          <div className={`api-status ${statusClass}`}>
-            <div className="api-status-copy">
-              <span className="api-status-label">
-                <span className="status-dot" aria-hidden="true" />
-                Ambiente publicado
-              </span>
-              <strong>{statusMessage}</strong>
-            </div>
-            <div className="api-status-actions">
-              <span className="api-status-badge">{pageLabel}</span>
-              {lastCheckedAt && (
-                <span className="api-status-meta">
-                  Última verificação: {lastCheckedAt}
+          {!apiReady && (
+            <div className={`api-status ${statusClass}`}>
+              <div className="api-status-copy">
+                <span className="api-status-label">
+                  <span className="status-dot" aria-hidden="true" />
+                  Ambiente publicado
                 </span>
-              )}
-              <button
-                type="button"
-                className="api-status-button"
-                onClick={() => void checkHealth()}
-              >
-                Atualizar status
-              </button>
+                <strong>{statusMessage}</strong>
+              </div>
+              <div className="api-status-actions">
+                <span className="api-status-badge">{pageLabel}</span>
+                {lastCheckedAt && (
+                  <span className="api-status-meta">
+                    Última verificação: {lastCheckedAt}
+                  </span>
+                )}
+                <button
+                  type="button"
+                  className="api-status-button"
+                  onClick={() => void checkHealth()}
+                >
+                  Atualizar status
+                </button>
+              </div>
             </div>
-          </div>
+          )}
         </nav>
 
         <main className="app-main" id="main-content">
@@ -332,6 +358,7 @@ function App() {
             {currentPage === "landing" && (
               <Landing
                 onEnterApp={() => navigateToPage("app")}
+                onCreateOutline={openOutlineCreator}
                 onOpenResources={() => navigateToPage("resources")}
                 onOpenTrust={() => navigateToPage("trust")}
               />
@@ -340,6 +367,8 @@ function App() {
               <Home
                 activeTab={currentTab}
                 onTabChange={(tab) => navigateToPage("app", tab)}
+                focusToolOnOpen={focusToolOnOpen}
+                onToolFocused={clearToolFocusRequest}
               />
             )}
             {currentPage === "resources" && (

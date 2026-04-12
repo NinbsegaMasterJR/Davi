@@ -3,7 +3,7 @@ import {
   analisarTeologicamente,
   type VersaoBiblica,
 } from "../services/ia.service";
-import { getErrorMessage } from "../utils/httpError";
+import { getErrorMessage, getErrorStatus } from "../utils/httpError";
 import {
   parseBibleVersion,
   sanitizeOptionalText,
@@ -40,7 +40,7 @@ router.post("/theological", async (req: Request, res: Response) => {
     res.json({ sucesso: true, tema, profundidade, analise });
   } catch (error: unknown) {
     res
-      .status(500)
+      .status(getErrorStatus(error))
       .json({ error: getErrorMessage(error, "Erro interno do servidor") });
   }
 });

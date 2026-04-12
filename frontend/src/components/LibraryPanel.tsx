@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useApp } from "../context/AppContext";
+import { downloadContent } from "../utils/fileExport";
 import { ResultPanel } from "./ResultPanel";
 
 export const LibraryPanel: React.FC = () => {
@@ -8,6 +9,7 @@ export const LibraryPanel: React.FC = () => {
   const [mode, setMode] = useState<"recent" | "favorites">("recent");
   const [searchQuery, setSearchQuery] = useState("");
   const [toolFilter, setToolFilter] = useState<string>("all");
+  const [tagFilter, setTagFilter] = useState<string>("all");
 
   const toolOptions = useMemo(() => {
     const entries = new Map<string, string>();
@@ -22,6 +24,14 @@ export const LibraryPanel: React.FC = () => {
     }));
   }, [library]);
 
+  const tagOptions = useMemo(
+    () =>
+      Array.from(
+        new Set(library.flatMap((item) => item.tags ?? [])),
+      ).sort((left, right) => left.localeCompare(right, "pt-BR")),
+    [library],
+  );
+
   const visibleItems = useMemo(() => {
     const normalizedSearch = searchQuery.trim().toLowerCase();
     let items =
@@ -31,9 +41,13 @@ export const LibraryPanel: React.FC = () => {
       items = items.filter((item) => item.toolId === toolFilter);
     }
 
+    if (tagFilter !== "all") {
+      items = items.filter((item) => item.tags?.includes(tagFilter));
+    }
+
     if (normalizedSearch) {
       items = items.filter((item) =>
-        [item.title, item.query, item.summary, item.toolLabel]
+        [item.title, item.query, item.summary, item.toolLabel, ...(item.tags ?? [])]
           .filter(Boolean)
           .some((value) =>
             String(value).toLowerCase().includes(normalizedSearch),
@@ -42,7 +56,7 @@ export const LibraryPanel: React.FC = () => {
     }
 
     return items.slice(0, 12);
-  }, [library, mode, searchQuery, toolFilter]);
+  }, [library, mode, searchQuery, tagFilter, toolFilter]);
 
   useEffect(() => {
     if (!visibleItems.some((item) => item.id === selectedId)) {
@@ -53,6 +67,28 @@ export const LibraryPanel: React.FC = () => {
   const selected =
     visibleItems.find((item) => item.id === selectedId) ?? visibleItems[0] ?? null;
   const latestDraft = drafts[0] ?? null;
+
+  const handleClearLibrary = () => {
+    if (!library.length) {
+      return;
+    }
+
+    const confirmed = window.confirm(
+      "Tem certeza que deseja apagar todos os resultados salvos neste navegador?",
+    );
+
+    if (confirmed) {
+      clearLibrary();
+    }
+  };
+
+  const handleExportLibrary = () => {
+    downloadContent(
+      "biblioteca-scriptura",
+      JSON.stringify({ library, exportedAt: new Date().toISOString() }, null, 2),
+      "json",
+    );
+  };
 
   return (
     <section className="library-panel" id="biblioteca-local">
@@ -80,7 +116,10 @@ export const LibraryPanel: React.FC = () => {
           >
             Favoritos
           </button>
-          <button type="button" className="library-clear" onClick={clearLibrary}>
+          <button type="button" className="library-clear" onClick={handleExportLibrary}>
+            Exportar .json
+          </button>
+          <button type="button" className="library-clear" onClick={handleClearLibrary}>
             Limpar tudo
           </button>
         </div>
@@ -135,6 +174,22 @@ export const LibraryPanel: React.FC = () => {
             ))}
           </select>
         </div>
+
+        <div className="library-search library-search-select">
+          <label htmlFor="library-tag-filter">Filtrar por tag</label>
+          <select
+            id="library-tag-filter"
+            value={tagFilter}
+            onChange={(event) => setTagFilter(event.target.value)}
+          >
+            <option value="all">Todas as tags</option>
+            {tagOptions.map((tag) => (
+              <option key={tag} value={tag}>
+                {tag}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
 
       {visibleItems.length === 0 ? (
@@ -163,6 +218,11 @@ export const LibraryPanel: React.FC = () => {
                 <span className="library-item-tool">{item.toolLabel}</span>
                 <strong>{item.title}</strong>
                 <span>{item.summary || item.query}</span>
+                {item.tags && item.tags.length > 0 && (
+                  <span className="library-item-tags">
+                    {item.tags.slice(0, 4).map((tag) => `#${tag}`).join(" ")}
+                  </span>
+                )}
                 <small>{new Date(item.createdAt).toLocaleString("pt-BR")}</small>
               </button>
             ))}

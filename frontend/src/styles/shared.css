@@ -433,6 +433,68 @@ body :is(
   margin-bottom: 1rem;
 }
 
+.tool-review-grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.tool-review-card {
+  display: grid;
+  gap: 0.3rem;
+  padding: 0.95rem 1rem;
+  border-radius: 18px;
+  background: rgba(255, 252, 247, 0.82);
+  border: 1px solid rgba(85, 40, 27, 0.08);
+}
+
+.tool-review-card.strong {
+  background: rgba(247, 212, 143, 0.24);
+}
+
+.tool-review-card span {
+  color: #9a3a22;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.tool-review-card strong,
+.tool-refinement-panel strong {
+  color: #5f2317;
+}
+
+.tool-review-card p {
+  margin: 0;
+  color: var(--ink-soft);
+  line-height: 1.62;
+}
+
+.tool-refinement-panel {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  border-radius: 20px;
+  background: rgba(255, 251, 245, 0.88);
+  border: 1px solid rgba(85, 40, 27, 0.08);
+}
+
+.tool-refinement-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.55rem;
+}
+
 .tool-result-body pre {
   white-space: pre-wrap;
   background: rgba(248, 241, 227, 0.76);
@@ -467,6 +529,16 @@ body :is(
   border-color: rgba(178, 58, 36, 0.22);
   background: rgba(255, 248, 239, 0.98);
   box-shadow: 0 12px 24px rgba(71, 28, 17, 0.06);
+}
+
+.btn-copy:disabled,
+.btn-copy-all:disabled,
+.btn-copy-single:disabled,
+.preset-chip:disabled {
+  cursor: not-allowed;
+  opacity: 0.64;
+  transform: none;
+  box-shadow: none;
 }
 
 .landing-btn {
@@ -600,7 +672,7 @@ body :is(.verses-list, .verses-grid) .verso-card:nth-child(6) {
 
 .library-toolbar {
   display: grid;
-  grid-template-columns: minmax(0, 1.6fr) minmax(220px, 0.8fr);
+  grid-template-columns: minmax(0, 1.4fr) repeat(2, minmax(180px, 0.7fr));
   gap: 0.85rem;
   margin-bottom: 1rem;
 }
@@ -675,6 +747,12 @@ body :is(.verses-list, .verses-grid) .verso-card:nth-child(6) {
   color: rgba(60, 36, 25, 0.68);
 }
 
+.library-item-tags {
+  color: #8a4d33;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
 .library-preview {
   display: grid;
   gap: 0.8rem;
@@ -724,9 +802,14 @@ body :is(.verses-list, .verses-grid) .verso-card:nth-child(6) {
   }
 
   .tool-result-actions,
-  .library-preview-actions {
+  .library-preview-actions,
+  .tool-refinement-panel {
     width: 100%;
     justify-content: flex-start;
+  }
+
+  .tool-refinement-panel {
+    flex-direction: column;
   }
 
   .library-grid {
@@ -738,7 +821,8 @@ body :is(.verses-list, .verses-grid) .verso-card:nth-child(6) {
   }
 
   .library-summary-grid,
-  .library-toolbar {
+  .library-toolbar,
+  .tool-review-grid {
     grid-template-columns: 1fr;
   }
 }

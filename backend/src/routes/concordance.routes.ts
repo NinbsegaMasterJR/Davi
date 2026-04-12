@@ -1,6 +1,6 @@
 import { Router, Request, Response } from "express";
 import { buscarConcordancia } from "../services/bible.service";
-import { getErrorMessage } from "../utils/httpError";
+import { getErrorMessage, getErrorStatus } from "../utils/httpError";
 import {
   parseBibleVersion,
   parseInteger,
@@ -29,7 +29,7 @@ router.get("/search", async (req: Request, res: Response) => {
     });
   } catch (error: unknown) {
     res
-      .status(500)
+      .status(getErrorStatus(error))
       .json({ error: getErrorMessage(error, "Erro interno do servidor") });
   }
 });

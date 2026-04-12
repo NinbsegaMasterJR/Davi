@@ -5,9 +5,11 @@ import {
   explicarPassagem,
   gerarCronogramaPregacoes,
   gerarCartaPastoralGceu,
+  refinarMaterialGerado,
+  type AcaoRefinamento,
   type VersaoBiblica,
 } from "../services/ia.service";
-import { getErrorMessage } from "../utils/httpError";
+import { getErrorMessage, getErrorStatus } from "../utils/httpError";
 import {
   parseBibleVersion,
   parseInteger,
@@ -23,11 +25,6 @@ interface SermonRequest {
   estilo?: string;
   duracao?: number;
   versaoBiblica?: VersaoBiblica;
-  secoesOpcionais?: {
-    exegese?: boolean;
-    ilustracao?: boolean;
-    aplicacaoPratica?: boolean;
-  };
 }
 
 interface AnalysisRequest {
@@ -45,6 +42,26 @@ interface PastoralLetterRequest {
   versaoBiblica?: VersaoBiblica;
 }
 
+interface RefineRequest {
+  title: string;
+  content: string;
+  action: AcaoRefinamento;
+}
+
+function parseRefinementAction(value: unknown): AcaoRefinamento {
+  if (
+    value === "encurtar" ||
+    value === "aprofundar" ||
+    value === "jovens" ||
+    value === "perguntas" ||
+    value === "slides"
+  ) {
+    return value;
+  }
+
+  return "aprofundar";
+}
+
 router.post("/outline", async (req: Request, res: Response) => {
   try {
     const {
@@ -52,7 +69,6 @@ router.post("/outline", async (req: Request, res: Response) => {
       estilo,
       duracao,
       versaoBiblica,
-      secoesOpcionais,
     } = req.body as SermonRequest;
 
     const esboco = await gerarEsbocoPregacao(
@@ -64,12 +80,11 @@ router.post("/outline", async (req: Request, res: Response) => {
       }),
       parseInteger(duracao, "Duracao", { min: 10, max: 120, fallback: 30 }),
       parseBibleVersion(versaoBiblica),
-      secoesOpcionais,
     );
     res.json({ sucesso: true, esboco });
   } catch (error: unknown) {
     res
-      .status(500)
+      .status(getErrorStatus(error))
       .json({ error: getErrorMessage(error, "Erro interno do servidor") });
   }
 });
@@ -97,7 +112,7 @@ router.post("/analysis", async (req: Request, res: Response) => {
     res.json({ sucesso: true, analise });
   } catch (error: unknown) {
     res
-      .status(500)
+      .status(getErrorStatus(error))
       .json({ error: getErrorMessage(error, "Erro interno do servidor") });
   }
 });
@@ -119,7 +134,7 @@ router.post("/explain", async (req: Request, res: Response) => {
     res.json({ sucesso: true, explicacao });
   } catch (error: unknown) {
     res
-      .status(500)
+      .status(getErrorStatus(error))
       .json({ error: getErrorMessage(error, "Erro interno do servidor") });
   }
 });
@@ -158,7 +173,7 @@ router.post("/schedule", async (req: Request, res: Response) => {
     res.json({ sucesso: true, cronograma });
   } catch (error: unknown) {
     res
-      .status(500)
+      .status(getErrorStatus(error))
       .json({ error: getErrorMessage(error, "Erro interno do servidor") });
   }
 });
@@ -196,7 +211,24 @@ router.post("/pastoral-letter", async (req: Request, res: Response) => {
     res.json({ sucesso: true, carta });
   } catch (error: unknown) {
     res
-      .status(500)
+      .status(getErrorStatus(error))
+      .json({ error: getErrorMessage(error, "Erro interno do servidor") });
+  }
+});
+
+router.post("/refine", async (req: Request, res: Response) => {
+  try {
+    const { title, content, action } = req.body as RefineRequest;
+    const refined = await refinarMaterialGerado(
+      sanitizeText(title, "Titulo", { minLength: 3, maxLength: 120 }),
+      sanitizeText(content, "Conteudo", { minLength: 20, maxLength: 18000 }),
+      parseRefinementAction(action),
+    );
+
+    res.json({ sucesso: true, refined });
+  } catch (error: unknown) {
+    res
+      .status(getErrorStatus(error))
       .json({ error: getErrorMessage(error, "Erro interno do servidor") });
   }
 });
