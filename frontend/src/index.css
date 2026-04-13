@@ -6,17 +6,17 @@
 @theme {
   --font-scriptura-display: "Fraunces", Georgia, serif;
   --font-scriptura-ui: "Manrope", "Segoe UI", sans-serif;
-  --color-scriptura-canvas: #eaf4ef;
-  --color-scriptura-canvas-deep: #dce9e3;
-  --color-scriptura-ink: #162622;
-  --color-scriptura-muted: #6f8680;
-  --color-scriptura-wine: #0f5f5c;
-  --color-scriptura-wine-deep: #0b3432;
-  --color-scriptura-ember: #c8503f;
-  --color-scriptura-amber: #d9b957;
-  --color-scriptura-gold: #f0d98a;
-  --shadow-scriptura-soft: 0 22px 60px rgba(8, 45, 43, 0.1);
-  --shadow-scriptura-strong: 0 30px 80px rgba(8, 45, 43, 0.16);
+  --color-scriptura-canvas: #f3f9fc;
+  --color-scriptura-canvas-deep: #e6f2f8;
+  --color-scriptura-ink: #1c3036;
+  --color-scriptura-muted: #78909a;
+  --color-scriptura-wine: #2f7f92;
+  --color-scriptura-wine-deep: #255565;
+  --color-scriptura-ember: #de7468;
+  --color-scriptura-amber: #e8c76f;
+  --color-scriptura-gold: #f5dea2;
+  --shadow-scriptura-soft: 0 22px 60px rgba(53, 98, 113, 0.1);
+  --shadow-scriptura-strong: 0 30px 80px rgba(53, 98, 113, 0.16);
 }
 
 html {
@@ -65,8 +65,8 @@ h4,
 }
 
 ::selection {
-  background: rgba(217, 185, 87, 0.3);
-  color: #162622;
+  background: rgba(232, 199, 111, 0.3);
+  color: #1c3036;
 }
 
 a:focus-visible,
@@ -74,6 +74,6 @@ button:focus-visible,
 input:focus-visible,
 select:focus-visible,
 textarea:focus-visible {
-  outline: 3px solid rgba(217, 185, 87, 0.9);
+  outline: 3px solid rgba(232, 199, 111, 0.9);
   outline-offset: 3px;
 }

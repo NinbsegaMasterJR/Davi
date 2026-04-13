@@ -10,8 +10,8 @@
   overflow: hidden;
   padding: 1.8rem;
   border-radius: 30px;
-  border: 1px solid rgba(15, 95, 92, 0.1);
-  background: rgba(248, 252, 250, 0.9);
+  border: 1px solid rgba(47, 127, 146, 0.1);
+  background: rgba(250, 253, 255, 0.9);
   box-shadow: var(--shadow-soft);
 }
 
@@ -27,8 +27,8 @@
     linear-gradient(120deg, rgba(255, 255, 255, 0.14), transparent 32%),
     repeating-linear-gradient(
       90deg,
-      rgba(15, 95, 92, 0.02) 0,
-      rgba(15, 95, 92, 0.02) 1px,
+      rgba(47, 127, 146, 0.02) 0,
+      rgba(47, 127, 146, 0.02) 1px,
       transparent 1px,
       transparent 78px
     );
@@ -47,15 +47,15 @@
   gap: 1rem;
   align-items: center;
   background:
-    radial-gradient(circle at top left, rgba(122, 199, 171, 0.22), transparent 28%),
-    linear-gradient(180deg, rgba(248, 253, 250, 0.96) 0%, rgba(235, 246, 240, 0.96) 100%);
+    radial-gradient(circle at top left, rgba(149, 214, 226, 0.22), transparent 28%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(232, 246, 252, 0.96) 100%);
 }
 
 .trust-center-hero h1,
 .trust-center-card h2,
 .trust-center-practices h2 {
   margin: 0;
-  color: #0f5f5c;
+  color: #2f7f92;
 }
 
 .trust-center-hero p,
@@ -63,21 +63,21 @@
 .trust-center-practices p {
   margin: 0.65rem 0 0;
   line-height: 1.75;
-  color: #4b635d;
+  color: #536e76;
 }
 
 .trust-center-note {
   padding: 1.2rem;
   border-radius: 24px;
   background:
-    radial-gradient(circle at top right, rgba(122, 199, 171, 0.18), transparent 24%),
-    linear-gradient(180deg, rgba(250, 254, 252, 0.96) 0%, rgba(238, 248, 243, 0.96) 100%);
-  border: 1px solid rgba(15, 95, 92, 0.1);
+    radial-gradient(circle at top right, rgba(149, 214, 226, 0.18), transparent 24%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(237, 248, 250, 0.96) 100%);
+  border: 1px solid rgba(47, 127, 146, 0.1);
 }
 
 .trust-center-note span {
   display: inline-block;
-  color: #1d8379;
+  color: #2f7f92;
   font-size: 0.74rem;
   font-weight: 800;
   letter-spacing: 0.1em;
@@ -87,7 +87,7 @@
 .trust-center-note strong {
   display: block;
   margin-top: 0.4rem;
-  color: #0f5f5c;
+  color: #2f7f92;
   font-size: 1.1rem;
   line-height: 1.45;
 }
@@ -104,8 +104,8 @@
 
 .trust-center-card:hover {
   transform: translateY(-2px);
-  border-color: rgba(200, 80, 63, 0.18);
-  box-shadow: 0 18px 30px rgba(8, 45, 43, 0.08);
+  border-color: rgba(222, 116, 104, 0.18);
+  box-shadow: 0 18px 30px rgba(53, 98, 113, 0.08);
 }
 
 .trust-center-practice-list {
@@ -118,8 +118,8 @@
 .trust-center-practice {
   padding: 1.15rem;
   border-radius: 24px;
-  background: rgba(250, 254, 252, 0.92);
-  border: 1px solid rgba(15, 95, 92, 0.08);
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(47, 127, 146, 0.08);
 }
 
 .trust-center-practice span {
@@ -128,15 +128,15 @@
   width: 2.4rem;
   height: 2.4rem;
   border-radius: 999px;
-  background: linear-gradient(135deg, #0f5f5c 0%, #d88459 100%);
-  color: #f7fffc;
+  background: linear-gradient(135deg, #bde8f2 0%, #ffd8d0 100%);
+  color: #255565;
   font-size: 0.86rem;
   font-weight: 800;
 }
 
 .trust-center-practice h3 {
   margin: 0.85rem 0 0;
-  color: #0f5f5c;
+  color: #2f7f92;
 }
 
 .trust-center-checklist ul {
@@ -150,9 +150,9 @@
 .trust-center-checklist li {
   padding: 0.9rem 1rem;
   border-radius: 18px;
-  background: rgba(250, 254, 252, 0.92);
-  border: 1px solid rgba(15, 95, 92, 0.08);
-  color: #4b635d;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(47, 127, 146, 0.08);
+  color: #536e76;
   font-weight: 700;
   line-height: 1.55;
 }
