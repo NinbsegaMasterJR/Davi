@@ -38,7 +38,7 @@ function parseTimestamp(value: string | undefined): number {
   }
 
   const timestamp = Date.parse(value);
-  return Number.isNaN(timestamp) ? 0 : timestamp;
+  return Number.isNaN(timestamp) ?0 : timestamp;
 }
 
 function mergeDocuments(
@@ -51,7 +51,7 @@ function mergeDocuments(
     favorite: current.favorite || next.favorite,
     createdAt:
       parseTimestamp(current.createdAt) >= parseTimestamp(next.createdAt)
-        ? current.createdAt
+        ?current.createdAt
         : next.createdAt,
   };
 }
@@ -66,7 +66,7 @@ function mergeLibrary(
     const existing = documents.get(document.id);
     documents.set(
       document.id,
-      existing ? mergeDocuments(existing, document) : document,
+      existing ?mergeDocuments(existing, document) : document,
     );
   });
 
@@ -132,7 +132,7 @@ export function mergeWorkspaceSnapshots(
       localSnapshot.onboardingDismissed || remoteSnapshot.onboardingDismissed,
     lastTab:
       localSync >= remoteSync
-        ? localSnapshot.lastTab || remoteSnapshot.lastTab
+        ?localSnapshot.lastTab || remoteSnapshot.lastTab
         : remoteSnapshot.lastTab || localSnapshot.lastTab,
     syncedAt: new Date().toISOString(),
   };
@@ -149,13 +149,13 @@ export function parseWorkspaceSnapshot(
     }
 
     return {
-      library: Array.isArray(parsed.library) ? parsed.library : [],
-      drafts: Array.isArray(parsed.drafts) ? parsed.drafts : [],
+      library: Array.isArray(parsed.library) ?parsed.library : [],
+      drafts: Array.isArray(parsed.drafts) ?parsed.drafts : [],
       onboardingDismissed: Boolean(parsed.onboardingDismissed),
-      lastTab: typeof parsed.lastTab === "string" ? parsed.lastTab : undefined,
+      lastTab: typeof parsed.lastTab === "string" ?parsed.lastTab : undefined,
       syncedAt:
         typeof parsed.syncedAt === "string"
-          ? parsed.syncedAt
+          ?parsed.syncedAt
           : new Date().toISOString(),
     };
   } catch (error) {

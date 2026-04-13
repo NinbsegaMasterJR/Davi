@@ -1,10 +1,12 @@
 import React from "react";
 import { BrandLogo } from "../components/BrandLogo";
+import type { ActiveTab } from "./Home";
 import "./Landing.css";
 
 interface LandingProps {
   onEnterApp: () => void;
   onCreateOutline: () => void;
+  onOpenTool: (tab: ActiveTab) => void;
   onOpenResources: () => void;
   onOpenTrust: () => void;
 }
@@ -46,9 +48,88 @@ const JOURNEY = [
   },
 ];
 
+const QUICK_STARTS: Array<{
+  label: string;
+  prompt: string;
+  tab: ActiveTab;
+}> = [
+  {
+    label: "Mensagem de domingo",
+    prompt: "Fé que persevera",
+    tab: "outline",
+  },
+  {
+    label: "Texto para explicar",
+    prompt: "João 15",
+    tab: "explain",
+  },
+  {
+    label: "Versículos de apoio",
+    prompt: "Esperança em meio à prova",
+    tab: "verses",
+  },
+  {
+    label: "Planejar série",
+    prompt: "Discipulado em 4 semanas",
+    tab: "schedule",
+  },
+];
+
+const DECISION_CARDS: Array<{
+  title: string;
+  text: string;
+  action: string;
+  tab: ActiveTab;
+}> = [
+  {
+    title: "Tenho um tema",
+    text: "Comece com tese, texto base, objetivos e desenvolvimento pregável.",
+    action: "Montar esboço",
+    tab: "outline",
+  },
+  {
+    title: "Tenho uma passagem",
+    text: "Organize contexto, sentido central, conexões bíblicas e aplicação.",
+    action: "Explicar texto",
+    tab: "explain",
+  },
+  {
+    title: "Preciso planejar o mês",
+    text: "Distribua temas, textos e ritmo pastoral para as próximas semanas.",
+    action: "Planejar série",
+    tab: "schedule",
+  },
+  {
+    title: "Preciso falar com a igreja",
+    text: "Escreva uma carta pastoral clara, bíblica e pronta para adaptar.",
+    action: "Escrever carta",
+    tab: "pastoral-letter",
+  },
+];
+
+const DEMO_SECTIONS = [
+  {
+    title: "Tema",
+    text: "Fé que persevera",
+  },
+  {
+    title: "Texto base",
+    text: "Hebreus 12:1-3",
+  },
+  {
+    title: "Ideia central",
+    text: "A igreja persevera quando mantém os olhos em Cristo e abandona pesos que enfraquecem a caminhada.",
+  },
+  {
+    title: "Aplicação",
+    text: "Identificar pesos, retomar disciplinas espirituais e caminhar em comunidade.",
+  },
+];
+
 export const Landing: React.FC<LandingProps> = ({
   onEnterApp,
   onCreateOutline,
+  onOpenTool,
   onOpenResources,
   onOpenTrust,
 }) => {
@@ -62,14 +143,14 @@ export const Landing: React.FC<LandingProps> = ({
             </div>
             <div>
               <span className="landing-kicker">Preparação bíblica com apoio inteligente</span>
-              <h1>Scriptura</h1>
+              <h1>Comece pelo que você precisa preparar hoje.</h1>
             </div>
           </div>
 
           <p className="landing-lead">
-            Um ateliê digital para transformar tema, texto e necessidade
-            ministerial em estudo, esboço e comunicação pastoral com mais
-            critério visual, menos fricção e ritmo de preparo.
+            Transforme tema, passagem ou necessidade pastoral em esboço,
+            explicação, referências, cronograma ou carta com menos fricção e
+            mais critério para revisar.
           </p>
 
           <div className="landing-actions">
@@ -105,6 +186,20 @@ export const Landing: React.FC<LandingProps> = ({
           </div>
 
           <p className="section-kicker">O que você ganha</p>
+          <div className="landing-quick-start" aria-label="Começos rápidos">
+            {QUICK_STARTS.map((item) => (
+              <button
+                key={item.label}
+                type="button"
+                className="landing-quick-card"
+                onClick={() => onOpenTool(item.tab)}
+              >
+                <span>{item.label}</span>
+                <strong>{item.prompt}</strong>
+              </button>
+            ))}
+          </div>
+
           <ul className="landing-feature-list">
             {FEATURE_LIST.map((item) => (
               <li key={item}>{item}</li>
@@ -125,6 +220,51 @@ export const Landing: React.FC<LandingProps> = ({
               <span>cadastro obrigatório para iniciar</span>
             </div>
           </div>
+        </div>
+      </section>
+
+      <section className="landing-section landing-choice">
+        <div className="landing-section-copy">
+          <p className="section-kicker">Escolha guiada</p>
+          <h2>O que você precisa preparar hoje?</h2>
+          <p>
+            Entre pelo ponto real da rotina pastoral e avance direto para a
+            ferramenta mais útil.
+          </p>
+        </div>
+        <div className="landing-choice-grid">
+          {DECISION_CARDS.map((card) => (
+            <article key={card.title} className="landing-choice-card">
+              <h3>{card.title}</h3>
+              <p>{card.text}</p>
+              <button
+                type="button"
+                className="landing-btn"
+                onClick={() => onOpenTool(card.tab)}
+              >
+                {card.action}
+              </button>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="landing-section landing-demo">
+        <div className="landing-section-copy">
+          <p className="section-kicker">Exemplo rápido</p>
+          <h2>De um tema simples para um rascunho revisável</h2>
+          <p>
+            A saída nasce organizada para você conferir texto bíblico, tom,
+            doutrina e aplicação antes de ministrar.
+          </p>
+        </div>
+        <div className="landing-demo-panel">
+          {DEMO_SECTIONS.map((section) => (
+            <div key={section.title}>
+              <span>{section.title}</span>
+              <strong>{section.text}</strong>
+            </div>
+          ))}
         </div>
       </section>
 

@@ -4,8 +4,8 @@ Projeto padronizado com `npm@11.9.0`.
 
 ## URLs Publicas Atuais
 
-- Frontend: `https://scriptura-web.vercel.app`
-- Backend: `https://scriptura-web-api.vercel.app`
+- Frontend: `https://pregador-ia.vercel.app`
+- Backend: `https://pregador-ia-api.vercel.app`
 
 ## Observacao
 
@@ -18,7 +18,7 @@ Service Name: frontend
 Root Directory: frontend
 Build Command: npm install && npm run build
 Start Command: npx vite preview --host 0.0.0.0 --port $PORT
-VITE_API_URL=https://scriptura-web-api.vercel.app
+VITE_API_URL=https://pregador-ia-api.vercel.app
 ```
 
 ## Backend no Railway
@@ -30,19 +30,19 @@ Build Command: npm install && npm run build
 Start Command: npm start
 GROQ_API_KEY=gsk_sua_chave
 NODE_ENV=production
-CORS_ORIGIN=https://scriptura-web.vercel.app
+CORS_ORIGIN=https://pregador-ia.vercel.app
 ```
 
 ## Validacao
 
-1. Abra `https://scriptura-web-api.vercel.app/health`
-2. Abra `https://scriptura-web.vercel.app`
+1. Abra `https://pregador-ia-api.vercel.app/health`
+2. Abra `https://pregador-ia.vercel.app`
 3. Teste a geracao de conteudo
 
 ## Resumo de URLs
 
 | Servico | Link |
 | --- | --- |
-| Frontend atual | https://scriptura-web.vercel.app |
-| Backend atual | https://scriptura-web-api.vercel.app |
+| Frontend atual | https://pregador-ia.vercel.app |
+| Backend atual | https://pregador-ia-api.vercel.app |
 | Railway | https://railway.app/dashboard |

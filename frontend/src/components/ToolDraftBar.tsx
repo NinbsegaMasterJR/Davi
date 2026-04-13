@@ -25,7 +25,7 @@ export const ToolDraftBar: React.FC<ToolDraftBarProps> = ({
     <div className="tool-draft-copy">
       <span className="tool-draft-kicker">Rascunho local</span>
       <strong>
-        {hasDraft ? "Formulário restaurado automaticamente" : "Autosave local ativo"}
+        {hasDraft ?"Formulário restaurado automaticamente" : "Autosave local ativo"}
       </strong>
       <p>
         {note} {formatDraftTime(draftUpdatedAt)}.

@@ -46,8 +46,8 @@ h4,
 }
 
 ::selection {
-  background: rgba(242, 183, 90, 0.3);
-  color: #2f1a12;
+  background: rgba(217, 185, 87, 0.3);
+  color: #162622;
 }
 
 a:focus-visible,
@@ -55,6 +55,6 @@ button:focus-visible,
 input:focus-visible,
 select:focus-visible,
 textarea:focus-visible {
-  outline: 3px solid rgba(242, 183, 90, 0.9);
+  outline: 3px solid rgba(217, 185, 87, 0.9);
   outline-offset: 3px;
 }

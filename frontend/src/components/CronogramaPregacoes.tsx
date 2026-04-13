@@ -65,18 +65,18 @@ export const CronogramaPregacoes: React.FC = () => {
     values: draftValues,
     onRestore: (draft) => {
       setMes(
-        typeof draft.mes === "number" ? draft.mes : Number(draft.mes) || mesAtual,
+        typeof draft.mes === "number" ?draft.mes : Number(draft.mes) || mesAtual,
       );
       setAno(
-        typeof draft.ano === "number" ? draft.ano : Number(draft.ano) || anoAtual,
+        typeof draft.ano === "number" ?draft.ano : Number(draft.ano) || anoAtual,
       );
-      setEstilo(typeof draft.estilo === "string" ? draft.estilo : "Arminiana");
+      setEstilo(typeof draft.estilo === "string" ?draft.estilo : "Arminiana");
       setVersaoBiblica(
         typeof draft.versaoBiblica === "string"
-          ? (draft.versaoBiblica as BibleVersion)
+          ?(draft.versaoBiblica as BibleVersion)
           : "ARA",
       );
-      setTemas(typeof draft.temas === "string" ? draft.temas : "");
+      setTemas(typeof draft.temas === "string" ?draft.temas : "");
     },
   });
   const presets = [
@@ -94,6 +94,21 @@ export const CronogramaPregacoes: React.FC = () => {
       label: "Série discipulado",
       estilo: "Arminiana",
       temas: "Identidade em Cristo, serviço, maturidade, missão",
+    },
+    {
+      label: "Série oração",
+      estilo: "Arminio-Wesleyana",
+      temas: "Dependência de Deus, intercessão, perseverança, gratidão",
+    },
+    {
+      label: "Série jovens",
+      estilo: "Arminiana",
+      temas: "Identidade, santidade, propósito, relacionamentos",
+    },
+    {
+      label: "Série liderança",
+      estilo: "Arminiana",
+      temas: "Serviço, caráter, visão, cuidado pastoral",
     },
   ];
 
@@ -289,12 +304,12 @@ export const CronogramaPregacoes: React.FC = () => {
           className="btn-primary"
         >
           {carregando
-            ? "Montando cronograma..."
+            ?"Montando cronograma..."
             : `Gerar Cronograma de ${MESES[mes - 1]}/${ano}`}
         </button>
 
         <div className="tool-feedback-stack" aria-live="polite">
-          {carregando ? (
+          {carregando ?(
             <div className="tool-state-card loading">
               <span className="tool-state-kicker">Planejamento em andamento</span>
               <strong>Distribuindo temas e textos ao longo do período</strong>
@@ -308,14 +323,14 @@ export const CronogramaPregacoes: React.FC = () => {
                 <span>Texto base sugerido</span>
               </div>
             </div>
-          ) : !resultado ? (
+          ) : !resultado ?(
             <div className="tool-state-card empty">
               <span className="tool-state-kicker">
-                {jaGerou ? "Pronto para replanejar" : "Antes de montar o cronograma"}
+                {jaGerou ?"Pronto para replanejar" : "Antes de montar o cronograma"}
               </span>
               <strong>
                 {jaGerou
-                  ? "Troque o mês, a linha teológica ou os temas sugeridos para gerar outra versão."
+                  ?"Troque o mês, a linha teológica ou os temas sugeridos para gerar outra versão."
                   : "Escolha o mês e, se quiser, indique alguns eixos temáticos para guiar a série."}
               </strong>
               <p>

@@ -1,0 +1,160 @@
+.howto-page {
+  display: grid;
+  gap: 1.2rem;
+}
+
+.howto-hero,
+.howto-paths,
+.howto-rhythm,
+.howto-care,
+.howto-cta {
+  padding: 1.7rem;
+  border: 1px solid rgba(15, 95, 92, 0.12);
+  border-radius: 8px;
+  background: rgba(248, 252, 250, 0.94);
+  box-shadow: var(--shadow-soft);
+}
+
+.howto-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.12fr) minmax(260px, 0.72fr);
+  gap: 1rem;
+  align-items: center;
+  background:
+    linear-gradient(135deg, rgba(250, 254, 252, 0.98) 0%, rgba(232, 246, 240, 0.98) 58%, rgba(255, 243, 236, 0.96) 100%);
+}
+
+.howto-hero h1,
+.howto-section-heading h2,
+.howto-card h3,
+.howto-care-list h3,
+.howto-cta h2 {
+  margin: 0;
+  color: #0f5f5c;
+}
+
+.howto-hero p,
+.howto-card p,
+.howto-care-list p,
+.howto-side-note p,
+.howto-cta p {
+  margin: 0.65rem 0 0;
+  color: #49625c;
+  line-height: 1.72;
+}
+
+.howto-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  margin-top: 1rem;
+}
+
+.howto-side-note {
+  padding: 1.1rem;
+  border: 1px solid rgba(15, 95, 92, 0.14);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.howto-side-note span,
+.howto-card span {
+  display: inline-block;
+  color: #1d8379;
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.howto-side-note strong {
+  display: block;
+  margin-top: 0.45rem;
+  color: #0f5f5c;
+  font-size: 1.05rem;
+  line-height: 1.45;
+}
+
+.howto-section-heading {
+  display: grid;
+  gap: 0.25rem;
+  margin-bottom: 1rem;
+}
+
+.howto-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.9rem;
+}
+
+.howto-card {
+  padding: 1rem;
+  border: 1px solid rgba(21, 73, 69, 0.1);
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.howto-card h3 {
+  margin-top: 0.35rem;
+}
+
+.howto-rhythm ol {
+  display: grid;
+  gap: 0.7rem;
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+.howto-rhythm li {
+  padding-left: 0.25rem;
+  color: #49625c;
+  line-height: 1.65;
+}
+
+.howto-rhythm li::marker {
+  color: #c8503f;
+  font-weight: 900;
+}
+
+.howto-care-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.9rem;
+}
+
+.howto-care-list article {
+  padding-top: 0.8rem;
+  border-top: 3px solid rgba(200, 80, 63, 0.45);
+}
+
+.howto-cta {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 1rem;
+  align-items: center;
+  background: linear-gradient(135deg, #0b3432 0%, #11605b 62%, #c8503f 100%);
+}
+
+.howto-cta h2,
+.howto-cta .section-kicker {
+  color: #f7fffc;
+}
+
+.howto-cta p {
+  color: rgba(245, 251, 247, 0.9);
+}
+
+@media (max-width: 820px) {
+  .howto-hero,
+  .howto-cta {
+    grid-template-columns: 1fr;
+  }
+
+  .howto-hero,
+  .howto-paths,
+  .howto-rhythm,
+  .howto-care,
+  .howto-cta {
+    padding: 1.1rem;
+  }
+}

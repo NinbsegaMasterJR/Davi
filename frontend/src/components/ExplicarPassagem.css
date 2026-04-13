@@ -6,23 +6,23 @@
 
 .explicar-passagem .input-section {
   background:
-    radial-gradient(circle at top left, rgba(255, 220, 162, 0.18), transparent 24%),
-    linear-gradient(135deg, rgba(255, 252, 247, 0.95) 0%, rgba(247, 237, 222, 0.94) 100%);
+    radial-gradient(circle at top left, rgba(186, 225, 213, 0.18), transparent 24%),
+    linear-gradient(135deg, rgba(248, 253, 250, 0.95) 0%, rgba(232, 244, 238, 0.94) 100%);
   border-radius: 28px;
   padding: 2rem;
-  box-shadow: 0 18px 42px rgba(78, 33, 20, 0.09);
+  box-shadow: 0 18px 42px rgba(8, 45, 43, 0.09);
   margin-bottom: 2rem;
-  border: 1px solid rgba(111, 29, 27, 0.1);
+  border: 1px solid rgba(15, 95, 92, 0.1);
 }
 
 .explicar-passagem h2 {
   margin: 0 0 0.5rem 0;
   font-size: 1.8rem;
-  color: #6f1d1b;
+  color: #0f5f5c;
 }
 
 .explicar-passagem .subtitle {
-  color: #6b4a3a;
+  color: #526a64;
   margin: 0 0 1.5rem 0;
   font-size: 0.98rem;
   line-height: 1.7;
@@ -36,25 +36,25 @@
   display: block;
   font-weight: 700;
   margin-bottom: 0.5rem;
-  color: #3c2419;
+  color: #1e312d;
 }
 
 .explicar-passagem .form-group input {
   width: 100%;
   padding: 0.85rem 1rem;
-  border: 1px solid rgba(111, 29, 27, 0.14);
+  border: 1px solid rgba(15, 95, 92, 0.14);
   border-radius: 16px;
   font-size: 1rem;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
   box-sizing: border-box;
-  color: #2d160f;
-  background: rgba(255, 253, 249, 0.96);
+  color: #10201d;
+  background: rgba(250, 254, 252, 0.96);
 }
 
 .explicar-passagem .form-group input:focus {
   outline: none;
-  border-color: rgba(178, 58, 36, 0.45);
-  box-shadow: 0 0 0 4px rgba(178, 58, 36, 0.1);
+  border-color: rgba(200, 80, 63, 0.45);
+  box-shadow: 0 0 0 4px rgba(200, 80, 63, 0.1);
 }
 
 .exemplos {
@@ -64,22 +64,22 @@
   align-items: center;
   margin-bottom: 1.5rem;
   font-size: 0.9rem;
-  color: #6b4a3a;
+  color: #526a64;
 }
 
 .btn-exemplo {
-  background: rgba(111, 29, 27, 0.06);
-  border: 1px solid rgba(111, 29, 27, 0.12);
+  background: rgba(15, 95, 92, 0.06);
+  border: 1px solid rgba(15, 95, 92, 0.12);
   border-radius: 999px;
   padding: 0.45rem 0.85rem;
   font-size: 0.85rem;
   cursor: pointer;
-  color: #6f1d1b;
+  color: #0f5f5c;
   transition: all 0.2s ease;
 }
 
 .btn-exemplo:hover {
-  background: rgba(111, 29, 27, 0.12);
+  background: rgba(15, 95, 92, 0.12);
 }
 
 .btn-exemplo:disabled {
@@ -88,8 +88,8 @@
 }
 
 .explicar-passagem .btn-primary {
-  background: linear-gradient(135deg, #7f1d1d 0%, #ba4a1f 100%);
-  color: #fff7ea;
+  background: linear-gradient(135deg, #0b6a63 0%, #d7644c 100%);
+  color: #f7fffc;
   border: none;
   padding: 0.95rem 2rem;
   border-radius: 16px;
@@ -102,7 +102,7 @@
 
 .explicar-passagem .btn-primary:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 14px 30px rgba(111, 29, 27, 0.18);
+  box-shadow: 0 14px 30px rgba(15, 95, 92, 0.18);
 }
 
 .explicar-passagem .btn-primary:disabled {
@@ -111,11 +111,11 @@
 }
 
 .explicar-passagem .result-section {
-  background: rgba(255, 251, 245, 0.9);
+  background: rgba(248, 252, 250, 0.9);
   border-radius: 28px;
   padding: 2rem;
-  box-shadow: 0 18px 42px rgba(78, 33, 20, 0.09);
-  border: 1px solid rgba(111, 29, 27, 0.1);
+  box-shadow: 0 18px 42px rgba(8, 45, 43, 0.09);
+  border: 1px solid rgba(15, 95, 92, 0.1);
 }
 
 .explicar-passagem .result-header {
@@ -130,33 +130,33 @@
 .explicar-passagem .result-header h3 {
   margin: 0;
   font-size: 1.3rem;
-  color: #6f1d1b;
+  color: #0f5f5c;
 }
 
 .explicar-passagem .btn-copy {
-  background: rgba(111, 29, 27, 0.08);
-  border: 1px solid rgba(111, 29, 27, 0.16);
+  background: rgba(15, 95, 92, 0.08);
+  border: 1px solid rgba(15, 95, 92, 0.16);
   padding: 0.6rem 1rem;
   border-radius: 14px;
   cursor: pointer;
   font-size: 0.9rem;
   transition: all 0.2s ease;
-  color: #6f1d1b;
+  color: #0f5f5c;
 }
 
 .explicar-passagem .btn-copy:hover {
-  background: rgba(111, 29, 27, 0.14);
+  background: rgba(15, 95, 92, 0.14);
 }
 
 .explicar-passagem .markdown-content {
   line-height: 1.85;
-  color: #3c2419;
+  color: #1e312d;
 }
 
 .explicar-passagem .markdown-content h1,
 .explicar-passagem .markdown-content h2,
 .explicar-passagem .markdown-content h3 {
-  color: #8c2f1c;
+  color: #16766d;
   margin-top: 1.5rem;
 }
 
@@ -175,16 +175,16 @@
 }
 
 .explicar-passagem .markdown-content strong {
-  color: #4d271b;
+  color: #24413c;
 }
 
 .explicar-passagem .markdown-content blockquote {
-  border-left: 4px solid #ba4a1f;
+  border-left: 4px solid #d7644c;
   padding: 0.75rem 1rem;
   margin: 1rem 0;
-  color: #6b4a3a;
+  color: #526a64;
   font-style: italic;
-  background: rgba(255, 242, 227, 0.9);
+  background: rgba(241, 251, 247, 0.9);
   border-radius: 0 14px 14px 0;
 }
 

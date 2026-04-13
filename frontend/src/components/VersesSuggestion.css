@@ -7,12 +7,12 @@
 .search-section {
   padding: 2rem;
   border-radius: 28px;
-  color: #fff7ea;
+  color: #f7fffc;
   margin-bottom: 2rem;
   background:
-    radial-gradient(circle at top left, rgba(255, 218, 156, 0.24), transparent 24%),
-    linear-gradient(135deg, #502217 0%, #7f1d1d 58%, #c75d22 100%);
-  box-shadow: 0 24px 60px rgba(73, 28, 16, 0.18);
+    radial-gradient(circle at top left, rgba(186, 225, 213, 0.24), transparent 24%),
+    linear-gradient(135deg, #114f49 0%, #0b6a63 58%, #d56b52 100%);
+  box-shadow: 0 24px 60px rgba(8, 45, 43, 0.18);
 }
 
 .search-section h2 {
@@ -24,7 +24,7 @@
 .feature-highlight {
   margin-top: -0.2rem;
   margin-bottom: 1.4rem;
-  color: rgba(255, 244, 224, 0.92);
+  color: rgba(243, 252, 248, 0.92);
   line-height: 1.7;
 }
 
@@ -42,32 +42,32 @@
 .form-group select {
   width: 100%;
   padding: 0.85rem 1rem;
-  border: 1px solid rgba(111, 29, 27, 0.14);
+  border: 1px solid rgba(15, 95, 92, 0.14);
   border-radius: 16px;
   font-size: 1rem;
   font-family: inherit;
-  color: #2d160f;
-  background: rgba(255, 249, 240, 0.94);
+  color: #10201d;
+  background: rgba(246, 252, 248, 0.94);
 }
 
 .form-group input:focus,
 .form-group select:focus {
   outline: none;
-  border-color: rgba(246, 198, 103, 0.72);
-  box-shadow: 0 0 0 4px rgba(246, 198, 103, 0.14);
+  border-color: rgba(224, 194, 101, 0.72);
+  box-shadow: 0 0 0 4px rgba(224, 194, 101, 0.14);
 }
 
 .form-group input:disabled,
 .form-group select:disabled {
-  background-color: rgba(243, 232, 219, 0.85);
+  background-color: rgba(228, 242, 235, 0.85);
   cursor: not-allowed;
 }
 
 .btn-search {
   width: 100%;
   padding: 0.9rem 1.5rem;
-  background: linear-gradient(135deg, #fff3dd 0%, #f6c667 100%);
-  color: #5a2618;
+  background: linear-gradient(135deg, #f5fbf7 0%, #e0c265 100%);
+  color: #174b45;
   border: none;
   border-radius: 16px;
   font-size: 1rem;
@@ -78,7 +78,7 @@
 
 .btn-search:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 16px 30px rgba(44, 17, 10, 0.18);
+  box-shadow: 0 16px 30px rgba(8, 45, 43, 0.18);
 }
 
 .btn-search:disabled {
@@ -87,15 +87,15 @@
 }
 
 .results-section {
-  background: rgba(255, 251, 245, 0.9);
-  border: 1px solid rgba(111, 29, 27, 0.1);
+  background: rgba(248, 252, 250, 0.9);
+  border: 1px solid rgba(15, 95, 92, 0.1);
   border-radius: 28px;
   padding: 2rem;
-  box-shadow: 0 18px 42px rgba(78, 33, 20, 0.09);
+  box-shadow: 0 18px 42px rgba(8, 45, 43, 0.09);
 }
 
 .results-section h3 {
-  color: #6f1d1b;
+  color: #0f5f5c;
   margin-top: 0;
 }
 
@@ -105,28 +105,28 @@
 }
 
 .verso-card {
-  border: 1px solid rgba(177, 88, 38, 0.16);
+  border: 1px solid rgba(216, 132, 89, 0.16);
   padding: 1.35rem;
-  background: linear-gradient(180deg, rgba(255, 253, 250, 0.96) 0%, rgba(252, 244, 234, 0.96) 100%);
+  background: linear-gradient(180deg, rgba(250, 254, 252, 0.96) 0%, rgba(242, 250, 246, 0.96) 100%);
   border-radius: 22px;
   transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
 }
 
 .verso-card:hover {
   transform: translateY(-2px);
-  border-color: rgba(177, 88, 38, 0.32);
-  box-shadow: 0 16px 28px rgba(111, 29, 27, 0.1);
+  border-color: rgba(216, 132, 89, 0.32);
+  box-shadow: 0 16px 28px rgba(15, 95, 92, 0.1);
 }
 
 .verso-ref {
   font-weight: 800;
-  color: #8c2f1c;
+  color: #16766d;
   font-size: 1.08rem;
   margin-bottom: 0.45rem;
 }
 
 .verso-text {
-  color: #5b3a2e;
+  color: #48655e;
   line-height: 1.75;
   margin: 0.5rem 0;
   font-style: italic;
@@ -134,8 +134,8 @@
 
 .verso-version {
   display: inline-block;
-  background: rgba(111, 29, 27, 0.08);
-  color: #8c2f1c;
+  background: rgba(15, 95, 92, 0.08);
+  color: #16766d;
   padding: 0.28rem 0.8rem;
   border-radius: 999px;
   font-size: 0.84rem;

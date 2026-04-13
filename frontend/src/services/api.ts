@@ -4,8 +4,8 @@ import type { WorkspaceSession, WorkspaceSnapshot } from "../types/workspace";
 
 const normalizedApiBaseUrl = API_BASE_URL.replace(/\/$/, "");
 const apiBaseUrl = normalizedApiBaseUrl
-  ? normalizedApiBaseUrl.endsWith("/api")
-    ? normalizedApiBaseUrl
+  ?normalizedApiBaseUrl.endsWith("/api")
+    ?normalizedApiBaseUrl
     : `${normalizedApiBaseUrl}/api`
   : "/api";
 

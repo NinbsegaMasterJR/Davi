@@ -33,18 +33,18 @@ export const TheologicalAnalysis: React.FC = () => {
   const { draftUpdatedAt, hasDraft, clearSavedDraft } = useToolDraft({
     toolId: "analysis",
     toolLabel: "Análise",
-    title: tema.trim() ? `Análise: ${tema}` : "Análise em andamento",
-    summary: `${profundidade} | ${versaoBiblica}${passagem ? ` | ${passagem}` : ""}`,
+    title: tema.trim() ?`Análise: ${tema}` : "Análise em andamento",
+    summary: `${profundidade} | ${versaoBiblica}${passagem ?` | ${passagem}` : ""}`,
     values: draftValues,
     onRestore: (draft) => {
-      setTema(typeof draft.tema === "string" ? draft.tema : "");
-      setPassagem(typeof draft.passagem === "string" ? draft.passagem : "");
+      setTema(typeof draft.tema === "string" ?draft.tema : "");
+      setPassagem(typeof draft.passagem === "string" ?draft.passagem : "");
       setProfundidade(
-        typeof draft.profundidade === "string" ? draft.profundidade : "medio",
+        typeof draft.profundidade === "string" ?draft.profundidade : "medio",
       );
       setVersaoBiblica(
         typeof draft.versaoBiblica === "string"
-          ? (draft.versaoBiblica as BibleVersion)
+          ?(draft.versaoBiblica as BibleVersion)
           : "ARA",
       );
     },
@@ -67,6 +67,24 @@ export const TheologicalAnalysis: React.FC = () => {
       tema: "Esperança da volta de Cristo",
       passagem: "1 Tessalonicenses 4:13-18",
       profundidade: "medio",
+    },
+    {
+      label: "EBD",
+      tema: "Dons espirituais e edificação da igreja",
+      passagem: "1 Coríntios 12",
+      profundidade: "medio",
+    },
+    {
+      label: "Discipulado",
+      tema: "Nova vida em Cristo",
+      passagem: "Efésios 4:17-32",
+      profundidade: "basico",
+    },
+    {
+      label: "Formação de líderes",
+      tema: "Caráter pastoral e serviço",
+      passagem: "1 Pedro 5:1-4",
+      profundidade: "avancado",
     },
   ];
 
@@ -91,7 +109,7 @@ export const TheologicalAnalysis: React.FC = () => {
         toolLabel: "Análise",
         title: `Análise: ${tema}`,
         query: tema,
-        summary: `${profundidade} • ${versaoBiblica}${passagem ? ` • ${passagem}` : ""}`,
+        summary: `${profundidade} • ${versaoBiblica}${passagem ?` • ${passagem}` : ""}`,
         content: response.data.analise,
         contentType: "markdown",
       });
@@ -228,11 +246,11 @@ export const TheologicalAnalysis: React.FC = () => {
           disabled={carregando}
           className="btn-primary"
         >
-          {carregando ? "Analisando tema..." : "Gerar Análise"}
+          {carregando ?"Analisando tema..." : "Gerar Análise"}
         </button>
 
         <div className="tool-feedback-stack" aria-live="polite">
-          {carregando ? (
+          {carregando ?(
             <div className="tool-state-card loading">
               <span className="tool-state-kicker">Análise em andamento</span>
               <strong>Organizando contexto, interpretação e aplicação</strong>
@@ -246,14 +264,14 @@ export const TheologicalAnalysis: React.FC = () => {
                 <span>Aplicação pastoral</span>
               </div>
             </div>
-          ) : !resultado ? (
+          ) : !resultado ?(
             <div className="tool-state-card empty">
               <span className="tool-state-kicker">
-                {jaGerou ? "Pronto para aprofundar de novo" : "Antes de analisar"}
+                {jaGerou ?"Pronto para aprofundar de novo" : "Antes de analisar"}
               </span>
               <strong>
                 {jaGerou
-                  ? "Ajuste profundidade, tema ou passagem e gere uma nova leitura."
+                  ?"Ajuste profundidade, tema ou passagem e gere uma nova leitura."
                   : "Escolha um tema teológico claro e, se puder, uma passagem de apoio."}
               </strong>
               <p>

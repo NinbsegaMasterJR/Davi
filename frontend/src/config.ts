@@ -20,7 +20,7 @@ function resolveApiBaseUrl(): string {
 
 function buildEndpoint(path: string): string {
   const apiBaseUrl = resolveApiBaseUrl();
-  return apiBaseUrl ? `${apiBaseUrl}${path}` : path;
+  return apiBaseUrl ?`${apiBaseUrl}${path}` : path;
 }
 
 const API_BASE_URL = resolveApiBaseUrl();

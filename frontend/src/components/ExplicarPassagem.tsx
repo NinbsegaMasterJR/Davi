@@ -30,15 +30,15 @@ export const ExplicarPassagem: React.FC = () => {
     toolId: "explain",
     toolLabel: "Passagem",
     title: referencia.trim()
-      ? `Passagem: ${referencia}`
+      ?`Passagem: ${referencia}`
       : "Explicação de passagem em andamento",
     summary: `Explicação em ${versaoBiblica}`,
     values: draftValues,
     onRestore: (draft) => {
-      setReferencia(typeof draft.referencia === "string" ? draft.referencia : "");
+      setReferencia(typeof draft.referencia === "string" ?draft.referencia : "");
       setVersaoBiblica(
         typeof draft.versaoBiblica === "string"
-          ? (draft.versaoBiblica as BibleVersion)
+          ?(draft.versaoBiblica as BibleVersion)
           : "ARA",
       );
     },
@@ -169,11 +169,11 @@ export const ExplicarPassagem: React.FC = () => {
           disabled={carregando}
           className="btn-primary"
         >
-          {carregando ? "Explicando texto..." : "Explicar Passagem"}
+          {carregando ?"Explicando texto..." : "Explicar Passagem"}
         </button>
 
         <div className="tool-feedback-stack" aria-live="polite">
-          {carregando ? (
+          {carregando ?(
             <div className="tool-state-card loading">
               <span className="tool-state-kicker">Explicando passagem</span>
               <strong>Lendo o texto com foco em contexto e aplicação</strong>
@@ -187,14 +187,14 @@ export const ExplicarPassagem: React.FC = () => {
                 <span>Aplicação</span>
               </div>
             </div>
-          ) : !resultado ? (
+          ) : !resultado ?(
             <div className="tool-state-card empty">
               <span className="tool-state-kicker">
-                {jaGerou ? "Pronto para outra leitura" : "Antes de explicar"}
+                {jaGerou ?"Pronto para outra leitura" : "Antes de explicar"}
               </span>
               <strong>
                 {jaGerou
-                  ? "Experimente outra passagem ou versão bíblica para comparar a leitura."
+                  ?"Experimente outra passagem ou versão bíblica para comparar a leitura."
                   : "Digite uma referência clara, de preferência com livro, capítulo e versículo."}
               </strong>
               <p>

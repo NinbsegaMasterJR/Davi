@@ -123,12 +123,12 @@ export const About: React.FC<AboutProps> = ({ onBackHome, githubUrl }) => {
                   className="faq-question"
                   aria-expanded={expandedFaq === index}
                   onClick={() =>
-                    setExpandedFaq(expandedFaq === index ? null : index)
+                    setExpandedFaq(expandedFaq === index ?null : index)
                   }
                 >
                   <span>{faq.pergunta}</span>
                   <span
-                    className={`arrow ${expandedFaq === index ? "open" : ""}`}
+                    className={`arrow ${expandedFaq === index ?"open" : ""}`}
                   >
                     v
                   </span>

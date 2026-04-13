@@ -1,11 +1,24 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useApp } from "../context/AppContext";
+import type { SavedDocument } from "../types/library";
 import { downloadContent } from "../utils/fileExport";
 import { ResultPanel } from "./ResultPanel";
 
 export const LibraryPanel: React.FC = () => {
-  const { library, drafts, toggleFavorite, removeDocument, clearLibrary } = useApp();
-  const [selectedId, setSelectedId] = useState<string | null>(library[0]?.id ?? null);
+  const {
+    library,
+    drafts,
+    toggleFavorite,
+    removeDocument,
+    clearLibrary,
+    importLibraryBackup,
+    showSuccess,
+    showError,
+  } = useApp();
+  const importInputRef = useRef<HTMLInputElement | null>(null);
+  const [selectedId, setSelectedId] = useState<string | null>(
+    library[0]?.id ?? null,
+  );
   const [mode, setMode] = useState<"recent" | "favorites">("recent");
   const [searchQuery, setSearchQuery] = useState("");
   const [toolFilter, setToolFilter] = useState<string>("all");
@@ -35,7 +48,7 @@ export const LibraryPanel: React.FC = () => {
   const visibleItems = useMemo(() => {
     const normalizedSearch = searchQuery.trim().toLowerCase();
     let items =
-      mode === "favorites" ? library.filter((item) => item.favorite) : library;
+      mode === "favorites" ?library.filter((item) => item.favorite) : library;
 
     if (toolFilter !== "all") {
       items = items.filter((item) => item.toolId === toolFilter);
@@ -90,6 +103,40 @@ export const LibraryPanel: React.FC = () => {
     );
   };
 
+  const handleImportLibrary = async (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const file = event.target.files?.[0];
+    event.target.value = "";
+
+    if (!file) {
+      return;
+    }
+
+    try {
+      const content = await file.text();
+      const parsed = JSON.parse(content) as
+        | { library?: SavedDocument[] }
+        | SavedDocument[];
+      const documents = Array.isArray(parsed) ? parsed : parsed.library;
+
+      if (!Array.isArray(documents)) {
+        showError("Arquivo inválido. Exporte a biblioteca em .json e tente novamente.");
+        return;
+      }
+
+      const importedCount = importLibraryBackup(documents, "merge");
+      showSuccess(
+        importedCount > 0
+          ? `${importedCount} item(ns) importado(s) para a biblioteca.`
+          : "Nenhum item válido foi encontrado no arquivo.",
+      );
+    } catch (error) {
+      void error;
+      showError("Não foi possível importar este backup.");
+    }
+  };
+
   return (
     <section className="library-panel" id="biblioteca-local">
       <div className="library-header">
@@ -104,14 +151,14 @@ export const LibraryPanel: React.FC = () => {
         <div className="library-controls">
           <button
             type="button"
-            className={`library-filter ${mode === "recent" ? "active" : ""}`}
+            className={`library-filter ${mode === "recent" ?"active" : ""}`}
             onClick={() => setMode("recent")}
           >
             Recentes
           </button>
           <button
             type="button"
-            className={`library-filter ${mode === "favorites" ? "active" : ""}`}
+            className={`library-filter ${mode === "favorites" ?"active" : ""}`}
             onClick={() => setMode("favorites")}
           >
             Favoritos
@@ -119,6 +166,20 @@ export const LibraryPanel: React.FC = () => {
           <button type="button" className="library-clear" onClick={handleExportLibrary}>
             Exportar .json
           </button>
+          <button
+            type="button"
+            className="library-clear"
+            onClick={() => importInputRef.current?.click()}
+          >
+            Importar .json
+          </button>
+          <input
+            ref={importInputRef}
+            type="file"
+            accept="application/json,.json"
+            className="library-import-input"
+            onChange={(event) => void handleImportLibrary(event)}
+          />
           <button type="button" className="library-clear" onClick={handleClearLibrary}>
             Limpar tudo
           </button>
@@ -141,7 +202,7 @@ export const LibraryPanel: React.FC = () => {
           <strong>{drafts.length}</strong>
           <small>
             {latestDraft
-              ? `Último: ${latestDraft.toolLabel}`
+              ?`Último: ${latestDraft.toolLabel}`
               : "Nenhum formulário salvo no momento"}
           </small>
         </div>
@@ -192,16 +253,16 @@ export const LibraryPanel: React.FC = () => {
         </div>
       </div>
 
-      {visibleItems.length === 0 ? (
+      {visibleItems.length === 0 ?(
         <div className="library-empty">
           <h3>
             {library.length === 0
-              ? "Nada salvo ainda"
+              ?"Nada salvo ainda"
               : "Nenhum item corresponde ao filtro atual"}
           </h3>
           <p>
             {library.length === 0
-              ? "Gere um esboço, uma análise ou uma lista de versículos e o conteúdo aparecerá aqui automaticamente."
+              ?"Gere um esboço, uma análise ou uma lista de versículos e o conteúdo aparecerá aqui automaticamente."
               : "Ajuste a busca, troque a ferramenta ou volte para recentes para enxergar mais itens."}
           </p>
         </div>
@@ -212,7 +273,7 @@ export const LibraryPanel: React.FC = () => {
               <button
                 key={item.id}
                 type="button"
-                className={`library-item ${selected?.id === item.id ? "active" : ""}`}
+                className={`library-item ${selected?.id === item.id ?"active" : ""}`}
                 onClick={() => setSelectedId(item.id)}
               >
                 <span className="library-item-tool">{item.toolLabel}</span>
@@ -232,7 +293,7 @@ export const LibraryPanel: React.FC = () => {
             <div className="library-preview">
               <div className="library-preview-actions">
                 <button type="button" className="btn-copy" onClick={() => toggleFavorite(selected.id)}>
-                  {selected.favorite ? "Remover favorito" : "Favoritar"}
+                  {selected.favorite ?"Remover favorito" : "Favoritar"}
                 </button>
                 <button type="button" className="btn-copy" onClick={() => removeDocument(selected.id)}>
                   Excluir

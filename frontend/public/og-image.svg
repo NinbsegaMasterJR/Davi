@@ -3,29 +3,29 @@
   <desc id="desc">Imagem de compartilhamento do Scriptura.</desc>
   <defs>
     <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
-      <stop offset="0" stop-color="#2f120d" />
-      <stop offset="0.52" stop-color="#6f1d1b" />
-      <stop offset="1" stop-color="#cf7230" />
+      <stop offset="0" stop-color="#0b3432" />
+      <stop offset="0.52" stop-color="#0f5f5c" />
+      <stop offset="1" stop-color="#d88459" />
     </linearGradient>
     <linearGradient id="paper" x1="0" x2="1" y1="0" y2="1">
-      <stop offset="0" stop-color="#fff8eb" />
-      <stop offset="1" stop-color="#f7d48f" />
+      <stop offset="0" stop-color="#f7fffc" />
+      <stop offset="1" stop-color="#f0d98a" />
     </linearGradient>
   </defs>
   <rect width="1200" height="630" fill="url(#bg)" />
-  <path d="M0 462C130 406 258 392 383 420C539 454 674 547 846 520C988 498 1094 422 1200 410V630H0Z" fill="#fff8eb" opacity="0.1" />
-  <rect x="74" y="76" width="1052" height="478" rx="34" fill="#fff8eb" opacity="0.08" stroke="#f7d48f" stroke-opacity="0.28" />
+  <path d="M0 462C130 406 258 392 383 420C539 454 674 547 846 520C988 498 1094 422 1200 410V630H0Z" fill="#f7fffc" opacity="0.1" />
+  <rect x="74" y="76" width="1052" height="478" rx="34" fill="#f7fffc" opacity="0.08" stroke="#7ac7ab" stroke-opacity="0.28" />
   <g transform="translate(120 124)">
     <rect width="136" height="136" rx="28" fill="url(#paper)" />
-    <path d="M42 41H94C104 41 112 49 112 59V100C112 106 107 111 101 111H42C34 111 28 105 28 97V55C28 47 34 41 42 41Z" fill="#6f1d1b" opacity="0.94" />
-    <path d="M44 58H91M44 75H98M44 92H82" stroke="#fff8eb" stroke-width="8" stroke-linecap="round" opacity="0.92" />
+    <path d="M42 41H94C104 41 112 49 112 59V100C112 106 107 111 101 111H42C34 111 28 105 28 97V55C28 47 34 41 42 41Z" fill="#0f5f5c" opacity="0.94" />
+    <path d="M44 58H91M44 75H98M44 92H82" stroke="#f7fffc" stroke-width="8" stroke-linecap="round" opacity="0.92" />
   </g>
-  <text x="120" y="330" fill="#fff8eb" font-family="Georgia, serif" font-size="94" font-weight="700">Scriptura</text>
-  <text x="124" y="398" fill="#ffe5bc" font-family="Arial, sans-serif" font-size="34" font-weight="700">Preparo biblico com apoio inteligente</text>
-  <text x="124" y="462" fill="#fff8eb" opacity="0.9" font-family="Arial, sans-serif" font-size="28">Esbocos, estudos, cronogramas e materiais pastorais com revisao criteriosa.</text>
-  <g fill="#f7d48f" font-family="Arial, sans-serif" font-size="22" font-weight="700">
-    <text x="124" y="516">Sem cadastro obrigatorio</text>
+  <text x="120" y="330" fill="#f7fffc" font-family="Georgia, serif" font-size="94" font-weight="700">Scriptura</text>
+  <text x="124" y="398" fill="#dff5ed" font-family="Arial, sans-serif" font-size="34" font-weight="700">Preparo bíblico com apoio inteligente</text>
+  <text x="124" y="462" fill="#f7fffc" opacity="0.9" font-family="Arial, sans-serif" font-size="28">Esboços, estudos, cronogramas e materiais pastorais com revisão criteriosa.</text>
+  <g fill="#f0d98a" font-family="Arial, sans-serif" font-size="22" font-weight="700">
+    <text x="124" y="516">Sem cadastro obrigatório</text>
     <text x="410" y="516">Biblioteca local</text>
-    <text x="650" y="516">Conferencia biblica</text>
+    <text x="650" y="516">Conferência bíblica</text>
   </g>
 </svg>

@@ -1,0 +1,39 @@
+{
+  "name": "Scriptura",
+  "short_name": "Scriptura",
+  "description": "Preparo bíblico com apoio inteligente, biblioteca local e revisão criteriosa.",
+  "start_url": "/#/inicio",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#eaf4ef",
+  "theme_color": "#0f5f5c",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Criar esboço",
+      "short_name": "Esboço",
+      "url": "/#/app/outline",
+      "description": "Abrir o gerador de esboço"
+    },
+    {
+      "name": "Explicar passagem",
+      "short_name": "Passagem",
+      "url": "/#/app/explain",
+      "description": "Abrir explicação de passagem"
+    },
+    {
+      "name": "Versículos por tema",
+      "short_name": "Versículos",
+      "url": "/#/app/verses",
+      "description": "Buscar versículos por tema"
+    }
+  ]
+}

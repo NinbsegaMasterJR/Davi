@@ -347,13 +347,13 @@ export const WorkspaceSyncPanel: React.FC<WorkspaceSyncPanelProps> = ({
         <div className="workspace-sync-badges">
           <span className="workspace-sync-badge">
             {checkingStatus
-              ? "Verificando nuvem"
+              ?"Verificando nuvem"
               : configured
-                ? "Nuvem ativa"
+                ?"Nuvem ativa"
                 : "Nuvem indisponível"}
           </span>
           <span className="workspace-sync-badge muted">
-            {session ? "Sessão conectada" : "Sem sessão"}
+            {session ?"Sessão conectada" : "Sem sessão"}
           </span>
         </div>
       </div>
@@ -365,7 +365,7 @@ export const WorkspaceSyncPanel: React.FC<WorkspaceSyncPanelProps> = ({
             <strong>{statusText}</strong>
             <p>
               {session
-                ? `Workspace ativo: ${session.displayName} (${session.workspaceId}).`
+                ?`Workspace ativo: ${session.displayName} (${session.workspaceId}).`
                 : "Crie um workspace sincronizado ou entre com um Workspace ID já existente."}
             </p>
           </div>
@@ -383,7 +383,7 @@ export const WorkspaceSyncPanel: React.FC<WorkspaceSyncPanelProps> = ({
               <span>Última sync</span>
               <strong>
                 {lastSyncAt
-                  ? new Date(lastSyncAt).toLocaleString("pt-BR")
+                  ?new Date(lastSyncAt).toLocaleString("pt-BR")
                   : "Ainda não sincronizado"}
               </strong>
             </div>
@@ -402,7 +402,7 @@ export const WorkspaceSyncPanel: React.FC<WorkspaceSyncPanelProps> = ({
               }}
               disabled={!session || !configured || syncing || busy}
             >
-              {syncing ? "Sincronizando..." : "Sincronizar agora"}
+              {syncing ?"Sincronizando..." : "Sincronizar agora"}
             </button>
             <button
               type="button"
@@ -442,21 +442,21 @@ export const WorkspaceSyncPanel: React.FC<WorkspaceSyncPanelProps> = ({
           <div className="workspace-sync-tabs">
             <button
               type="button"
-              className={`workspace-sync-tab ${mode === "create" ? "active" : ""}`}
+              className={`workspace-sync-tab ${mode === "create" ?"active" : ""}`}
               onClick={() => setMode("create")}
             >
               Criar workspace
             </button>
             <button
               type="button"
-              className={`workspace-sync-tab ${mode === "login" ? "active" : ""}`}
+              className={`workspace-sync-tab ${mode === "login" ?"active" : ""}`}
               onClick={() => setMode("login")}
             >
               Entrar
             </button>
           </div>
 
-          {mode === "create" ? (
+          {mode === "create" ?(
             <div className="workspace-sync-form">
               <div className="form-group">
                 <label htmlFor="workspace-name">Nome do workspace</label>
@@ -488,7 +488,7 @@ export const WorkspaceSyncPanel: React.FC<WorkspaceSyncPanelProps> = ({
                 onClick={() => void handleCreateWorkspace()}
                 disabled={busy || !configured}
               >
-                {busy ? "Criando..." : "Criar e conectar"}
+                {busy ?"Criando..." : "Criar e conectar"}
               </button>
             </div>
           ) : (
@@ -523,7 +523,7 @@ export const WorkspaceSyncPanel: React.FC<WorkspaceSyncPanelProps> = ({
                 onClick={() => void handleLoginWorkspace()}
                 disabled={busy || !configured}
               >
-                {busy ? "Entrando..." : "Entrar no workspace"}
+                {busy ?"Entrando..." : "Entrar no workspace"}
               </button>
             </div>
           )}

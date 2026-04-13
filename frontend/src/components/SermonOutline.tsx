@@ -33,20 +33,20 @@ export const SermonOutline: React.FC = () => {
   const { draftUpdatedAt, hasDraft, clearSavedDraft } = useToolDraft({
     toolId: "outline",
     toolLabel: "Esboço",
-    title: tema.trim() ? `Esboço: ${tema}` : "Esboço em andamento",
+    title: tema.trim() ?`Esboço: ${tema}` : "Esboço em andamento",
     summary: `${estilo} | ${duracao} min | ${versaoBiblica}`,
     values: draftValues,
     onRestore: (draft) => {
-      setTema(typeof draft.tema === "string" ? draft.tema : "");
-      setEstilo(typeof draft.estilo === "string" ? draft.estilo : "Arminiana");
+      setTema(typeof draft.tema === "string" ?draft.tema : "");
+      setEstilo(typeof draft.estilo === "string" ?draft.estilo : "Arminiana");
       setDuracao(
         typeof draft.duracao === "number"
-          ? draft.duracao
+          ?draft.duracao
           : Number(draft.duracao) || 30,
       );
       setVersaoBiblica(
         typeof draft.versaoBiblica === "string"
-          ? (draft.versaoBiblica as BibleVersion)
+          ?(draft.versaoBiblica as BibleVersion)
           : "ARA",
       );
     },
@@ -69,6 +69,24 @@ export const SermonOutline: React.FC = () => {
       tema: "Chamado e identidade em Cristo",
       estilo: "Arminiana",
       duracao: 30,
+    },
+    {
+      label: "Devocional",
+      tema: "Descanso em Deus em dias de ansiedade",
+      estilo: "Arminiana",
+      duracao: 18,
+    },
+    {
+      label: "GCEU / célula",
+      tema: "Comunhão que gera cuidado",
+      estilo: "Arminio-Wesleyana",
+      duracao: 25,
+    },
+    {
+      label: "Série de 4 semanas",
+      tema: "Discipulado que transforma a rotina",
+      estilo: "Arminiana",
+      duracao: 35,
     },
   ];
 
@@ -236,11 +254,11 @@ export const SermonOutline: React.FC = () => {
         />
 
         <button onClick={gerar} disabled={carregando} className="btn-primary">
-          {carregando ? "Gerando estrutura..." : "Gerar Esboço"}
+          {carregando ?"Gerando estrutura..." : "Gerar Esboço"}
         </button>
 
         <div className="tool-feedback-stack" aria-live="polite">
-          {carregando ? (
+          {carregando ?(
             <div className="tool-state-card loading">
               <span className="tool-state-kicker">Gerando esboço</span>
               <strong>Montando a estrutura principal da mensagem</strong>
@@ -254,14 +272,14 @@ export const SermonOutline: React.FC = () => {
                 <span>Exegese e aplicação</span>
               </div>
             </div>
-          ) : !resultado ? (
+          ) : !resultado ?(
             <div className="tool-state-card empty">
               <span className="tool-state-kicker">
-                {jaGerou ? "Pronto para nova tentativa" : "Antes de gerar"}
+                {jaGerou ?"Pronto para nova tentativa" : "Antes de gerar"}
               </span>
               <strong>
                 {jaGerou
-                  ? "Você pode ajustar o tema e gerar novamente."
+                  ?"Você pode ajustar o tema e gerar novamente."
                   : "Defina o tema, a linha teológica, a duração e a versão bíblica."}
               </strong>
               <p>

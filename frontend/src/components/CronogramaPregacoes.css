@@ -6,23 +6,23 @@
 
 .cronograma-pregacoes .input-section {
   background:
-    radial-gradient(circle at top left, rgba(255, 220, 162, 0.18), transparent 24%),
-    linear-gradient(135deg, rgba(255, 252, 247, 0.95) 0%, rgba(247, 237, 222, 0.94) 100%);
+    radial-gradient(circle at top left, rgba(186, 225, 213, 0.18), transparent 24%),
+    linear-gradient(135deg, rgba(248, 253, 250, 0.95) 0%, rgba(232, 244, 238, 0.94) 100%);
   border-radius: 28px;
   padding: 2rem;
-  box-shadow: 0 18px 42px rgba(78, 33, 20, 0.09);
+  box-shadow: 0 18px 42px rgba(8, 45, 43, 0.09);
   margin-bottom: 2rem;
-  border: 1px solid rgba(111, 29, 27, 0.1);
+  border: 1px solid rgba(15, 95, 92, 0.1);
 }
 
 .cronograma-pregacoes h2 {
   margin: 0 0 0.5rem 0;
   font-size: 1.8rem;
-  color: #6f1d1b;
+  color: #0f5f5c;
 }
 
 .cronograma-pregacoes .subtitle {
-  color: #6b4a3a;
+  color: #526a64;
   margin: 0 0 1.5rem 0;
   font-size: 0.98rem;
   line-height: 1.7;
@@ -48,37 +48,37 @@
 .cronograma-pregacoes .form-group label {
   font-weight: 700;
   margin-bottom: 0.5rem;
-  color: #3c2419;
+  color: #1e312d;
 }
 
 .label-hint {
   font-weight: 400;
-  color: #8c6a58;
+  color: #738a84;
   font-size: 0.85rem;
 }
 
 .cronograma-pregacoes .form-group input,
 .cronograma-pregacoes .form-group select {
   padding: 0.85rem 1rem;
-  border: 1px solid rgba(111, 29, 27, 0.14);
+  border: 1px solid rgba(15, 95, 92, 0.14);
   border-radius: 16px;
   font-size: 1rem;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
   box-sizing: border-box;
-  background: rgba(255, 253, 249, 0.96);
-  color: #2d160f;
+  background: rgba(250, 254, 252, 0.96);
+  color: #10201d;
 }
 
 .cronograma-pregacoes .form-group input:focus,
 .cronograma-pregacoes .form-group select:focus {
   outline: none;
-  border-color: rgba(178, 58, 36, 0.45);
-  box-shadow: 0 0 0 4px rgba(178, 58, 36, 0.1);
+  border-color: rgba(200, 80, 63, 0.45);
+  box-shadow: 0 0 0 4px rgba(200, 80, 63, 0.1);
 }
 
 .cronograma-pregacoes .btn-primary {
-  background: linear-gradient(135deg, #7f1d1d 0%, #ba4a1f 100%);
-  color: #fff7ea;
+  background: linear-gradient(135deg, #0b6a63 0%, #d7644c 100%);
+  color: #f7fffc;
   border: none;
   padding: 0.95rem 2rem;
   border-radius: 16px;
@@ -91,7 +91,7 @@
 
 .cronograma-pregacoes .btn-primary:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 14px 30px rgba(111, 29, 27, 0.18);
+  box-shadow: 0 14px 30px rgba(15, 95, 92, 0.18);
 }
 
 .cronograma-pregacoes .btn-primary:disabled {
@@ -100,11 +100,11 @@
 }
 
 .cronograma-pregacoes .result-section {
-  background: rgba(255, 251, 245, 0.9);
+  background: rgba(248, 252, 250, 0.9);
   border-radius: 28px;
   padding: 2rem;
-  box-shadow: 0 18px 42px rgba(78, 33, 20, 0.09);
-  border: 1px solid rgba(111, 29, 27, 0.1);
+  box-shadow: 0 18px 42px rgba(8, 45, 43, 0.09);
+  border: 1px solid rgba(15, 95, 92, 0.1);
 }
 
 .cronograma-pregacoes .result-header {
@@ -115,45 +115,45 @@
   flex-wrap: wrap;
   gap: 1rem;
   padding-bottom: 1rem;
-  border-bottom: 1px solid rgba(111, 29, 27, 0.1);
+  border-bottom: 1px solid rgba(15, 95, 92, 0.1);
 }
 
 .cronograma-pregacoes .result-header h3 {
   margin: 0;
   font-size: 1.3rem;
-  color: #6f1d1b;
+  color: #0f5f5c;
 }
 
 .cronograma-pregacoes .btn-copy {
-  background: rgba(111, 29, 27, 0.08);
-  border: 1px solid rgba(111, 29, 27, 0.16);
+  background: rgba(15, 95, 92, 0.08);
+  border: 1px solid rgba(15, 95, 92, 0.16);
   padding: 0.6rem 1rem;
   border-radius: 14px;
   cursor: pointer;
   font-size: 0.9rem;
   transition: all 0.2s ease;
-  color: #6f1d1b;
+  color: #0f5f5c;
 }
 
 .cronograma-pregacoes .btn-copy:hover {
-  background: rgba(111, 29, 27, 0.14);
+  background: rgba(15, 95, 92, 0.14);
 }
 
 .cronograma-pregacoes .markdown-content {
   line-height: 1.85;
-  color: #3c2419;
+  color: #1e312d;
 }
 
 .cronograma-pregacoes .markdown-content h1,
 .cronograma-pregacoes .markdown-content h2 {
-  color: #8c2f1c;
+  color: #16766d;
   margin-top: 1.5rem;
-  border-bottom: 1px solid rgba(177, 88, 38, 0.16);
+  border-bottom: 1px solid rgba(216, 132, 89, 0.16);
   padding-bottom: 0.5rem;
 }
 
 .cronograma-pregacoes .markdown-content h3 {
-  color: #9d4b21;
+  color: #5f7f47;
   margin-top: 1.2rem;
 }
 
@@ -172,15 +172,15 @@
 }
 
 .cronograma-pregacoes .markdown-content strong {
-  color: #4d271b;
+  color: #24413c;
 }
 
 .cronograma-pregacoes .markdown-content blockquote {
-  border-left: 4px solid #ba4a1f;
+  border-left: 4px solid #d7644c;
   margin: 1rem 0;
-  color: #6b4a3a;
+  color: #526a64;
   font-style: italic;
-  background: rgba(255, 242, 227, 0.9);
+  background: rgba(241, 251, 247, 0.9);
   border-radius: 0 14px 14px 0;
   padding: 0.75rem 1rem;
 }

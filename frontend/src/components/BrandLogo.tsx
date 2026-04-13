@@ -14,17 +14,17 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({ className }) => {
     >
       <defs>
         <linearGradient id="brandGlow" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#ffd27a" />
-          <stop offset="55%" stopColor="#ff7b54" />
-          <stop offset="100%" stopColor="#a61b1b" />
+          <stop offset="0%" stopColor="#f0d98a" />
+          <stop offset="55%" stopColor="#d7644c" />
+          <stop offset="100%" stopColor="#0d716b" />
         </linearGradient>
         <linearGradient id="brandCross" x1="50%" y1="0%" x2="50%" y2="100%">
-          <stop offset="0%" stopColor="#fff9e9" />
-          <stop offset="100%" stopColor="#ffd27a" />
+          <stop offset="0%" stopColor="#f7fffc" />
+          <stop offset="100%" stopColor="#f0d98a" />
         </linearGradient>
       </defs>
 
-      <circle cx="60" cy="60" r="55" fill="rgba(72,18,10,0.18)" />
+      <circle cx="60" cy="60" r="55" fill="rgba(8,45,43,0.18)" />
       <path
         d="M60 13 C69 23, 73 31, 71 40 C69 48, 63 51, 63 58 C63 66, 68 70, 72 76
            C61 73, 52 65, 50 55 C47 40, 54 25, 60 13 Z"
@@ -36,7 +36,7 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({ className }) => {
            C89 80, 68 91, 60 100
            C52 91, 31 80, 31 58
            C31 42, 44 31, 60 31 Z"
-        fill="#7f0f14"
+        fill="#0b6a63"
       />
       <path
         d="M60 39

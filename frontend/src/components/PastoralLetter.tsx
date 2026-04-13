@@ -40,30 +40,30 @@ export const PastoralLetter: React.FC = () => {
     toolId: "pastoral-letter",
     toolLabel: "Carta GCEU",
     title: tema.trim()
-      ? `Carta pastoral: ${tema}`
+      ?`Carta pastoral: ${tema}`
       : "Carta pastoral em andamento",
     summary: `${publicoAlvo} | ${versaoBiblica}`,
     values: draftValues,
     onRestore: (draft) => {
-      setTema(typeof draft.tema === "string" ? draft.tema : "");
+      setTema(typeof draft.tema === "string" ?draft.tema : "");
       setObjetivo(
         typeof draft.objetivo === "string"
-          ? draft.objetivo
+          ?draft.objetivo
           : "edificar, orientar e fortalecer a igreja",
       );
       setPublicoAlvo(
         typeof draft.publicoAlvo === "string"
-          ? draft.publicoAlvo
+          ?draft.publicoAlvo
           : "liderança, membros e cooperadores do GCEU",
       );
       setTom(
         typeof draft.tom === "string"
-          ? draft.tom
+          ?draft.tom
           : "pastoral, acolhedor e firme",
       );
       setVersaoBiblica(
         typeof draft.versaoBiblica === "string"
-          ? (draft.versaoBiblica as BibleVersion)
+          ?(draft.versaoBiblica as BibleVersion)
           : "ARA",
       );
     },
@@ -89,6 +89,27 @@ export const PastoralLetter: React.FC = () => {
       objetivo: "orientar a igreja com maturidade e clareza",
       publicoAlvo: "membros e obreiros",
       tom: "pastoral, sereno e assertivo",
+    },
+    {
+      label: "Convocação",
+      tema: "Mobilização para serviço e cuidado",
+      objetivo: "convocar a igreja para servir com unidade",
+      publicoAlvo: "líderes, voluntários e membros",
+      tom: "pastoral, encorajador e objetivo",
+    },
+    {
+      label: "Consolo",
+      tema: "Esperança em tempos difíceis",
+      objetivo: "consolar e fortalecer a fé da igreja",
+      publicoAlvo: "toda a congregação",
+      tom: "pastoral, sensível e esperançoso",
+    },
+    {
+      label: "Discipulado",
+      tema: "Compromisso com maturidade cristã",
+      objetivo: "estimular crescimento, constância e responsabilidade espiritual",
+      publicoAlvo: "membros, novos convertidos e líderes de GCEU",
+      tom: "pastoral, formativo e encorajador",
     },
   ];
 
@@ -263,11 +284,11 @@ export const PastoralLetter: React.FC = () => {
           disabled={carregando}
           className="btn-primary"
         >
-          {carregando ? "Gerando carta..." : "Gerar Carta Pastoral"}
+          {carregando ?"Gerando carta..." : "Gerar Carta Pastoral"}
         </button>
 
         <div className="tool-feedback-stack" aria-live="polite">
-          {carregando ? (
+          {carregando ?(
             <div className="tool-state-card loading">
               <span className="tool-state-kicker">Escrevendo carta</span>
               <strong>Montando um texto pastoral com tom e objetivo definidos</strong>
@@ -281,14 +302,14 @@ export const PastoralLetter: React.FC = () => {
                 <span>Base bíblica</span>
               </div>
             </div>
-          ) : !resultado ? (
+          ) : !resultado ?(
             <div className="tool-state-card empty">
               <span className="tool-state-kicker">
-                {jaGerou ? "Pronto para outra carta" : "Antes de escrever"}
+                {jaGerou ?"Pronto para outra carta" : "Antes de escrever"}
               </span>
               <strong>
                 {jaGerou
-                  ? "Ajuste o tom, o público ou o tema para gerar uma nova versão."
+                  ?"Ajuste o tom, o público ou o tema para gerar uma nova versão."
                   : "Defina o tema, o objetivo pastoral e o público para deixar a carta mais assertiva."}
               </strong>
               <p>

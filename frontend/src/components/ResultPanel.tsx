@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { useApp } from "../context/AppContext";
 import type { SavedContentType } from "../types/library";
@@ -47,6 +47,17 @@ const REFINEMENT_ACTIONS: Array<{
   },
 ];
 
+const FEEDBACK_ACTIONS: Array<{
+  action: RefinementAction;
+  label: string;
+}> = [
+  { action: "encurtar", label: "Muito longo" },
+  { action: "aprofundar", label: "Ficou raso" },
+  { action: "jovens", label: "Linguagem simples" },
+  { action: "perguntas", label: "Virar conversa em grupo" },
+  { action: "slides", label: "Quero apresentar" },
+];
+
 export const ResultPanel: React.FC<ResultPanelProps> = ({
   title,
   content,
@@ -61,6 +72,7 @@ export const ResultPanel: React.FC<ResultPanelProps> = ({
     useState<SavedContentType>(contentType);
   const [refiningAction, setRefiningAction] =
     useState<RefinementAction | null>(null);
+  const [readingModeOpen, setReadingModeOpen] = useState(false);
 
   useEffect(() => {
     setActiveContent(content);
@@ -73,6 +85,16 @@ export const ResultPanel: React.FC<ResultPanelProps> = ({
       block: "start",
     });
   }, [activeContent, title]);
+
+  const resultSections = useMemo(
+    () =>
+      activeContent
+        .split("\n")
+        .map((line) => line.match(/^#{1,3}\s+(.+)/)?.[1]?.trim())
+        .filter((line): line is string => Boolean(line))
+        .slice(0, 6),
+    [activeContent],
+  );
 
   const copyText = async () => {
     try {
@@ -114,6 +136,25 @@ export const ResultPanel: React.FC<ResultPanelProps> = ({
     const html = buildClipboardHtml(title, activeContent, activeContentType);
     downloadContent(title, html, "html");
     showSuccess("Arquivo .html baixado.");
+  };
+
+  const handleJsonDownload = () => {
+    downloadContent(
+      title,
+      JSON.stringify(
+        {
+          title,
+          content: activeContent,
+          contentType: activeContentType,
+          exportedAt: new Date().toISOString(),
+          source: "Scriptura",
+        },
+        null,
+        2,
+      ),
+      "json",
+    );
+    showSuccess("Arquivo .json baixado.");
   };
 
   const handlePrint = () => {
@@ -182,12 +223,22 @@ export const ResultPanel: React.FC<ResultPanelProps> = ({
           <button type="button" className="btn-copy" onClick={handleHtmlDownload}>
             Baixar .html
           </button>
+          <button type="button" className="btn-copy" onClick={handleJsonDownload}>
+            Baixar .json
+          </button>
           <button type="button" className="btn-copy" onClick={handlePrint}>
             Imprimir / PDF
           </button>
+          <button
+            type="button"
+            className="btn-copy"
+            onClick={() => setReadingModeOpen(true)}
+          >
+            Modo leitura
+          </button>
           {onToggleFavorite && (
             <button type="button" className="btn-copy" onClick={onToggleFavorite}>
-              {favorite ? "Remover favorito" : "Favoritar"}
+              {favorite ?"Remover favorito" : "Favoritar"}
             </button>
           )}
         </div>
@@ -197,6 +248,15 @@ export const ResultPanel: React.FC<ResultPanelProps> = ({
         <strong>Próximo passo sugerido</strong>
         Revise o texto, ajuste ao contexto da igreja e use os atalhos abaixo para copiar, exportar ou imprimir. Este resultado também fica salvo automaticamente na biblioteca local deste navegador.
       </div>
+
+      {resultSections.length > 0 && (
+        <div className="tool-result-map" aria-label="Mapa do resultado">
+          <span>Mapa rápido</span>
+          {resultSections.map((section) => (
+            <strong key={section}>{section}</strong>
+          ))}
+        </div>
+      )}
 
       <div className="tool-review-grid">
         <div className="tool-review-card strong">
@@ -220,7 +280,25 @@ export const ResultPanel: React.FC<ResultPanelProps> = ({
         <div>
           <p className="tool-result-kicker">Ajustes rápidos</p>
           <strong>Transforme este resultado em uma nova versão</strong>
+          <p>Use feedback simples para pedir outro formato sem recomeçar.</p>
         </div>
+        <div className="tool-refinement-actions">
+          {FEEDBACK_ACTIONS.map((item) => (
+            <button
+              key={item.action}
+              type="button"
+              className="btn-copy"
+              onClick={() => void handleRefine(item.action)}
+              disabled={Boolean(refiningAction)}
+            >
+              {refiningAction === item.action ?"Gerando..." : item.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <details className="tool-refinement-more">
+        <summary>Ver refinamentos clássicos</summary>
         <div className="tool-refinement-actions">
           {REFINEMENT_ACTIONS.map((item) => (
             <button
@@ -229,20 +307,48 @@ export const ResultPanel: React.FC<ResultPanelProps> = ({
               className="btn-copy"
               onClick={() => void handleRefine(item.action)}
               disabled={Boolean(refiningAction)}
+              title={item.summary}
             >
-              {refiningAction === item.action ? "Gerando..." : item.label}
+              {refiningAction === item.action ?"Gerando..." : item.label}
             </button>
           ))}
         </div>
-      </div>
+      </details>
 
       <div className="markdown-content tool-result-body" aria-live="polite">
-        {activeContentType === "markdown" ? (
+        {activeContentType === "markdown" ?(
           <ReactMarkdown>{activeContent}</ReactMarkdown>
         ) : (
           <pre>{activeContent}</pre>
         )}
       </div>
+
+      {readingModeOpen && (
+        <div className="reading-mode" role="dialog" aria-modal="true">
+          <div className="reading-mode-shell">
+            <div className="reading-mode-header">
+              <div>
+                <p className="tool-result-kicker">Modo leitura</p>
+                <h2>{title}</h2>
+              </div>
+              <button
+                type="button"
+                className="btn-copy"
+                onClick={() => setReadingModeOpen(false)}
+              >
+                Fechar
+              </button>
+            </div>
+            <div className="markdown-content reading-mode-body">
+              {activeContentType === "markdown" ?(
+                <ReactMarkdown>{activeContent}</ReactMarkdown>
+              ) : (
+                <pre>{activeContent}</pre>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

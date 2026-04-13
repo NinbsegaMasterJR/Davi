@@ -2,14 +2,14 @@
 
 ## Repositorio
 
-- GitHub: `https://github.com/NinsegaMasterJr/Gerador.P-Web`
+- GitHub: `https://github.com/NinbsegaMasterJR/Davi`
 - Projeto: `Gerador.P-Web`
 - Marca atual: `Scriptura`
 
 ## Producoes Atuais
 
-- Frontend: `https://scriptura-web.vercel.app`
-- Backend: `https://scriptura-web-api.vercel.app`
+- Frontend: `https://pregador-ia.vercel.app`
+- Backend: `https://pregador-ia-api.vercel.app`
 
 ## Enviar o Projeto para o GitHub
 
@@ -19,7 +19,7 @@ git init
 git add .
 git commit -m "Inicial: Scriptura Web"
 git branch -M main
-git remote add origin https://github.com/NinsegaMasterJr/Gerador.P-Web.git
+git remote add origin https://github.com/NinbsegaMasterJR/Davi.git
 git push -u origin main
 ```
 
@@ -28,7 +28,7 @@ git push -u origin main
 ### Frontend
 
 ```env
-VITE_API_URL=https://scriptura-web-api.vercel.app
+VITE_API_URL=https://pregador-ia-api.vercel.app
 ```
 
 ### Backend
@@ -36,13 +36,13 @@ VITE_API_URL=https://scriptura-web-api.vercel.app
 ```env
 GROQ_API_KEY=gsk_sua_chave
 NODE_ENV=production
-CORS_ORIGIN=https://scriptura-web.vercel.app
+CORS_ORIGIN=https://pregador-ia.vercel.app
 ```
 
 ## Testar
 
-1. Abra `https://scriptura-web-api.vercel.app/health`
-2. Abra `https://scriptura-web.vercel.app`
+1. Abra `https://pregador-ia-api.vercel.app/health`
+2. Abra `https://pregador-ia.vercel.app`
 3. Verifique a geracao de conteudo
 
 ## Observacao

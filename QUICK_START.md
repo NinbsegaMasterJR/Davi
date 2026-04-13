@@ -4,8 +4,8 @@ Use npm em todo o projeto. O repositorio esta fixado em `npm@11.9.0`.
 
 ## Producoes Atuais
 
-- Frontend: `https://scriptura-web.vercel.app`
-- Backend: `https://scriptura-web-api.vercel.app`
+- Frontend: `https://pregador-ia.vercel.app`
+- Backend: `https://pregador-ia-api.vercel.app`
 
 ## 1. Backend
 
@@ -35,13 +35,13 @@ npm run dev
 ## 3. Acesse
 
 - Local: `http://localhost:3000`
-- Producao: `https://scriptura-web.vercel.app`
+- Producao: `https://pregador-ia.vercel.app`
 
 ## 4. Health Check
 
 ```bash
 curl http://localhost:3001/health
-curl https://scriptura-web-api.vercel.app/health
+curl https://pregador-ia-api.vercel.app/health
 ```
 
 Resposta esperada:

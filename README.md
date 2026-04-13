@@ -4,9 +4,9 @@ Aplicacao web full-stack para preparar esbocos, estudos e materiais biblicos com
 
 ## URLs Atuais
 
-- Frontend: `https://scriptura-web.vercel.app`
-- Backend: `https://scriptura-web-api.vercel.app`
-- GitHub: `https://github.com/NinsegaMasterJr/Gerador.P-Web`
+- Frontend: `https://pregador-ia.vercel.app`
+- Backend: `https://pregador-ia-api.vercel.app`
+- GitHub: `https://github.com/NinbsegaMasterJR/Davi`
 
 ## Principais Recursos
 
@@ -78,7 +78,7 @@ npm run build
 Health check da API:
 
 ```txt
-https://scriptura-web-api.vercel.app/health
+https://pregador-ia-api.vercel.app/health
 ```
 
 Resposta esperada:
@@ -95,7 +95,7 @@ Resposta esperada:
 ### Frontend
 
 ```env
-VITE_API_URL=https://scriptura-web-api.vercel.app
+VITE_API_URL=https://pregador-ia-api.vercel.app
 ```
 
 ### Backend
@@ -103,13 +103,14 @@ VITE_API_URL=https://scriptura-web-api.vercel.app
 ```env
 GROQ_API_KEY=gsk_sua_chave
 NODE_ENV=production
-CORS_ORIGIN=https://scriptura-web.vercel.app
+CORS_ORIGIN=https://pregador-ia.vercel.app
 ```
 
 ## Deploy
 
 - Resumo rapido: [DEPLOY.md](DEPLOY.md)
 - Guia rapido: [DEPLOY_RAPIDO.md](DEPLOY_RAPIDO.md)
+- Dominio proprio: [DOMINIO_PROPRIO.md](DOMINIO_PROPRIO.md)
 - GitHub + deploy: [DEPLOY_GITHUB.md](DEPLOY_GITHUB.md)
 - Railway: [RAILWAY_DEPLOY.md](RAILWAY_DEPLOY.md)
 
@@ -118,9 +119,9 @@ Se voce publicar em outro dominio, troque `VITE_API_URL` e `CORS_ORIGIN` pelas U
 
 ## Suporte
 
-- Site: `https://scriptura-web.vercel.app`
-- API: `https://scriptura-web-api.vercel.app`
-- Issues: `https://github.com/NinsegaMasterJr/Gerador.P-Web/issues`
+- Site: `https://pregador-ia.vercel.app`
+- API: `https://pregador-ia-api.vercel.app`
+- Issues: `https://github.com/NinbsegaMasterJR/Davi/issues`
 
 ## Licenca
 

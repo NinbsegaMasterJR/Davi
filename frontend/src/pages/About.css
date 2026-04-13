@@ -7,11 +7,11 @@
   overflow: hidden;
   border-radius: 34px;
   padding: 2.6rem 2rem;
-  color: #fff6e8;
+  color: #f6fffb;
   background:
-    radial-gradient(circle at top left, rgba(247, 212, 143, 0.3), transparent 26%),
-    radial-gradient(circle at 85% 15%, rgba(255, 210, 122, 0.12), transparent 18%),
-    linear-gradient(145deg, #2f120d 0%, #612117 46%, #b14a24 100%);
+    radial-gradient(circle at top left, rgba(122, 199, 171, 0.3), transparent 26%),
+    radial-gradient(circle at 85% 15%, rgba(240, 215, 118, 0.12), transparent 18%),
+    linear-gradient(145deg, #0b3432 0%, #11605b 46%, #c95f49 100%);
   box-shadow: var(--shadow-strong);
 }
 
@@ -25,8 +25,8 @@
     linear-gradient(120deg, rgba(255, 255, 255, 0.12), transparent 32%),
     repeating-linear-gradient(
       90deg,
-      rgba(255, 245, 232, 0.04) 0,
-      rgba(255, 245, 232, 0.04) 1px,
+      rgba(245, 251, 247, 0.04) 0,
+      rgba(245, 251, 247, 0.04) 1px,
       transparent 1px,
       transparent 72px
     );
@@ -51,8 +51,8 @@
   display: grid;
   place-items: center;
   border-radius: 28px;
-  background: rgba(255, 245, 232, 0.12);
-  box-shadow: inset 0 0 0 1px rgba(255, 220, 153, 0.14);
+  background: rgba(245, 251, 247, 0.12);
+  box-shadow: inset 0 0 0 1px rgba(186, 225, 213, 0.14);
 }
 
 .about-logo {
@@ -65,8 +65,8 @@
   margin-bottom: 0.45rem;
   padding: 0.35rem 0.8rem;
   border-radius: 999px;
-  background: rgba(255, 248, 237, 0.12);
-  color: #ffe5bc;
+  background: rgba(246, 252, 248, 0.12);
+  color: #dff5ed;
   font-size: 0.78rem;
   font-weight: 800;
   letter-spacing: 0.1em;
@@ -98,8 +98,8 @@
 .about-section {
   position: relative;
   overflow: hidden;
-  background: rgba(255, 251, 245, 0.9);
-  border: 1px solid rgba(111, 29, 27, 0.1);
+  background: rgba(248, 252, 250, 0.9);
+  border: 1px solid rgba(15, 95, 92, 0.1);
   border-radius: 30px;
   padding: 1.8rem;
   box-shadow: var(--shadow-soft);
@@ -115,8 +115,8 @@
     linear-gradient(120deg, rgba(255, 255, 255, 0.14), transparent 32%),
     repeating-linear-gradient(
       90deg,
-      rgba(111, 29, 27, 0.02) 0,
-      rgba(111, 29, 27, 0.02) 1px,
+      rgba(15, 95, 92, 0.02) 0,
+      rgba(15, 95, 92, 0.02) 1px,
       transparent 1px,
       transparent 78px
     );
@@ -128,13 +128,13 @@
 }
 
 .about-section h2 {
-  color: #5f2317;
+  color: #0f5f5c;
   margin: 0.1rem 0 0.6rem;
   font-size: 2rem;
 }
 
 .about-section p {
-  color: #5b3a2e;
+  color: #48655e;
   line-height: 1.8;
 }
 
@@ -152,13 +152,13 @@
 .about-value-card {
   padding: 1.1rem 1.15rem;
   border-radius: 24px;
-  background: rgba(255, 253, 249, 0.94);
-  border: 1px solid rgba(177, 88, 38, 0.1);
+  background: rgba(250, 254, 252, 0.94);
+  border: 1px solid rgba(216, 132, 89, 0.1);
 }
 
 .about-value-card h3 {
   margin: 0 0 0.35rem;
-  color: #6f1d1b;
+  color: #0f5f5c;
 }
 
 .about-value-card p {
@@ -176,8 +176,8 @@
   text-align: center;
   padding: 1.2rem;
   border-radius: 24px;
-  background: rgba(255, 253, 249, 0.96);
-  border: 1px solid rgba(177, 88, 38, 0.1);
+  background: rgba(250, 254, 252, 0.96);
+  border: 1px solid rgba(216, 132, 89, 0.1);
 }
 
 .step-number {
@@ -186,8 +186,8 @@
   width: 52px;
   height: 52px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #5f2317 0%, #cf7230 100%);
-  color: #fff7ea;
+  background: linear-gradient(135deg, #0f5f5c 0%, #d88459 100%);
+  color: #f7fffc;
   font-size: 1.35rem;
   font-weight: 700;
   margin-bottom: 1rem;
@@ -195,7 +195,7 @@
 
 .step h3 {
   margin: 0.5rem 0 0.35rem 0;
-  color: #6f1d1b;
+  color: #0f5f5c;
   font-size: 1rem;
 }
 
@@ -204,7 +204,7 @@
 }
 
 .faq-item {
-  border-bottom: 1px solid rgba(111, 29, 27, 0.08);
+  border-bottom: 1px solid rgba(15, 95, 92, 0.08);
   padding: 0.35rem 0;
 }
 
@@ -224,19 +224,19 @@
   gap: 1rem;
   font-size: 1rem;
   font-weight: 800;
-  color: #4d271b;
+  color: #24413c;
   transition: all 0.25s ease;
   border-radius: 18px;
 }
 
 .faq-question:hover {
-  color: #8c2f1c;
-  background: rgba(111, 29, 27, 0.05);
+  color: #16766d;
+  background: rgba(15, 95, 92, 0.05);
 }
 
 .arrow {
   transition: transform 0.3s ease;
-  color: #8c2f1c;
+  color: #16766d;
 }
 
 .arrow.open {
@@ -245,7 +245,7 @@
 
 .faq-answer {
   padding: 0 1rem 1rem 1rem;
-  color: #6b4a3a;
+  color: #526a64;
   line-height: 1.7;
   animation: slideDown 0.25s ease;
 }
@@ -274,8 +274,8 @@
 
 .contact-btn {
   padding: 0.9rem 1.45rem;
-  background: linear-gradient(135deg, #5f2317 0%, #cf7230 100%);
-  color: #fff7ea;
+  background: linear-gradient(135deg, #0f5f5c 0%, #d88459 100%);
+  color: #f7fffc;
   border-radius: 999px;
   transition: all 0.25s ease;
   display: inline-block;
@@ -286,17 +286,17 @@
 
 .contact-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 14px 30px rgba(111, 29, 27, 0.18);
+  box-shadow: 0 14px 30px rgba(15, 95, 92, 0.18);
 }
 
 .contact-btn.secondary {
-  background: rgba(111, 29, 27, 0.06);
-  color: #6f1d1b;
-  border: 1px solid rgba(111, 29, 27, 0.14);
+  background: rgba(15, 95, 92, 0.06);
+  color: #0f5f5c;
+  border: 1px solid rgba(15, 95, 92, 0.14);
 }
 
 .contact-btn.secondary:hover {
-  background: rgba(111, 29, 27, 0.12);
+  background: rgba(15, 95, 92, 0.12);
   box-shadow: none;
 }
 
@@ -304,7 +304,7 @@
   text-align: center;
   padding: 1rem 0 0.25rem;
   margin-top: 1.5rem;
-  color: rgba(36, 19, 13, 0.72);
+  color: rgba(22, 38, 34, 0.72);
 }
 
 .about-footer p {

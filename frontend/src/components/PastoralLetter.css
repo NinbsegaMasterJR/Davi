@@ -7,12 +7,12 @@
 .pastoral-letter .input-section {
   padding: 2rem;
   border-radius: 28px;
-  color: #fff7ea;
+  color: #f7fffc;
   margin-bottom: 2rem;
   background:
-    radial-gradient(circle at top left, rgba(255, 215, 145, 0.22), transparent 25%),
-    linear-gradient(135deg, #482114 0%, #7f1d1d 55%, #ba4a1f 100%);
-  box-shadow: 0 24px 60px rgba(73, 28, 16, 0.18);
+    radial-gradient(circle at top left, rgba(183, 222, 210, 0.22), transparent 25%),
+    linear-gradient(135deg, #0f4642 0%, #0b6a63 55%, #d7644c 100%);
+  box-shadow: 0 24px 60px rgba(8, 45, 43, 0.18);
 }
 
 .pastoral-letter h2 {
@@ -24,7 +24,7 @@
 .pastoral-letter .subtitle {
   margin-top: 0;
   margin-bottom: 1.5rem;
-  color: rgba(255, 244, 224, 0.92);
+  color: rgba(243, 252, 248, 0.92);
   line-height: 1.7;
 }
 
@@ -42,18 +42,18 @@
 .pastoral-letter .form-group select {
   width: 100%;
   padding: 0.85rem 1rem;
-  border: 1px solid rgba(111, 29, 27, 0.16);
+  border: 1px solid rgba(15, 95, 92, 0.16);
   border-radius: 16px;
   font-size: 1rem;
-  color: #2d160f;
-  background: rgba(255, 249, 240, 0.94);
+  color: #10201d;
+  background: rgba(246, 252, 248, 0.94);
 }
 
 .pastoral-letter .form-group input:focus,
 .pastoral-letter .form-group select:focus {
   outline: none;
-  border-color: rgba(246, 198, 103, 0.72);
-  box-shadow: 0 0 0 4px rgba(246, 198, 103, 0.14);
+  border-color: rgba(224, 194, 101, 0.72);
+  box-shadow: 0 0 0 4px rgba(224, 194, 101, 0.14);
 }
 
 .pastoral-letter .form-row {
@@ -65,8 +65,8 @@
 .pastoral-letter .btn-primary {
   width: 100%;
   padding: 0.9rem 1.5rem;
-  background: linear-gradient(135deg, #fff3dd 0%, #f6c667 100%);
-  color: #5a2618;
+  background: linear-gradient(135deg, #f5fbf7 0%, #e0c265 100%);
+  color: #174b45;
   border: none;
   border-radius: 16px;
   font-size: 1rem;
@@ -77,15 +77,15 @@
 
 .pastoral-letter .btn-primary:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 16px 30px rgba(44, 17, 10, 0.18);
+  box-shadow: 0 16px 30px rgba(8, 45, 43, 0.18);
 }
 
 .pastoral-letter .result-section {
-  background: rgba(255, 251, 245, 0.9);
-  border: 1px solid rgba(111, 29, 27, 0.1);
+  background: rgba(248, 252, 250, 0.9);
+  border: 1px solid rgba(15, 95, 92, 0.1);
   border-radius: 28px;
   padding: 2rem;
-  box-shadow: 0 18px 42px rgba(78, 33, 20, 0.09);
+  box-shadow: 0 18px 42px rgba(8, 45, 43, 0.09);
 }
 
 .pastoral-letter .result-header {
@@ -98,27 +98,27 @@
 
 .pastoral-letter .result-header h3 {
   margin: 0;
-  color: #6f1d1b;
+  color: #0f5f5c;
 }
 
 .pastoral-letter .btn-copy {
   padding: 0.65rem 1rem;
-  background: rgba(111, 29, 27, 0.08);
-  color: #6f1d1b;
-  border: 1px solid rgba(111, 29, 27, 0.16);
+  background: rgba(15, 95, 92, 0.08);
+  color: #0f5f5c;
+  border: 1px solid rgba(15, 95, 92, 0.16);
   border-radius: 14px;
   cursor: pointer;
 }
 
 .pastoral-letter .markdown-content {
-  color: #3c2419;
+  color: #1e312d;
   line-height: 1.85;
 }
 
 .pastoral-letter .markdown-content h1,
 .pastoral-letter .markdown-content h2,
 .pastoral-letter .markdown-content h3 {
-  color: #8c2f1c;
+  color: #16766d;
   margin-top: 1.5rem;
   margin-bottom: 0.6rem;
 }

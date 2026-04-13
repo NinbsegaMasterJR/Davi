@@ -10,8 +10,8 @@
   overflow: hidden;
   padding: 1.8rem;
   border-radius: 30px;
-  border: 1px solid rgba(111, 29, 27, 0.1);
-  background: rgba(255, 251, 245, 0.9);
+  border: 1px solid rgba(15, 95, 92, 0.1);
+  background: rgba(248, 252, 250, 0.9);
   box-shadow: var(--shadow-soft);
 }
 
@@ -27,8 +27,8 @@
     linear-gradient(120deg, rgba(255, 255, 255, 0.14), transparent 32%),
     repeating-linear-gradient(
       90deg,
-      rgba(111, 29, 27, 0.02) 0,
-      rgba(111, 29, 27, 0.02) 1px,
+      rgba(15, 95, 92, 0.02) 0,
+      rgba(15, 95, 92, 0.02) 1px,
       transparent 1px,
       transparent 78px
     );
@@ -47,15 +47,15 @@
   gap: 1rem;
   align-items: center;
   background:
-    radial-gradient(circle at top left, rgba(247, 212, 143, 0.22), transparent 28%),
-    linear-gradient(180deg, rgba(255, 252, 247, 0.96) 0%, rgba(248, 238, 225, 0.96) 100%);
+    radial-gradient(circle at top left, rgba(122, 199, 171, 0.22), transparent 28%),
+    linear-gradient(180deg, rgba(248, 253, 250, 0.96) 0%, rgba(235, 246, 240, 0.96) 100%);
 }
 
 .contact-hero h1,
 .contact-card h2,
 .contact-roadmap h2 {
   margin: 0;
-  color: #5f2317;
+  color: #0f5f5c;
 }
 
 .contact-hero p,
@@ -63,21 +63,21 @@
 .contact-roadmap p {
   margin: 0.65rem 0 0;
   line-height: 1.75;
-  color: #5d4033;
+  color: #4b635d;
 }
 
 .contact-note {
   padding: 1.2rem;
   border-radius: 24px;
   background:
-    radial-gradient(circle at top right, rgba(247, 212, 143, 0.18), transparent 24%),
-    linear-gradient(180deg, rgba(255, 253, 249, 0.96) 0%, rgba(249, 240, 227, 0.96) 100%);
-  border: 1px solid rgba(111, 29, 27, 0.1);
+    radial-gradient(circle at top right, rgba(122, 199, 171, 0.18), transparent 24%),
+    linear-gradient(180deg, rgba(250, 254, 252, 0.96) 0%, rgba(238, 248, 243, 0.96) 100%);
+  border: 1px solid rgba(15, 95, 92, 0.1);
 }
 
 .contact-note span {
   display: inline-block;
-  color: #9a3a22;
+  color: #1d8379;
   font-size: 0.74rem;
   font-weight: 800;
   letter-spacing: 0.1em;
@@ -87,7 +87,7 @@
 .contact-note strong {
   display: block;
   margin-top: 0.4rem;
-  color: #5f2317;
+  color: #0f5f5c;
   font-size: 1.1rem;
   line-height: 1.45;
 }
@@ -104,14 +104,14 @@
 
 .contact-card:hover {
   transform: translateY(-2px);
-  border-color: rgba(178, 58, 36, 0.18);
-  box-shadow: 0 18px 30px rgba(83, 34, 22, 0.08);
+  border-color: rgba(200, 80, 63, 0.18);
+  box-shadow: 0 18px 30px rgba(8, 45, 43, 0.08);
 }
 
 .contact-card a {
   display: inline-block;
   margin-top: 1rem;
-  color: #8c2f1c;
+  color: #16766d;
   font-weight: 800;
 }
 
@@ -125,8 +125,8 @@
 .contact-roadmap-item {
   padding: 1.15rem;
   border-radius: 24px;
-  background: rgba(255, 253, 249, 0.92);
-  border: 1px solid rgba(111, 29, 27, 0.08);
+  background: rgba(250, 254, 252, 0.92);
+  border: 1px solid rgba(15, 95, 92, 0.08);
 }
 
 .contact-roadmap-item span {
@@ -135,8 +135,8 @@
   width: 2.4rem;
   height: 2.4rem;
   border-radius: 999px;
-  background: linear-gradient(135deg, #5f2317 0%, #cf7230 100%);
-  color: #fff7ea;
+  background: linear-gradient(135deg, #0f5f5c 0%, #d88459 100%);
+  color: #f7fffc;
   font-size: 0.86rem;
   font-weight: 800;
 }

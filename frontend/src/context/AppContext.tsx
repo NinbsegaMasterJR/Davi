@@ -20,6 +20,10 @@ interface AppContextType {
   showError: (message: string) => void;
   library: SavedDocument[];
   saveDocument: (input: SaveDocumentInput) => SavedDocument;
+  importLibraryBackup: (
+    documents: SavedDocument[],
+    mode?: "merge" | "replace",
+  ) => number;
   toggleFavorite: (id: string) => void;
   removeDocument: (id: string) => void;
   clearLibrary: () => void;
@@ -72,7 +76,7 @@ function loadStoredJson<T>(key: string, fallback: T, legacyKey?: string): T {
 
 function loadInitialLibrary(): SavedDocument[] {
   const parsed = loadStoredJson<unknown>(STORAGE_KEY, [], LEGACY_STORAGE_KEY);
-  return Array.isArray(parsed) ? (parsed as SavedDocument[]) : [];
+  return Array.isArray(parsed) ?(parsed as SavedDocument[]) : [];
 }
 
 function loadInitialDrafts(): SavedDraft[] {
@@ -81,7 +85,7 @@ function loadInitialDrafts(): SavedDraft[] {
     [],
     LEGACY_DRAFTS_STORAGE_KEY,
   );
-  return Array.isArray(parsed) ? (parsed as SavedDraft[]) : [];
+  return Array.isArray(parsed) ?(parsed as SavedDraft[]) : [];
 }
 
 function loadInitialOnboardingState(): boolean {
@@ -117,6 +121,35 @@ function buildDocumentTags(input: SaveDocumentInput): string[] {
         .filter(Boolean),
     ),
   ).slice(0, 6);
+}
+
+function isSavedDocument(value: unknown): value is SavedDocument {
+  if (!value || typeof value !== "object") {
+    return false;
+  }
+
+  const candidate = value as Partial<SavedDocument>;
+  return (
+    typeof candidate.id === "string" &&
+    typeof candidate.toolId === "string" &&
+    typeof candidate.toolLabel === "string" &&
+    typeof candidate.title === "string" &&
+    typeof candidate.query === "string" &&
+    typeof candidate.content === "string" &&
+    (candidate.contentType === "markdown" || candidate.contentType === "text")
+  );
+}
+
+function normalizeImportedDocument(document: SavedDocument): SavedDocument {
+  return {
+    ...document,
+    createdAt: document.createdAt || new Date().toISOString(),
+    favorite: Boolean(document.favorite),
+    tags:
+      document.tags && document.tags.length > 0
+        ? document.tags.map((tag) => normalizeTag(tag)).filter(Boolean)
+        : buildDocumentTags(document),
+  };
 }
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -172,6 +205,35 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
     return document;
   };
 
+  const importLibraryBackup = useCallback(
+    (documents: SavedDocument[], mode: "merge" | "replace" = "merge") => {
+      const imported = documents
+        .filter(isSavedDocument)
+        .map(normalizeImportedDocument);
+
+      setLibrary((current) => {
+        const source = mode === "replace" ? imported : [...imported, ...current];
+        const deduped = new Map<string, SavedDocument>();
+
+        source.forEach((document) => {
+          if (!deduped.has(document.id)) {
+            deduped.set(document.id, document);
+          }
+        });
+
+        return Array.from(deduped.values())
+          .sort(
+            (left, right) =>
+              Date.parse(right.createdAt) - Date.parse(left.createdAt),
+          )
+          .slice(0, MAX_LIBRARY_ITEMS);
+      });
+
+      return imported.length;
+    },
+    [],
+  );
+
   const saveDraft = useCallback((input: SaveDraftInput): SavedDraft => {
     const draft: SavedDraft = {
       ...input,
@@ -194,7 +256,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
   const toggleFavorite = (id: string) => {
     setLibrary((current) =>
       current.map((item) =>
-        item.id === id ? { ...item, favorite: !item.favorite } : item,
+        item.id === id ?{ ...item, favorite: !item.favorite } : item,
       ),
     );
   };
@@ -245,6 +307,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
         showError,
         library,
         saveDocument,
+        importLibraryBackup,
         toggleFavorite,
         removeDocument,
         clearLibrary,

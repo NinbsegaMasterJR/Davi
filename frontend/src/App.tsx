@@ -22,6 +22,9 @@ const About = lazy(() =>
 const Resources = lazy(() =>
   import("./pages/Resources").then((module) => ({ default: module.Resources })),
 );
+const HowTo = lazy(() =>
+  import("./pages/HowTo").then((module) => ({ default: module.HowTo })),
+);
 const TrustCenter = lazy(() =>
   import("./pages/TrustCenter").then((module) => ({
     default: module.TrustCenter,
@@ -31,7 +34,14 @@ const Contact = lazy(() =>
   import("./pages/Contact").then((module) => ({ default: module.Contact })),
 );
 
-type PageType = "landing" | "app" | "resources" | "about" | "trust" | "contact";
+type PageType =
+  | "landing"
+  | "app"
+  | "resources"
+  | "howto"
+  | "about"
+  | "trust"
+  | "contact";
 type ApiStatus = "checking" | "online" | "offline";
 
 interface HealthResponse {
@@ -40,7 +50,7 @@ interface HealthResponse {
   groqConfigured?: boolean;
 }
 
-const GITHUB_REPO_URL = "https://github.com/NinsegaMasterJr/Gerador.P-Web";
+const GITHUB_REPO_URL = "https://github.com/NinbsegaMasterJR/Davi";
 const DEFAULT_TAB: ActiveTab = "outline";
 
 const TAB_TITLES: Record<ActiveTab, string> = {
@@ -62,7 +72,7 @@ function loadLastVisitedTab(): ActiveTab {
     LAST_TAB_STORAGE_KEY,
     LEGACY_LAST_TAB_STORAGE_KEY,
   );
-  return stored && isActiveTab(stored) ? stored : DEFAULT_TAB;
+  return stored && isActiveTab(stored) ?stored : DEFAULT_TAB;
 }
 
 function parseHash(hash: string): { page: PageType; tab: ActiveTab } {
@@ -75,6 +85,10 @@ function parseHash(hash: string): { page: PageType; tab: ActiveTab } {
 
   if (cleanedHash === "recursos") {
     return { page: "resources", tab: lastVisitedTab };
+  }
+
+  if (cleanedHash === "como-usar" || cleanedHash === "guia") {
+    return { page: "howto", tab: lastVisitedTab };
   }
 
   if (cleanedHash === "sobre" || cleanedHash === "about") {
@@ -97,7 +111,7 @@ function parseHash(hash: string): { page: PageType; tab: ActiveTab } {
     const tab = cleanedHash.split("/")[1];
     return {
       page: "app",
-      tab: tab && isActiveTab(tab) ? tab : lastVisitedTab,
+      tab: tab && isActiveTab(tab) ?tab : lastVisitedTab,
     };
   }
 
@@ -110,6 +124,8 @@ function buildHash(page: PageType, tab: ActiveTab): string {
       return "#/sobre";
     case "resources":
       return "#/recursos";
+    case "howto":
+      return "#/como-usar";
     case "trust":
       return "#/confianca";
     case "contact":
@@ -130,10 +146,11 @@ function App() {
   const [groqConfigured, setGroqConfigured] = useState(true);
   const [lastCheckedAt, setLastCheckedAt] = useState<string>("");
   const [focusToolOnOpen, setFocusToolOnOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const checkHealth = useCallback(async () => {
     setApiStatus((currentStatus) =>
-      currentStatus === "online" ? currentStatus : "checking",
+      currentStatus === "online" ?currentStatus : "checking",
     );
 
     try {
@@ -146,7 +163,7 @@ function App() {
       }
 
       const data = (await response.json()) as HealthResponse;
-      setApiStatus(data.status === "OK" ? "online" : "offline");
+      setApiStatus(data.status === "OK" ?"online" : "offline");
       setGroqConfigured(data.groqConfigured !== false);
       setLastCheckedAt(new Date().toLocaleTimeString("pt-BR"));
     } catch (error) {
@@ -162,6 +179,7 @@ function App() {
       const route = parseHash(window.location.hash);
       setCurrentPage(route.page);
       setCurrentTab(route.tab);
+      setMobileMenuOpen(false);
     };
 
     window.addEventListener("hashchange", handleHashChange);
@@ -189,15 +207,17 @@ function App() {
   useEffect(() => {
     document.title =
       currentPage === "about"
-        ? "Scriptura | Sobre o projeto"
+        ?"Scriptura | Sobre o projeto"
         : currentPage === "resources"
-          ? "Scriptura | Recursos"
-          : currentPage === "trust"
-            ? "Scriptura | Confiança e privacidade"
+          ?"Scriptura | Recursos"
+          : currentPage === "howto"
+            ?"Scriptura | Como usar"
+            : currentPage === "trust"
+            ?"Scriptura | Confiança e privacidade"
             : currentPage === "contact"
-              ? "Scriptura | Contato"
+              ?"Scriptura | Contato"
               : currentPage === "landing"
-                ? "Scriptura | Preparação bíblica com apoio inteligente"
+                ?"Scriptura | Preparação bíblica com apoio inteligente"
                 : `Scriptura | ${TAB_TITLES[currentTab]}`;
   }, [currentPage, currentTab]);
 
@@ -208,6 +228,7 @@ function App() {
   const navigateToPage = (page: PageType, nextTab: ActiveTab = currentTab) => {
     setCurrentPage(page);
     setCurrentTab(nextTab);
+    setMobileMenuOpen(false);
     window.location.hash = buildHash(page, nextTab);
   };
 
@@ -222,27 +243,29 @@ function App() {
 
   const statusMessage =
     apiStatus === "checking"
-      ? "Verificando conexão com a API..."
+      ?"Verificando conexão com a API..."
       : apiStatus === "offline"
-        ? "API offline. Inicie o backend para gerar conteúdo."
+        ?"API offline. Inicie o backend para gerar conteúdo."
         : groqConfigured
-          ? "API online e pronta para gerar conteúdo."
+          ?"API online e pronta para gerar conteúdo."
           : "API online, mas a GROQ_API_KEY não está configurada no backend.";
 
   const statusClass =
     apiStatus === "online" && groqConfigured
-      ? "status-ok"
+      ?"status-ok"
       : apiStatus === "checking"
-        ? "status-warn"
+        ?"status-warn"
         : "status-error";
   const apiReady = apiStatus === "online" && groqConfigured;
 
   const pageLabel =
     currentPage === "app"
-      ? TAB_TITLES[currentTab]
+      ?TAB_TITLES[currentTab]
       : currentPage === "landing"
-        ? "Landing editorial"
-        : "Página institucional";
+        ?"Landing editorial"
+        : currentPage === "howto"
+          ?"Guia de uso"
+          : "Página institucional";
 
   return (
     <AppProvider>
@@ -262,46 +285,64 @@ function App() {
                   <small>Preparo bíblico com critério, ritmo e profundidade</small>
                 </span>
               </button>
-              <div className="nav-links">
+              <button
+                type="button"
+                className="nav-menu-toggle"
+                aria-controls="primary-navigation"
+                aria-expanded={mobileMenuOpen}
+                onClick={() => setMobileMenuOpen((isOpen) => !isOpen)}
+              >
+                Menu
+              </button>
+              <div
+                className={`nav-links ${mobileMenuOpen ? "open" : ""}`}
+                id="primary-navigation"
+              >
                 <button
-                  className={`nav-link ${currentPage === "landing" ? "active" : ""}`}
+                  className={`nav-link ${currentPage === "landing" ?"active" : ""}`}
                   onClick={() => navigateToPage("landing")}
                 >
                   Início
                 </button>
                 <button
-                  className={`nav-link ${currentPage === "app" ? "active" : ""}`}
+                  className={`nav-link ${currentPage === "app" ?"active" : ""}`}
                   onClick={() => navigateToPage("app")}
                 >
                   Workspace
                 </button>
                 <button
-                  className={`nav-link ${currentPage === "resources" ? "active" : ""}`}
+                  className={`nav-link ${currentPage === "resources" ?"active" : ""}`}
                   onClick={() => navigateToPage("resources")}
                 >
                   Recursos
                 </button>
                 <button
-                  className={`nav-link ${currentPage === "about" ? "active" : ""}`}
+                  className={`nav-link ${currentPage === "howto" ?"active" : ""}`}
+                  onClick={() => navigateToPage("howto")}
+                >
+                  Como usar
+                </button>
+                <button
+                  className={`nav-link ${currentPage === "about" ?"active" : ""}`}
                   onClick={() => navigateToPage("about")}
                 >
                   Sobre
                 </button>
                 <button
-                  className={`nav-link ${currentPage === "trust" ? "active" : ""}`}
+                  className={`nav-link ${currentPage === "trust" ?"active" : ""}`}
                   onClick={() => navigateToPage("trust")}
                 >
                   Confiança
                 </button>
                 <button
-                  className={`nav-link ${currentPage === "contact" ? "active" : ""}`}
+                  className={`nav-link ${currentPage === "contact" ?"active" : ""}`}
                   onClick={() => navigateToPage("contact")}
                 >
                   Contato
                 </button>
               </div>
             </div>
-            <div className="nav-side">
+            <div className={`nav-side ${mobileMenuOpen ? "open" : ""}`}>
               {apiReady && (
                 <span className="nav-health-pill">
                   <span className="status-dot" aria-hidden="true" />
@@ -359,6 +400,7 @@ function App() {
               <Landing
                 onEnterApp={() => navigateToPage("app")}
                 onCreateOutline={openOutlineCreator}
+                onOpenTool={(tab) => navigateToPage("app", tab)}
                 onOpenResources={() => navigateToPage("resources")}
                 onOpenTrust={() => navigateToPage("trust")}
               />
@@ -373,6 +415,13 @@ function App() {
             )}
             {currentPage === "resources" && (
               <Resources onOpenApp={() => navigateToPage("app")} />
+            )}
+            {currentPage === "howto" && (
+              <HowTo
+                onOpenApp={() => navigateToPage("app")}
+                onOpenResources={() => navigateToPage("resources")}
+                onOpenTrust={() => navigateToPage("trust")}
+              />
             )}
             {currentPage === "about" && (
               <About

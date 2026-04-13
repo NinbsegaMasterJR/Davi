@@ -2,8 +2,8 @@
 
 ## URLs Atuais
 
-- Frontend: `https://scriptura-web.vercel.app`
-- Backend: `https://scriptura-web-api.vercel.app`
+- Frontend: `https://pregador-ia.vercel.app`
+- Backend: `https://pregador-ia-api.vercel.app`
 
 ## TL;DR
 
@@ -17,7 +17,7 @@
 ### Frontend
 
 ```env
-VITE_API_URL=https://scriptura-web-api.vercel.app
+VITE_API_URL=https://pregador-ia-api.vercel.app
 ```
 
 ### Backend
@@ -25,13 +25,13 @@ VITE_API_URL=https://scriptura-web-api.vercel.app
 ```env
 GROQ_API_KEY=gsk_sua_chave
 NODE_ENV=production
-CORS_ORIGIN=https://scriptura-web.vercel.app
+CORS_ORIGIN=https://pregador-ia.vercel.app
 ```
 
 ## Teste Rapido
 
 ```txt
-https://scriptura-web-api.vercel.app/health
+https://pregador-ia-api.vercel.app/health
 ```
 
 Resposta esperada:

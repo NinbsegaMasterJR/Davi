@@ -40,24 +40,61 @@ export const Concordancia: React.FC = () => {
     toolId: "concordance",
     toolLabel: "Concordância",
     title: palavra.trim()
-      ? `Concordância: ${palavra}`
+      ?`Concordância: ${palavra}`
       : "Pesquisa de concordância em andamento",
     summary: `${limite} resultados | ${versaoBiblica}`,
     values: draftValues,
     onRestore: (draft) => {
-      setPalavra(typeof draft.palavra === "string" ? draft.palavra : "");
+      setPalavra(typeof draft.palavra === "string" ?draft.palavra : "");
       setLimite(
         typeof draft.limite === "number"
-          ? draft.limite
+          ?draft.limite
           : Number(draft.limite) || 10,
       );
       setVersaoBiblica(
         typeof draft.versaoBiblica === "string"
-          ? (draft.versaoBiblica as BibleVersion)
+          ?(draft.versaoBiblica as BibleVersion)
           : "ARA",
       );
     },
   });
+  const presets = [
+    {
+      label: "Graça",
+      palavra: "graça",
+      limite: 10,
+    },
+    {
+      label: "Aliança",
+      palavra: "aliança",
+      limite: 10,
+    },
+    {
+      label: "Perdão",
+      palavra: "perdão",
+      limite: 10,
+    },
+    {
+      label: "Ressurreição",
+      palavra: "ressurreição",
+      limite: 10,
+    },
+    {
+      label: "Santificação",
+      palavra: "santificação",
+      limite: 10,
+    },
+    {
+      label: "Serviço",
+      palavra: "serviço",
+      limite: 10,
+    },
+    {
+      label: "Esperança",
+      palavra: "esperança",
+      limite: 10,
+    },
+  ];
 
   useEffect(() => {
     if (resultados.length > 0) {
@@ -140,6 +177,23 @@ export const Concordancia: React.FC = () => {
           </div>
         </div>
 
+        <div className="preset-row" aria-label="Exemplos de termos para concordância">
+          {presets.map((preset) => (
+            <button
+              key={preset.label}
+              type="button"
+              className="preset-chip"
+              onClick={() => {
+                setPalavra(preset.palavra);
+                setLimite(preset.limite);
+              }}
+              disabled={carregando}
+            >
+              {preset.label}
+            </button>
+          ))}
+        </div>
+
         <div className="form-row">
           <div className="form-group flex-grow">
             <label htmlFor="palavra">Palavra, tema ou conceito:</label>
@@ -206,11 +260,11 @@ export const Concordancia: React.FC = () => {
         />
 
         <button onClick={buscar} disabled={carregando} className="btn-search">
-          {carregando ? "Buscando textos..." : "Buscar na Bíblia"}
+          {carregando ?"Buscando textos..." : "Buscar na Bíblia"}
         </button>
 
         <div className="tool-feedback-stack" aria-live="polite">
-          {carregando ? (
+          {carregando ?(
             <div className="tool-state-card loading">
               <span className="tool-state-kicker">Pesquisa em andamento</span>
               <strong>Relacionando textos ao conceito informado</strong>
@@ -224,14 +278,14 @@ export const Concordancia: React.FC = () => {
                 <span>Versão bíblica</span>
               </div>
             </div>
-          ) : resultados.length === 0 ? (
+          ) : resultados.length === 0 ?(
             <div className="tool-state-card empty">
               <span className="tool-state-kicker">
-                {jaBuscou ? "Nenhum painel pronto no momento" : "Antes da pesquisa"}
+                {jaBuscou ?"Nenhum painel pronto no momento" : "Antes da pesquisa"}
               </span>
               <strong>
                 {jaBuscou
-                  ? "Experimente simplificar o termo ou pesquisar por um conceito mais amplo."
+                  ?"Experimente simplificar o termo ou pesquisar por um conceito mais amplo."
                   : "Pesquise por uma palavra-chave ou conceito que ajude a abrir o estudo."}
               </strong>
               <p>

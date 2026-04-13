@@ -22,6 +22,28 @@ const PRACTICES = [
   "Use as respostas como base de trabalho, não como versão final automática.",
 ];
 
+const DATA_POINTS = [
+  {
+    title: "Biblioteca local",
+    text: "Resultados e rascunhos ficam no armazenamento do navegador, a menos que você use a sincronização de workspace.",
+  },
+  {
+    title: "Pedidos enviados à API",
+    text: "Temas, passagens e instruções digitadas são enviados ao backend para gerar respostas e devem evitar dados sensíveis.",
+  },
+  {
+    title: "Sem decisão automática",
+    text: "O app não define doutrina, aconselhamento ou orientação pastoral final. Ele organiza material para revisão humana.",
+  },
+];
+
+const REVIEW_CHECKLIST = [
+  "Li o texto bíblico inteiro, não apenas o versículo citado.",
+  "Conferi referências, nomes, datas e afirmações teológicas.",
+  "Adaptei exemplos, tom e aplicações à igreja local.",
+  "Removi qualquer dado pessoal ou situação sensível antes de compartilhar.",
+];
+
 export const TrustCenter: React.FC = () => {
   return (
     <div className="trust-center-page">
@@ -67,6 +89,34 @@ export const TrustCenter: React.FC = () => {
             </article>
           ))}
         </div>
+      </section>
+
+      <section className="trust-center-practices">
+        <div>
+          <p className="section-kicker">Privacidade prática</p>
+          <h2>O que acontece com o material de trabalho</h2>
+        </div>
+        <div className="trust-center-practice-list">
+          {DATA_POINTS.map((item, index) => (
+            <article key={item.title} className="trust-center-practice">
+              <span>0{index + 1}</span>
+              <h3>{item.title}</h3>
+              <p>{item.text}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="trust-center-practices trust-center-checklist">
+        <div>
+          <p className="section-kicker">Antes de usar em público</p>
+          <h2>Checklist rápido de revisão</h2>
+        </div>
+        <ul>
+          {REVIEW_CHECKLIST.map((item) => (
+            <li key={item}>{item}</li>
+          ))}
+        </ul>
       </section>
     </div>
   );

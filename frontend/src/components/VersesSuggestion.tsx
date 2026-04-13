@@ -34,24 +34,56 @@ export const VersesSuggestion: React.FC = () => {
     toolId: "verses",
     toolLabel: "Versículos",
     title: tema.trim()
-      ? `Versículos sobre: ${tema}`
+      ?`Versículos sobre: ${tema}`
       : "Busca de versículos em andamento",
     summary: `${limite} referências | ${versaoBiblica}`,
     values: draftValues,
     onRestore: (draft) => {
-      setTema(typeof draft.tema === "string" ? draft.tema : "");
+      setTema(typeof draft.tema === "string" ?draft.tema : "");
       setLimite(
         typeof draft.limite === "number"
-          ? draft.limite
+          ?draft.limite
           : Number(draft.limite) || 5,
       );
       setVersaoBiblica(
         typeof draft.versaoBiblica === "string"
-          ? (draft.versaoBiblica as BibleVersion)
+          ?(draft.versaoBiblica as BibleVersion)
           : "ARA",
       );
     },
   });
+  const presets = [
+    {
+      label: "Consolo",
+      tema: "Consolo para quem está sofrendo",
+      limite: 5,
+    },
+    {
+      label: "Santidade",
+      tema: "Santidade na vida cristã",
+      limite: 10,
+    },
+    {
+      label: "Esperança",
+      tema: "Esperança em meio à prova",
+      limite: 5,
+    },
+    {
+      label: "Família",
+      tema: "Restauração e cuidado da família",
+      limite: 10,
+    },
+    {
+      label: "Oração",
+      tema: "Vida de oração e dependência de Deus",
+      limite: 10,
+    },
+    {
+      label: "Missão",
+      tema: "Chamado para testemunhar e servir",
+      limite: 10,
+    },
+  ];
 
   useEffect(() => {
     if (versiculos.length > 0) {
@@ -121,6 +153,23 @@ export const VersesSuggestion: React.FC = () => {
           </div>
         </div>
 
+        <div className="preset-row" aria-label="Exemplos de temas bíblicos">
+          {presets.map((preset) => (
+            <button
+              key={preset.label}
+              type="button"
+              className="preset-chip"
+              onClick={() => {
+                setTema(preset.tema);
+                setLimite(preset.limite);
+              }}
+              disabled={carregando}
+            >
+              {preset.label}
+            </button>
+          ))}
+        </div>
+
         <div className="form-group">
           <label htmlFor="tema">Tema, assunto ou necessidade da igreja:</label>
           <input
@@ -184,11 +233,11 @@ export const VersesSuggestion: React.FC = () => {
         />
 
         <button onClick={buscar} disabled={carregando} className="btn-search">
-          {carregando ? "Buscando referências..." : "Buscar Versículos"}
+          {carregando ?"Buscando referências..." : "Buscar Versículos"}
         </button>
 
         <div className="tool-feedback-stack" aria-live="polite">
-          {carregando ? (
+          {carregando ?(
             <div className="tool-state-card loading">
               <span className="tool-state-kicker">Buscando referências</span>
               <strong>Mapeando textos ligados ao tema informado</strong>
@@ -202,14 +251,14 @@ export const VersesSuggestion: React.FC = () => {
                 <span>Versão bíblica</span>
               </div>
             </div>
-          ) : versiculos.length === 0 ? (
+          ) : versiculos.length === 0 ?(
             <div className="tool-state-card empty">
               <span className="tool-state-kicker">
-                {jaBuscou ? "Nenhuma lista pronta no momento" : "Antes da busca"}
+                {jaBuscou ?"Nenhuma lista pronta no momento" : "Antes da busca"}
               </span>
               <strong>
                 {jaBuscou
-                  ? "Tente reformular o tema, ajustar a quantidade ou mudar a versão bíblica."
+                  ?"Tente reformular o tema, ajustar a quantidade ou mudar a versão bíblica."
                   : "Digite um tema claro para levantar versículos de apoio com mais foco."}
               </strong>
               <p>

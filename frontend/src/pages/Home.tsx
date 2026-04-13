@@ -306,7 +306,7 @@ export const Home: React.FC<HomeProps> = ({
   const resumeItems = useMemo(
     () =>
       recentDrafts.length > 0
-        ? recentDrafts.map((item) => ({
+        ?recentDrafts.map((item) => ({
             key: `${item.tab}-${item.updatedAt}`,
             label: "Rascunho",
             title: item.title,
@@ -408,7 +408,7 @@ export const Home: React.FC<HomeProps> = ({
           role="tablist"
         >
           <button
-            className={`tab ${activeTab === "outline" ? "active" : ""}`}
+            className={`tab ${activeTab === "outline" ?"active" : ""}`}
             onClick={() => onTabChange("outline")}
             role="tab"
             aria-selected={activeTab === "outline"}
@@ -416,7 +416,7 @@ export const Home: React.FC<HomeProps> = ({
             Esboço
           </button>
           <button
-            className={`tab ${activeTab === "verses" ? "active" : ""}`}
+            className={`tab ${activeTab === "verses" ?"active" : ""}`}
             onClick={() => onTabChange("verses")}
             role="tab"
             aria-selected={activeTab === "verses"}
@@ -424,7 +424,7 @@ export const Home: React.FC<HomeProps> = ({
             Versículos
           </button>
           <button
-            className={`tab ${activeTab === "analysis" ? "active" : ""}`}
+            className={`tab ${activeTab === "analysis" ?"active" : ""}`}
             onClick={() => onTabChange("analysis")}
             role="tab"
             aria-selected={activeTab === "analysis"}
@@ -432,7 +432,7 @@ export const Home: React.FC<HomeProps> = ({
             Análise
           </button>
           <button
-            className={`tab ${activeTab === "explain" ? "active" : ""}`}
+            className={`tab ${activeTab === "explain" ?"active" : ""}`}
             onClick={() => onTabChange("explain")}
             role="tab"
             aria-selected={activeTab === "explain"}
@@ -440,7 +440,7 @@ export const Home: React.FC<HomeProps> = ({
             Passagem
           </button>
           <button
-            className={`tab ${activeTab === "concordance" ? "active" : ""}`}
+            className={`tab ${activeTab === "concordance" ?"active" : ""}`}
             onClick={() => onTabChange("concordance")}
             role="tab"
             aria-selected={activeTab === "concordance"}
@@ -448,7 +448,7 @@ export const Home: React.FC<HomeProps> = ({
             Concordância
           </button>
           <button
-            className={`tab ${activeTab === "schedule" ? "active" : ""}`}
+            className={`tab ${activeTab === "schedule" ?"active" : ""}`}
             onClick={() => onTabChange("schedule")}
             role="tab"
             aria-selected={activeTab === "schedule"}
@@ -456,7 +456,7 @@ export const Home: React.FC<HomeProps> = ({
             Cronograma
           </button>
           <button
-            className={`tab ${activeTab === "pastoral-letter" ? "active" : ""}`}
+            className={`tab ${activeTab === "pastoral-letter" ?"active" : ""}`}
             onClick={() => onTabChange("pastoral-letter")}
             role="tab"
             aria-selected={activeTab === "pastoral-letter"}
@@ -503,16 +503,16 @@ export const Home: React.FC<HomeProps> = ({
         <article className="workspace-guide-card">
           <div className="workspace-guide-copy">
             <p className="section-kicker">
-              {onboardingDismissed ? "Retomada inteligente" : "Onboarding rápido"}
+              {onboardingDismissed ?"Retomada inteligente" : "Onboarding rápido"}
             </p>
             <h2>
               {onboardingDismissed
-                ? "Entre pelo que ficou aberto, não do zero"
+                ?"Entre pelo que ficou aberto, não do zero"
                 : "Primeiros 5 minutos dentro do workspace"}
             </h2>
             <p>
               {onboardingDismissed
-                ? "Seu navegador agora lembra a ferramenta mais recente, os rascunhos por formulário e os últimos resultados da biblioteca."
+                ?"Seu navegador agora lembra a ferramenta mais recente, os rascunhos por formulário e os últimos resultados da biblioteca."
                 : "A fase 4 adiciona um fluxo mais assistido: escolha a ferramenta, deixe o formulário evoluir com autosave local e volte depois sem perder o ponto de partida."}
             </p>
           </div>
@@ -542,7 +542,7 @@ export const Home: React.FC<HomeProps> = ({
               onClick={() => onTabChange(activeTab)}
             >
               {hasDraftForActiveTool
-                ? "Retomar ferramenta ativa"
+                ?"Retomar ferramenta ativa"
                 : "Abrir ferramenta ativa"}
             </button>
             <button
@@ -556,11 +556,11 @@ export const Home: React.FC<HomeProps> = ({
               type="button"
               className="workspace-guide-link"
               onClick={
-                onboardingDismissed ? resetOnboarding : dismissOnboarding
+                onboardingDismissed ?resetOnboarding : dismissOnboarding
               }
             >
               {onboardingDismissed
-                ? "Mostrar onboarding novamente"
+                ?"Mostrar onboarding novamente"
                 : "Dispensar este guia"}
             </button>
           </div>
@@ -594,10 +594,10 @@ export const Home: React.FC<HomeProps> = ({
             </div>
             <div className="workspace-stat-card">
               <span>Última geração</span>
-              <strong>{latestDocument ? latestDocument.toolLabel : "Sem atividade"}</strong>
+              <strong>{latestDocument ?latestDocument.toolLabel : "Sem atividade"}</strong>
               <small>
                 {latestDocument
-                  ? new Date(latestDocument.createdAt).toLocaleString("pt-BR")
+                  ?new Date(latestDocument.createdAt).toLocaleString("pt-BR")
                   : "Gere um material para começar"}
               </small>
             </div>
@@ -624,12 +624,12 @@ export const Home: React.FC<HomeProps> = ({
             <p className="section-kicker">Retomar trabalho</p>
             <h2>
               {recentDrafts.length > 0
-                ? "Rascunhos prontos para continuar"
+                ?"Rascunhos prontos para continuar"
                 : "Seu histórico recente está aqui"}
             </h2>
             <p>
               {recentDrafts.length > 0
-                ? "Se você saiu no meio do preparo, basta voltar pela ferramenta certa e continuar do ponto salvo."
+                ?"Se você saiu no meio do preparo, basta voltar pela ferramenta certa e continuar do ponto salvo."
                 : "Enquanto não houver rascunhos ativos, você ainda pode retomar pelo último material gerado e salvo na biblioteca."}
             </p>
           </div>
@@ -680,7 +680,7 @@ export const Home: React.FC<HomeProps> = ({
             <button
               key={tool.id}
               type="button"
-              className={`tool-card ${activeTab === tool.id ? "active" : ""}`}
+              className={`tool-card ${activeTab === tool.id ?"active" : ""}`}
               onClick={() => onTabChange(tool.id)}
             >
               <span className="tool-card-eyebrow">{tool.eyebrow}</span>

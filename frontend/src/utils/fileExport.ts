@@ -19,9 +19,9 @@ export function downloadContent(
   const filename = `${slugify(title) || "scriptura-documento"}.${extension}`;
   const mimeType =
     extension === "html"
-      ? "text/html;charset=utf-8"
+      ?"text/html;charset=utf-8"
       : extension === "json"
-        ? "application/json;charset=utf-8"
+        ?"application/json;charset=utf-8"
         : "text/plain;charset=utf-8";
 
   const blob = new Blob([content], { type: mimeType });

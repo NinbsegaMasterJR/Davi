@@ -17,11 +17,11 @@ export function formatVersesAsText(
 ): string {
   return [
     title,
-    topic ? `Consulta: ${topic}` : "",
+    topic ?`Consulta: ${topic}` : "",
     "",
     ...verses.map((verse) =>
       `${verse.referencia}\n${verse.texto}${
-        verse.versao ? `\nVersao: ${verse.versao}` : ""
+        verse.versao ?`\nVersao: ${verse.versao}` : ""
       }`,
     ),
   ]
@@ -36,7 +36,7 @@ export function buildPrintableHtml(
 ): string {
   const renderedContent =
     contentType === "markdown"
-      ? renderBasicMarkdown(content)
+      ?renderBasicMarkdown(content)
       : `<pre>${escapeHtml(content)}</pre>`;
 
   return `<!doctype html>
@@ -47,24 +47,24 @@ export function buildPrintableHtml(
     <style>
       body {
         font-family: Georgia, "Times New Roman", serif;
-        color: #24130d;
+        color: #162622;
         margin: 32px;
         line-height: 1.6;
       }
       h1, h2, h3, h4 {
-        color: #7f1d1d;
+        color: #0b6a63;
       }
       pre {
         white-space: pre-wrap;
-        background: #f8f1e3;
+        background: #edf7f2;
         padding: 16px;
         border-radius: 12px;
       }
       blockquote {
         margin: 1rem 0;
         padding-left: 1rem;
-        border-left: 4px solid #f6c667;
-        color: #5d4033;
+        border-left: 4px solid #e0c265;
+        color: #4b635d;
       }
       li {
         margin-bottom: 0.35rem;
@@ -85,7 +85,7 @@ export function buildClipboardHtml(
 ): string {
   const body =
     contentType === "markdown"
-      ? renderBasicMarkdown(content)
+      ?renderBasicMarkdown(content)
       : `<pre>${escapeHtml(content)}</pre>`;
 
   return `<section><h1>${escapeHtml(title)}</h1>${body}</section>`;

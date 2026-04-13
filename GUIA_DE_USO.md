@@ -4,8 +4,8 @@ Bem-vindo. Este guia mostra como usar o Scriptura para preparar pregacoes, estud
 
 ## Acesso
 
-- Site: `https://scriptura-web.vercel.app`
-- API: `https://scriptura-web-api.vercel.app`
+- Site: `https://pregador-ia.vercel.app`
+- API: `https://pregador-ia-api.vercel.app`
 
 ## O que voce pode fazer
 
@@ -59,12 +59,12 @@ Sim. O app depende da API para gerar conteudo.
 Sim. O Scriptura entrega uma base para voce adaptar.
 
 **Qual URL devo usar?**  
-Use `https://scriptura-web.vercel.app`.
+Use `https://pregador-ia.vercel.app`.
 
 ## Suporte
 
-- Site: `https://scriptura-web.vercel.app`
-- Issues: `https://github.com/NinsegaMasterJr/Gerador.P-Web/issues`
+- Site: `https://pregador-ia.vercel.app`
+- Issues: `https://github.com/NinbsegaMasterJR/Davi/issues`
 
 ## Sobre
 
