@@ -269,7 +269,7 @@ function App() {
 
   return (
     <AppProvider>
-      <div className="app">
+      <div className="app font-scriptura-ui text-scriptura-ink">
         <a href="#main-content" className="skip-link">
           Pular para o conteúdo principal
         </a>
